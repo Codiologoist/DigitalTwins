@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { AllDataType } from "../types/types.ts";
+import { AllDataType } from "../types";
 import { fetchPatientData } from "../utils.ts";
 
 // Custom hook to manage the patient data
@@ -35,8 +35,9 @@ const usePatientData = () => {
     });
 
     const fetchIntervalTime = 5000; // Time interval for data fetching
-    const updateIntervalTime = 1000; // Time interval for data updates
-    const chunkSize = 20; // Number of data points to fetch per update
+    const updateIntervalTime = 200; // Time interval for data updates
+    const chunkSize = 5; // Number of data points to fetch per update
+    const windowSize = -1000; // Max. number of data points contained in the plot
 
     useEffect(() => {
         // Fetch data every 10 seconds
@@ -99,40 +100,40 @@ const usePatientData = () => {
                     return {
                         // Concatenates the existing data type's time and measurement data with the new data chunk, then only limits to the last 200 points.
                         ["ABP,Dias"]: {
-                            time_vector: [...prevData['ABP,Dias'].time_vector, ...fetchedData['ABP,Dias'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['ABP,Dias'].measurement_data, ...fetchedData['ABP,Dias'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['ABP,Dias'].time_vector, ...fetchedData['ABP,Dias'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['ABP,Dias'].measurement_data, ...fetchedData['ABP,Dias'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["ABP,Mean"]: {
-                            time_vector: [...prevData['ABP,Mean'].time_vector, ...fetchedData['ABP,Mean'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['ABP,Mean'].measurement_data, ...fetchedData['ABP,Mean'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['ABP,Mean'].time_vector, ...fetchedData['ABP,Mean'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['ABP,Mean'].measurement_data, ...fetchedData['ABP,Mean'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["ABP,Syst"]: {
-                            time_vector: [...prevData['ABP,Syst'].time_vector, ...fetchedData['ABP,Syst'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['ABP,Syst'].measurement_data, ...fetchedData['ABP,Syst'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['ABP,Syst'].time_vector, ...fetchedData['ABP,Syst'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['ABP,Syst'].measurement_data, ...fetchedData['ABP,Syst'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["HR,na"]: {
-                            time_vector: [...prevData['HR,na'].time_vector, ...fetchedData['HR,na'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['HR,na'].measurement_data, ...fetchedData['HR,na'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['HR,na'].time_vector, ...fetchedData['HR,na'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['HR,na'].measurement_data, ...fetchedData['HR,na'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["RR,na"]: {
-                            time_vector: [...prevData['RR,na'].time_vector, ...fetchedData['RR,na'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['RR,na'].measurement_data, ...fetchedData['RR,na'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['RR,na'].time_vector, ...fetchedData['RR,na'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['RR,na'].measurement_data, ...fetchedData['RR,na'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["SpO2,na"]: {
-                            time_vector: [...prevData['SpO2,na'].time_vector, ...fetchedData['SpO2,na'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['SpO2,na'].measurement_data, ...fetchedData['SpO2,na'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['SpO2,na'].time_vector, ...fetchedData['SpO2,na'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['SpO2,na'].measurement_data, ...fetchedData['SpO2,na'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["Tvesic,na"]: {
-                            time_vector: [...prevData['Tvesic,na'].time_vector, ...fetchedData['Tvesic,na'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['Tvesic,na'].measurement_data, ...fetchedData['Tvesic,na'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['Tvesic,na'].time_vector, ...fetchedData['Tvesic,na'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['Tvesic,na'].measurement_data, ...fetchedData['Tvesic,na'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["rSO2,Left"]: {
-                            time_vector: [...prevData['rSO2,Left'].time_vector, ...fetchedData['rSO2,Left'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['rSO2,Left'].measurement_data, ...fetchedData['rSO2,Left'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['rSO2,Left'].time_vector, ...fetchedData['rSO2,Left'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['rSO2,Left'].measurement_data, ...fetchedData['rSO2,Left'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         },
                         ["rSO2,Right"]: {
-                            time_vector: [...prevData['rSO2,Right'].time_vector, ...fetchedData['rSO2,Right'].time_vector.slice(prevIndex, nextIndex)].slice(-200),
-                            measurement_data: [...prevData['rSO2,Right'].measurement_data, ...fetchedData['rSO2,Right'].measurement_data.slice(prevIndex, nextIndex)].slice(-200)
+                            time_vector: [...prevData['rSO2,Right'].time_vector, ...fetchedData['rSO2,Right'].time_vector.slice(prevIndex, nextIndex)].slice(windowSize),
+                            measurement_data: [...prevData['rSO2,Right'].measurement_data, ...fetchedData['rSO2,Right'].measurement_data.slice(prevIndex, nextIndex)].slice(windowSize)
                         }
                     }
                 });

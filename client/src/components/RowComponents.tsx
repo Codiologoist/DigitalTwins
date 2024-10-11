@@ -1,18 +1,9 @@
 import React from 'react'
 import Plot from 'react-plotly.js';
+import { RowData } from '../types';
 
 // Defines the properties that the RowComponent will accept as props.
-interface RowComponentProps {
-    title: string; // Title of the measurement (e.g., "HR", "ABP")
-    unit: string; // Unit of measurement (e.g., "bpm", "mmHg")
-    color: string; // Color for the graph line
-    numberColor: string; // Color for the displayed number
-    data: { // Structure of the data being passed
-        time_vector: number[]; // Array of time points
-        measurement_data: number[]; // Array of measurement values
-    };
-    optionPart?: React.ReactNode; // Optional additional content (can be string or JSX)
-}
+interface RowComponentProps extends RowData {}
 
 // A reusable component that displays a graph and corresponding number indicator.
 const RowComponent: React.FC<RowComponentProps> = ({ title, unit, color, numberColor, data, optionPart }) => {
