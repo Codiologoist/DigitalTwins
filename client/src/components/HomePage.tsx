@@ -24,7 +24,7 @@ const HomePage = () => {
         <img
          src={icuImage}
          alt="ICU Image"
-         className="w-full h-auto md:max-h-80 object-contain rounded-lg" // Changed from object-cover to object-contain
+         className="w-full h-auto md:max-h-96 object-contain rounded-lg shadow-md" // Adjust max height and add shadow for depth
         />
       </div>
     </div>
