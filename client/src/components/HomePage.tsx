@@ -1,24 +1,32 @@
-import { useNavigate } from 'react-router-dom';
+import icuImage from "../assets/icu_image.png";
 
 const HomePage = () => {
-  const navigate = useNavigate(); // Hook to programmatically navigate
-
-  const handleLoginClick = () => {
-    navigate('/login'); // Navigate to the login page
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-4 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Welcome to Codiologist</h1>
-      <p className="text-lg text-gray-700 mb-6">
-        This website is designed to help you manage patient data and health insights efficiently.
-      </p>
-      <button
-        onClick={handleLoginClick}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-300"
-      >
-        Want to Login? Start Now!
-      </button>
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen p-6 bg-white font-sans">
+      {/* Text Section */}
+      <div className="flex flex-col justify-center w-full md:w-1/2 p-6">
+        <h1 className="text-5xl font-extrabold text-blue-900 mb-4 text-center md:text-left">
+          Welcome to Codiologist!
+        </h1>
+        <h2 className="text-2xl font-semibold text-blue-700 mb-6 text-center md:text-left">
+          Monitoring Made Simple
+        </h2>
+        <p className="text-lg text-gray-800 mb-6 text-center md:text-left">
+          Our platform assists healthcare professionals in managing patient data and health insights efficiently.
+          Monitor your patients effectively with real-time Moberg monitor data, ensuring optimal care for neuro-intensive patients.
+        </p>
+        <p className="text-md text-gray-700 text-center md:text-left">
+          Explore the possibilities of real-time monitoring and improve patient care with our innovative solutions.
+        </p>
+      </div>
+      {/* Image Section */}
+      <div className="w-full md:w-1/2 flex justify-center md:justify-end p-4 md:p-0">
+        <img
+          src={icuImage}
+          alt="ICU Image"
+          className="w-full h-auto md:h-80 object-cover rounded-lg"
+        />
+      </div>
     </div>
   );
 };
