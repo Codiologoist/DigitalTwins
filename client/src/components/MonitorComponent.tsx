@@ -1,25 +1,73 @@
-import React, { useState } from "react";
+import React from "react";
 import '../App.css';
 import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "../components/PatientHeader.tsx";
 import PatientSignals from "../components/PatientSignals.tsx";
 import { Patient } from "../types.ts";
+import { useParams } from "react-router-dom";
 
 // Sample patient data only for testing purpose - to be removed later
 const mockSelectedPatient: Patient = { 
-    id: 1, firstName: "David", lastName: "Svensson" 
+    id: 123, firstName: "David", lastName: "Svensson" 
+};
+
+// This function is a mock version,
+// which will later be replaced by an API call (retrieve the selected patient's data based on patient's ID)
+const useSelectedPatient = (patientId: number | string) => {
+    const validPatientId = 123; // Assume only Id 123 is valid in this mock
+    if (patientId !== validPatientId) {
+        return {
+            selectedPatient: null,
+            isLoading: false,
+            isNotFound: true
+        }
+    }
+    // Simulate the selected patient data
+    const selectedPatient = mockSelectedPatient;
+
+    // Simulate a loading state that data(i.e., patient name) is available immediately)
+    const isLoading = false;
+
+    // Return the mock patient data and loading state
+    return {selectedPatient, isLoading, isNotFound: false};
 };
 
 // The main component that renders different rows of data for a patient monitor.
 // More specifically, it fetches data (e.g., ABP, heart rate, etc.) and displays them in separate rows using the RowComponent.
 const Monitor: React.FC = () => {
     const {visibleData, loading} = usePatientData();
-    const [selectedPatient] = useState<Patient>(mockSelectedPatient); // Simulate that a patient is selected and display their data
+    // const [selectedPatient] = useState<Patient>(mockSelectedPatient); // Simulate that a patient is selected and display their data
+    const {patientId} = useParams();
+    const {selectedPatient, isLoading: isPatientLoading, isNotFound} = useSelectedPatient(Number(patientId));
+
     // Shows a loading message until the data has been populated
-    if (loading) {
-        return <div>Loading...</div> 
+    if (loading || isPatientLoading) {
+        return <div className="text-blue-700">Loading...</div> 
     }
+    // Shows a message when patient id is not valid
+    if (isNotFound) {
+        return <div className="flex items-center justify-center h-screen">
+                <div className="bg-blue-100 rounded-lg p-4 shadow-lg max-w-md text-center">
+                    <div className="text-blue-700 font-semibold text-lg">
+                        No data available for the selected patient.
+                    </div>
+                    <p className="text-blue-500 mt-2">Please check the patient ID or try again later.</p>
+                </div>
+               </div>
+    }
+    // Ensures selectedPatient is not null before rendering PatientHeader
+    if (!selectedPatient) {
+        return <div className="flex items-center justify-center h-screen">
+                <div className="bg-blue-100 rounded-lg p-4 shadow-lg max-w-md text-center">
+                    <div className="text-blue-700 font-semibold text-lg">
+                        No patient selected
+                    </div>
+                    <p className="text-blue-500 mt-2">Please check the patient ID or try again later.</p>
+                </div>
+               </div>
+    }
+
 
     // An array of row objects, each representing a row of data type to be displayed.
     const rowData = [
