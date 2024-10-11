@@ -2,8 +2,8 @@ import React from "react";
 import '../App.css';
 import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
-import PatientHeader from "../components/PatientHeader.tsx";
-import PatientSignals from "../components/PatientSignals.tsx";
+import PatientHeader from "./PatientHeaderComponent.tsx";
+import PatientSignals from "./PatientSignalsComponent.tsx";
 import { Patient } from "../types.ts";
 import { useParams } from "react-router-dom";
 
