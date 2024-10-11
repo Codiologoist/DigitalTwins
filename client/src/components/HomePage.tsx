@@ -22,9 +22,9 @@ const HomePage = () => {
       {/* Image Section */}
       <div className="w-full md:w-1/2 flex justify-center md:justify-end p-4 md:p-0">
         <img
-          src={icuImage}
-          alt="ICU Image"
-          className="w-full h-auto md:h-80 object-cover rounded-lg"
+         src={icuImage}
+         alt="ICU Image"
+         className="w-full h-auto md:max-h-80 object-contain rounded-lg" // Changed from object-cover to object-contain
         />
       </div>
     </div>
