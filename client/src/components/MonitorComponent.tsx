@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import '../App.css';
 import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
