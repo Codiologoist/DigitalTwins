@@ -10,7 +10,7 @@ const App = () => {
       <Routes>
 
         <Route path="/" element={<HomeView />} /> 
-        <Route path="/monitor" element={<Monitor />} />
+        <Route path=":patientId/monitor" element={<Monitor />} />
 
       </Routes>
     );

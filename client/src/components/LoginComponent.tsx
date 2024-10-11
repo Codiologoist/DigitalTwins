@@ -6,7 +6,7 @@ export default function LoginComponent() {
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    navigate('/monitor');
+    navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
   };
 
   return (
