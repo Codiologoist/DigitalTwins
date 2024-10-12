@@ -7,9 +7,10 @@ import LoginComponent from './components/LoginComponent.tsx'; // Import LoginCom
 const App = () => { 
     return (
       <Routes>
+        
         <Route path="/" element={<HomeView />} /> 
-        <Route path="/monitor" element={<Monitor />} />
-        <Route path="/login" element={<LoginComponent />} /> {/* Route for login page */}
+        <Route path=":patientId/monitor" element={<Monitor />} />
+
       </Routes>
     );
 };
