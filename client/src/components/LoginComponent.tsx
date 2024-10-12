@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import icu_image from "../assets/icu_image1.png";
+import icu_image from "../assets/patientImage.png";
 
 export default function LoginComponent() {
   const navigate = useNavigate();

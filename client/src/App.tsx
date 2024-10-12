@@ -1,14 +1,13 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
-import HomeView from "./views/HomeView.tsx";
+import HomeView from "./views/LandingPageView.tsx";
 import Monitor from './components/MonitorComponent.tsx';
-
+import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
 
 const App = () => { 
     return (
-      // Manage routes of page view
       <Routes>
-
+        
         <Route path="/" element={<HomeView />} /> 
         <Route path=":patientId/monitor" element={<Monitor />} />
 
