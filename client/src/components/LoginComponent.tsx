@@ -1,12 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import icu_image from "../assets/patientImage.png";
+import { useState } from "react";
 
 export default function LoginComponent() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
+
+    try {
+      const response = await fetch("http://localhost:5000/api/v1/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store Token and navigate
+        localStorage.setItem("token", data.token); // Assume that the returned token field is data.token
+        navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
+      } else {
+        alert(data.message); // Prompt for login failure
+      }
+    } catch (error) {
+      console.error("Login request failed:", error);
+    }
+    
   };
 
   return (
@@ -50,6 +72,8 @@ export default function LoginComponent() {
                     type="email"
                     required
                     autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -73,6 +97,8 @@ export default function LoginComponent() {
                     type="password"
                     required
                     autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full rounded-md border-0 pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
