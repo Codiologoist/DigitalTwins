@@ -16,10 +16,16 @@ export const getAllDoctors = async (req: Request, res: Response) => {
 
 // Controller to create a doctor
 export const createDoctor = async (req: Request, res: Response) => {
-  const { name, lastName, SSN, username, password } = req.body;
+  const { firstName, lastName, SSN, username, password } = req.body;
 
   try {
-    const newDoctor = new Doctor({ name, lastName, SSN, username, password });
+    const newDoctor = new Doctor({
+      firstName,
+      lastName,
+      SSN,
+      username,
+      password,
+    });
     await newDoctor.save();
 
     return res.status(201).json({ success: true, data: newDoctor });
@@ -58,12 +64,12 @@ export const deleteDoctor = async (req: Request, res: Response) => {
 // Controller to update doctor details by SSN
 export const updateDoctor = async (req: Request, res: Response) => {
   const { SSN } = req.params;
-  const { name, lastName, username, password } = req.body;
+  const { firstName, lastName, username, password } = req.body;
 
   try {
     const updatedDoctor = await Doctor.findOneAndUpdate(
       { SSN },
-      { name, lastName, username, password },
+      { firstName, lastName, username, password },
       { new: true }
     );
 

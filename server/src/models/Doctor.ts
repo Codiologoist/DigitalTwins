@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface DoctorDocument extends Document {
-  name: string;
+  firstName: string;
   lastName: string;
   SSN: string;
   username: string;
@@ -9,7 +9,7 @@ interface DoctorDocument extends Document {
 }
 
 const DoctorSchema: Schema = new Schema({
-  name: { type: String, required: true },
+  firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   SSN: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
