@@ -64,7 +64,7 @@ jobs:
       mongodb:
         image: mongo:latest
         ports:
-          - 27017: 27017
+          - 27017
         options: >-
           --health-cmd "mongo --eval 'db.adminCommand(\"ping\")'" 
           --health-interval 10s
