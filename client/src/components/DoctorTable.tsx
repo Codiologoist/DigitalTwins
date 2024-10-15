@@ -9,10 +9,17 @@ interface Doctor {
   'Password': string;
 }
 
-const DoctorTable: React.FC<{ data: Doctor[] }> = ({ data }) => {
-  const columns = ['Full Name', 'Personal Number', 'Username', 'Password'];
+// Define props for DoctorTable, including onEdit and onDelete
+interface DoctorTableProps {
+    data: Doctor[];
+    onEdit: (doctor: Doctor) => void; // Function to handle editing
+    onDelete: (doctor: Doctor) => void; // Function to handle deleting
+  }
 
-  return <Table columns={columns} data={data} />;
+  const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
+    const columns = ['Full Name', 'Personal Number', 'Username', 'Password'];
+
+    return <Table columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
 };
 
 export default DoctorTable;
