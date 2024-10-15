@@ -9,16 +9,19 @@ jobs:
       CI_RUN: true
       CI_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
+      - name: Checkout public repo
+        uses: actions/checkout@v3
+  
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y git python3 python3-pip python3-venv
 
       - name: Create decrypted folder
         run: |
-          ls
-          # cd server
-          # mkdir decrypted_data
-          # cd ..
+          ls -l
+          cd server
+          mkdir decrypted_data
+          cd ..
 
       - name: Set up SSH for cloning the private repo
         run: |
