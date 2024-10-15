@@ -90,11 +90,9 @@ jobs:
         with:
           name: decrypted-data
           path: server/decrypted_data
-        run: |
-          cd server
-          ls -l
 
       - name: Start server and run tests
         run: |
           cd server
+          ls -l
           npm run ci-test
