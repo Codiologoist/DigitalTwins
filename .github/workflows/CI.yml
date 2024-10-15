@@ -16,9 +16,9 @@ jobs:
       - name: Create decrypted folder
         run: |
           ls
-          cd server
-          mkdir decrypted_data
-          cd ..
+          # cd server
+          # mkdir decrypted_data
+          # cd ..
 
       - name: Set up SSH for cloning the private repo
         run: |
