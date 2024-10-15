@@ -68,9 +68,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        alias: mongodb
     env:
       PORT: 5000
-      MONGO_URI: mongodb://localhost:27017/DigitalTwinsDB
+      MONGO_URI: mongodb://mongodb:27017/DigitalTwinsDB
     steps:
       - name: Checkout public repo
         uses: actions/checkout@v3
