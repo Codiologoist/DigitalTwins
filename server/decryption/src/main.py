@@ -2,6 +2,7 @@ import subprocess
 import platform
 import time
 import argparse
+import os
 
 if __name__ == "__main__":
     # Create an argument parser
@@ -11,6 +12,13 @@ if __name__ == "__main__":
     # Parse the command line arguments
     args = parser.parse_args()
 
+    # Determines if we decrypt files once only
+    is_run_once = False
+
+    # See if there is a CI_RUN environment variable
+    if 'CI_RUN' in os.environ:
+        is_run_once = True
+
     # Loop indefinitely until the script is interrupted
     while True:
         # Determine the appropriate Python command based on the operating system
@@ -18,6 +26,9 @@ if __name__ == "__main__":
 
         # Run the decryption script
         subprocess.run([python_command, "decryptor.py"])
+
+        if is_run_once:
+            break
 
         # Wait for 5 seconds
         print(f'Sleeping for {args.time} seconds...')
