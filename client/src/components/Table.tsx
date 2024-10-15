@@ -31,8 +31,10 @@ const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
               ))}
               {onEdit && onDelete && ( // show action buttons only for admin
                 <td>
-                  <button onClick={() => onEdit(row)}>Edit</button> {/* Edit button */}
-                  <button onClick={() => onDelete(row)}>Delete</button> {/* Delete button */}
+                  <div className="actions"> {/* Added actions class here */}
+                    <button onClick={() => onEdit(row)}>Edit</button> {/* Edit button */}
+                    <button onClick={() => onDelete(row)}>Delete</button> {/* Delete button */}
+                  </div>
                 </td>
               )}
             </tr>
