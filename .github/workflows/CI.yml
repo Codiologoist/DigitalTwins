@@ -82,8 +82,6 @@ jobs:
           sudo apt-get update && sudo apt-get install -y curl
           curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
           sudo apt-get install -y nodejs
-          node --version
-          npm --version
           cd server
           npm install
       
@@ -91,7 +89,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: decrypted-data
-          path: server/
+          path: server/decrypted_data
+        run: |
+          cd server
+          ls -l
 
       - name: Start server and run tests
         run: |
