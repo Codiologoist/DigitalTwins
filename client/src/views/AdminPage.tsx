@@ -1,16 +1,19 @@
 import React, {useState} from 'react';
 import DoctorTable from '../components/DoctorTable';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const AdminPage: React.FC = () => {
+    const navigate = useNavigate(); // Initialize useNavigate
     const [doctorData, setDoctorData] = useState([
       { 'Full Name': 'Dr. John Doe', 'Personal Number': '987654', 'Username': 'jdoe', 'Password': 'password123' },
       { 'Full Name': 'Dr. Jane Smith', 'Personal Number': '456789', 'Username': 'jsmith', 'Password': 'password456' }
     ]);
   
-    // Handle editing a doctor
+     // Handle editing a doctor
     const handleEdit = (doctor: any) => {
-      console.log('Edit doctor:', doctor);
-      // Implement your edit logic here (e.g., open a modal with a form) PLACEHOLDER
+     console.log('Edit doctor:', doctor);
+     // Navigate to the EditDoctorPage, passing the doctor's data
+     navigate('/editDoctor', { state: { doctor } }); // modify the path as needed
     };
   
     // Handle deleting a doctor
