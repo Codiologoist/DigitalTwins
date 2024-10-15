@@ -91,7 +91,7 @@ jobs:
 
       - name: Start server and run tests
         run: |
-          ls -l
+          cd server
           npm run ci-test
   build-client:
     runs-on: ubuntu-latest
