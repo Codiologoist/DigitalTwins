@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       CI_RUN: true
-      CI_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      CI_SSH_PRIVATE_KEY: ${{ secrets.CI_SSH_PRIVATE_KEY }}
     steps:
       - name: Checkout public repo
         uses: actions/checkout@v3
