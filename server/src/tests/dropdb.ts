@@ -2,10 +2,10 @@ import { MongooseError } from "mongoose";
 import mongoose from 'mongoose';
 
 // Variables
-var mongoURI = process.env.MONGODB_URI;
+var mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
-    console.error('Missing MONGODB_URI for dropping test database.');
+    console.error('Missing MONGO_URI for dropping test database.');
     process.exit(1);
 }
 
