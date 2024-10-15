@@ -109,5 +109,6 @@ jobs:
 
       - name: Build client
         run: |
+          cd client
           npm run lint
           npm run build
