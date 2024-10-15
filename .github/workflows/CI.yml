@@ -72,7 +72,7 @@ jobs:
           --health-retries 5
     env:
       PORT: 5000
-      MONGODB_URI: mongodb://127.0.0.1:27017/DigitalTwinsDB
+      MONGODB_URI: mongodb://mongodb:27017/DigitalTwinsDB
     steps:
       - name: Checkout public repo
         uses: actions/checkout@v3
@@ -80,7 +80,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y curl
-          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+          curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
           sudo apt-get install -y nodejs
           node --version
           npm --version
