@@ -27,7 +27,6 @@ jobs:
           ls -l
           cd server
           mkdir decrypted_data
-          cd ..
 
       - name: Set up SSH for cloning the private repo
         run: |
@@ -41,7 +40,6 @@ jobs:
           cd server/decryption/src
           git clone git@github.com:Codiologoist/Restricted.git
           cp -r Restricted/* .
-          cd ../../..
 
       - name: Create python environment and run the app
         run: |
@@ -93,6 +91,23 @@ jobs:
 
       - name: Start server and run tests
         run: |
-          cd server
           ls -l
           npm run ci-test
+  build-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout public repo
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y curl
+          curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          cd client
+          npm install
+
+      - name: Build client
+        run: |
+          npm run lint
+          npm run build
