@@ -1,8 +1,9 @@
 import React from 'react'
 import Plot from 'react-plotly.js';
-import { RowData } from '../types';
+import { RowData } from '../types/types.ts';
 
 // Defines the properties that the RowComponent will accept as props.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface RowComponentProps extends RowData {}
 
 // A reusable component that displays a graph and corresponding number indicator.

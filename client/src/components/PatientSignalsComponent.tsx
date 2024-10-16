@@ -1,4 +1,4 @@
-import { RowData } from "../types";
+import { RowData } from "../types/types.ts";
 import RowComponent from "./RowComponents";
 
 interface PatientSignalsProps {

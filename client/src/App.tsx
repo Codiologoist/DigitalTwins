@@ -1,10 +1,8 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import HomeView from "./views/LandingPageView.tsx";
-import HomeView from "./views/LandingPageView.tsx";
 import Monitor from './components/MonitorComponent.tsx';
-import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
-import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
+// import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
 
 const App = () => { 
     return (

@@ -1,5 +1,5 @@
 import { FaUser } from "react-icons/fa";
-import { Patient } from "../types";
+import { Patient } from "../types/types.ts";
 
 interface PatientHeaderProps {
     patient: Patient;
