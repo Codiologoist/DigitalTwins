@@ -1,0 +1,513 @@
+{
+  "info": {
+    "_postman_id": "b235ced5-eee6-47b5-8e3e-ac114e111ec3",
+    "name": "DigitalTwins",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29410474",
+    "_collection_link": "https://gold-shadow-663116.postman.co/workspace/Codiologists~68578af4-9d91-4757-86f6-496827be98c9/collection/29410474-b235ced5-eee6-47b5-8e3e-ac114e111ec3?action=share&source=collection_link&creator=29410474"
+  },
+  "item": [
+    {
+      "name": "PatientData",
+      "item": [
+        {
+          "name": "Get All Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get ABP,Dias",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Dias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "ABP,Dias"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get ABP,Mean",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Mean",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "ABP,Mean"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get ABP,Syst",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Syst",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "ABP,Syst"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get HR,na",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/HR,na",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "HR,na"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get RR,na",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/RR,na",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "RR,na"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get SpO2,na",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/SpO2,na",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "SpO2,na"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tvesic,na",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/Tvesic,na",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "Tvesic,na"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get rSO2,Left",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/rSO2,Left",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "rSO2,Left"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get rSO2,Right",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(`Status code: ${pm.response.code}`, function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/patients/1/data/rSO2,Right",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "patients", "1", "data", "rSO2,Right"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "Post Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Doctor is successfully created\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"firstName\", \"John\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Doe\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"SSN\", \"199904208945\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"username\", \"john.doe\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"SSN\": \"199904208945\",\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePassword123\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/doctors",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "doctors"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Doctors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Successfully retrieved all doctors\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Check if the doctor exists in the list with username and password\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    const doctor = jsonData.data.find(doc => doc.SSN === \"199904208945\");\r",
+                  "    pm.expect(doctor).to.not.be.undefined;\r",
+                  "    pm.expect(doctor).to.have.property(\"username\", \"john.doe\");\r",
+                  "    pm.expect(doctor).to.have.property(\"password\"); // Ensure password is present, though unhashed\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/doctors",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "doctors"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Patch Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Doctor is successfully updated\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Jane\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Smith\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"username\", \"jane.smith\");\r",
+                  "    pm.expect(jsonData.data).to.have.property(\"password\"); // Ensure password is updated\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"username\": \"jane.smith\",\r\n  \"password\": \"newSecurePassword456\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "doctors", "199904208945"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Doctor is successfully deleted\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Doctor deleted successfully\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "v1", "admin", "doctors", "199904208945"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get welcome message",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/v1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "v1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
