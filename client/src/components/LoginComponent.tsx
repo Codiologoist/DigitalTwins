@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import icu_image from "../assets/patientImage.png";
 import { useState } from "react";
@@ -11,22 +12,25 @@ export default function LoginComponent() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.post("http://localhost:5000/api/v1/login", {
+        username,
+        password,
       });
-      const data = await response.json();
+      
+      const data = response.data;
 
-      if (response.ok) {
+      if (data.success) {
         // Store Token and navigate
         localStorage.setItem("token", data.token); // Assume that the returned token field is data.token
         navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
-      } else {
-        alert(data.message); // Prompt for login failure
-      }
+      } 
     } catch (error) {
-      console.error("Login request failed:", error);
+      if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+          alert(errorMessage);
+      } else {
+          console.error("Login request failed:", error);
+      }
     }
     
   };
