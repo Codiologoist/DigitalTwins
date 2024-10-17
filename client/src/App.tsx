@@ -2,17 +2,6 @@ import './App.css';
 import { Routes, Route } from "react-router-dom";
 import HomeView from "./views/LandingPageView.tsx";
 import Monitor from './components/MonitorComponent.tsx';
-<<<<<<< HEAD
-// import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
-
-const App = () => { 
-    return (
-      <Routes>
-        <Route path="/" element={<HomeView />} /> 
-        <Route path=":patientId/monitor" element={<Monitor />} />
-
-      </Routes>
-=======
 import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
 import NavBar from './components/NavbarComponent.tsx';
 import DoctorPageComponent from './components/DoctorPageComponent.tsx'
@@ -54,7 +43,6 @@ const App = () => {
             <Route path="*" element={<NotFound />}/> {/* Catch-all route for handling 404 pages */}
         </Routes>
       </div>
->>>>>>> e819f9e (#28 Improve navbar functionality)
     );
 };
 

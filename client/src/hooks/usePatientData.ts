@@ -1,9 +1,5 @@
 import {useEffect, useState} from "react";
-<<<<<<< HEAD
-import { AllDataType } from "../types/types.ts";
-=======
 import { AllDataType } from "../types/types";
->>>>>>> e819f9e (#28 Improve navbar functionality)
 import { fetchPatientData } from "../utils.ts";
 
 // Custom hook to manage the patient data
@@ -24,8 +20,8 @@ const usePatientData = () => {
     // Initializes the state for checking that data is currently being loaded 
     const [loading, setLoading] = useState(true);
     // Initializes the state for tracking the current index in the dataset
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [, setCurrentIndex] = useState(0);  
+     
+    const [currentIndex, setCurrentIndex] = useState(0);  
     // Initializes the state 'fetchedData' with an object consisting of multiple data types of patients
     const [fetchedData, setFetchedData] = useState<AllDataType>({
         ["ABP,Dias"]: { time_vector: [], measurement_data: [] },

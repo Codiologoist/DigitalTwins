@@ -10,14 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@headlessui/react": "^2.1.10",
     "@heroicons/react": "^2.1.5",
->>>>>>> e819f9e (#28 Improve navbar functionality)
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.7",
     "plotly.js": "^2.35.2",
