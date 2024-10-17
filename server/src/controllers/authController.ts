@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
 import Admin from "../models/Admin";
 import Doctor from "../models/Doctor";
+
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -15,8 +18,8 @@ export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
-    let user;
-    let userType;
+    let user = null;
+    let userType = null;
 
     // First, check if the user exists in the Admin collection
     user = await Admin.findOne({ username });
@@ -32,7 +35,7 @@ export const login = async (req: Request, res: Response) => {
 
     // If user is still not found, return an error
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "The user could not be found" });
     }
 
     // Check if the password matches

@@ -6,6 +6,7 @@ import cors from "cors";
 import apiRoutes from "./routes/api";
 import patientRoutes from "./routes/patient";
 import adminRoutes from "./routes/admin";
+import loginRoutes from "./routes/login"
 import { notFoundHandler } from "./middlewares/errorHandler";
 import { authenticate } from "./middlewares/authMiddleware";
 
@@ -45,6 +46,7 @@ app.use(express.json());
 app.use("/api/v1", apiRoutes);
 app.use("/api/v1/patients", authenticate, patientRoutes);
 app.use("/api/v1/admin", authenticate, adminRoutes);
+app.use("/api/v1", loginRoutes);
 
 // Apply error handler
 app.use(notFoundHandler);
