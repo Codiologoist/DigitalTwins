@@ -7,6 +7,7 @@ import apiRoutes from "./routes/api";
 import patientRoutes from "./routes/patient";
 import adminRoutes from "./routes/admin"; // Add Admin routes
 import { notFoundHandler } from "./middlewares/errorHandler";
+import { updatePatientDataInterval } from "./services/utils";
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +40,7 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Apply routes
 app.use("/api/v1", apiRoutes);
@@ -52,3 +54,6 @@ app.use(notFoundHandler);
 app.listen(port, () => {
   console.log(`HTTP Server running on port ${port}`);
 });
+
+// Update patient data every 5 minutes
+updatePatientDataInterval();
