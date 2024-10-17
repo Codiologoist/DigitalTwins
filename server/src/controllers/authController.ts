@@ -4,7 +4,12 @@ import jwt from "jsonwebtoken";
 import Admin from "../models/Admin";
 import Doctor from "../models/Doctor";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.error("JWT_SECRET is not defined. Please set it in your environment variables in .env file.");
+  process.exit(1);
+}
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -37,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Generate JWT with user ID and role
-    const token = jwt.sign({ id: user._id, role: userType }, JWT_SECRET, {
+    const token = jwt.sign({ id: user._id, username: user.username, role: userType }, JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -45,6 +50,10 @@ export const login = async (req: Request, res: Response) => {
       success: true,
       token,
       role: userType,
+      user: {
+        id: user._id,
+        username: user.username,
+      },
       message: `Login successful for ${userType}`,
     });
   } catch (error: any) {
