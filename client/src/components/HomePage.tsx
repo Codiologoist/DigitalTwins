@@ -2,7 +2,7 @@ import icuImage from "../assets/icu_image.png";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen p-6 bg-white font-sans">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen p-6 pt-10 bg-white font-sans">
       {/* Text Section */}
       <div className="flex flex-col justify-center w-full md:w-1/2 p-6">
         <h1 className="text-5xl font-extrabold text-blue-900 mb-4 text-center md:text-left">
