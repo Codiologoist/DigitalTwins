@@ -53,10 +53,3 @@ app.use(notFoundHandler);
 app.listen(port, () => {
   console.log(`HTTP Server running on port ${port}`);
 });
-
-//Start HTTPS server
-/*
-https.createServer(sslOptions, app).listen(port, () => {
- console.log(`HTTPS Server running on port ${port}`);
-});
-*/

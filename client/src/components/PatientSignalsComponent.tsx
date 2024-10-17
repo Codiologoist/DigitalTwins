@@ -1,5 +1,5 @@
-import { RowData } from "../types";
-import RowComponent from "./RowComponents";
+import { RowData } from "../types/types";
+import RowComponent from "./RowComponent";
 
 interface PatientSignalsProps {
     rowData: RowData[];
