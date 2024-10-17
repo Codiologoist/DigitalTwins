@@ -14,6 +14,31 @@ export const getAllDoctors = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to get a specific doctor by SSN
+export const getDoctorBySSN = async (req: Request, res: Response) => {
+  const { SSN } = req.params;
+
+  try {
+    // Find the doctor by SSN
+    const doctor = await Doctor.findOne({ SSN });
+
+    // If doctor not found, return 404
+    if (!doctor) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Doctor with SSN ${SSN} not found` });
+    }
+
+    // If doctor found, return doctor data
+    return res.status(200).json({ success: true, data: doctor });
+  } catch (error: any) {
+    console.error(`Error fetching doctor: ${error.message || error}`);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 // Controller to create a doctor
 export const createDoctor = async (req: Request, res: Response) => {
   const { firstName, lastName, SSN, username, password } = req.body;
