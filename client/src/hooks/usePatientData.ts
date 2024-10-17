@@ -1,5 +1,9 @@
 import {useEffect, useState} from "react";
+<<<<<<< HEAD
 import { AllDataType } from "../types/types.ts";
+=======
+import { AllDataType } from "../types/types";
+>>>>>>> e819f9e (#28 Improve navbar functionality)
 import { fetchPatientData } from "../utils.ts";
 
 // Custom hook to manage the patient data
@@ -138,6 +142,7 @@ const usePatientData = () => {
                         }
                     }
                 });
+                console.log("Current Index:", currentIndex);
                 return nextIndex; // Updates currentIndex to the next index                            
                 }
             )};
@@ -151,7 +156,7 @@ const usePatientData = () => {
             clearInterval(fetchIntervalId); 
             clearInterval(updateIntervalId);
         }
-    }, [fetchedData])
+    }, [windowSize,fetchedData])
     return {visibleData, loading};
 }
 
