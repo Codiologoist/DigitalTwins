@@ -7,8 +7,7 @@ interface DoctorDocument extends Document {
   SSN: string;
   username: string;
   password: string;
-  type: string;
-  comparePassword(candidatePassword: string): Promise<boolean>;
+  comparePassword(candidatePassword: string): Promise<boolean>; // Password comparison
 }
 
 const DoctorSchema: Schema = new Schema({
@@ -17,16 +16,15 @@ const DoctorSchema: Schema = new Schema({
   SSN: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  type: { type: String, default: "doctor" },
 });
 
 // Encrypt passwords using bcrypt
 DoctorSchema.pre<DoctorDocument>("save", async function (next) {
   try {
-    if (!this.isModified("password")) return next();
+    if (!this.isModified("password")) return next(); // If the password has not been modified, skip the encryption process
 
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    const salt = await bcrypt.genSalt(10); // Generate a salt
+    this.password = await bcrypt.hash(this.password, salt);  // Hash the password with salt
     next();
   } catch (error) {
     next(error as mongoose.CallbackError);
