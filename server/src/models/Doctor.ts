@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import bcrypt from "bcryptjs";
 
 interface DoctorDocument extends Document {
   firstName: string;
@@ -6,6 +7,8 @@ interface DoctorDocument extends Document {
   SSN: string;
   username: string;
   password: string;
+  type: string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const DoctorSchema: Schema = new Schema({
@@ -14,7 +17,26 @@ const DoctorSchema: Schema = new Schema({
   SSN: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  type: { type: String, default: "doctor" },
 });
+
+// Encrypt passwords using bcrypt
+DoctorSchema.pre<DoctorDocument>("save", async function (next) {
+  try {
+    if (!this.isModified("password")) return next();
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error as mongoose.CallbackError);
+  }
+});
+
+// Compare the entered password with the stored hash password
+DoctorSchema.methods.comparePassword = function (candidatePassword: string): Promise<boolean> {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 const Doctor = mongoose.model<DoctorDocument>("Doctor", DoctorSchema);
 export default Doctor;
