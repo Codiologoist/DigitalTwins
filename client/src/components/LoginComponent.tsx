@@ -1,16 +1,53 @@
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import icu_image from "../assets/patientImage.png";
+import { useState } from "react";
+import Navbar from './NavbarComponent';
 
 export default function LoginComponent() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/login", {
+        username,
+        password,
+      });
+      
+      const data = response.data;
+
+      if (data.success) {
+        // Store Token and navigate
+        localStorage.setItem("token", data.token);
+        setUserRole(data.role);
+        setIsLoggedIn(true);
+        navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
+      } 
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+          alert(errorMessage);
+      } else {
+          console.error("Login request failed:", error);
+      }
+    }
+    
   };
 
   return (
     <>
+      <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={() => {
+        setIsLoggedIn(false);
+        setUserRole(null);
+        localStorage.removeItem('token');
+      }} />
+      
       <div className="relative isolate min-h-screen">
         {/* Background container */}
         <div
@@ -41,15 +78,17 @@ export default function LoginComponent() {
             <form action="#" method="POST" className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium font-bold leading-6 text-gray-900">
-                  Email address
+                  Username
                 </label>
                 <div className="mt-2">
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
+                    id="username"
+                    name="username"
+                    type="username"
                     required
-                    autoComplete="email"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -60,11 +99,7 @@ export default function LoginComponent() {
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
+                  
                 </div>
                 <div className="mt-2">
                   <input
@@ -73,6 +108,8 @@ export default function LoginComponent() {
                     type="password"
                     required
                     autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full rounded-md border-0 pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>

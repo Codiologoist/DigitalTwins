@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getAllDoctors,
+  getDoctorBySSN,
   createDoctor,
   deleteDoctor,
   updateDoctor,
@@ -10,6 +11,7 @@ const router = Router();
 
 // Admin routes for managing doctors
 router.get("/doctors", getAllDoctors); // GET all doctors
+router.get("/doctors/:SSN", getDoctorBySSN); // Get a specific doctor by SSN
 router.post("/doctors", createDoctor); // CREATE a new doctor
 router.delete("/doctors/:SSN", deleteDoctor); // DELETE a doctor by SSN
 router.patch("/doctors/:SSN", updateDoctor); // UPDATE a doctor by SSN
