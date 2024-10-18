@@ -2,11 +2,14 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import icu_image from "../assets/patientImage.png";
 import { useState } from "react";
+import Navbar from './NavbarComponent';
 
 export default function LoginComponent() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +24,9 @@ export default function LoginComponent() {
 
       if (data.success) {
         // Store Token and navigate
-        localStorage.setItem("token", data.token); // Assume that the returned token field is data.token
+        localStorage.setItem("token", data.token);
+        setUserRole(data.role);
+        setIsLoggedIn(true);
         navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
       } 
     } catch (error) {
@@ -37,6 +42,12 @@ export default function LoginComponent() {
 
   return (
     <>
+      <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={() => {
+        setIsLoggedIn(false);
+        setUserRole(null);
+        localStorage.removeItem('token');
+      }} />
+      
       <div className="relative isolate min-h-screen">
         {/* Background container */}
         <div
@@ -88,11 +99,7 @@ export default function LoginComponent() {
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
+                  
                 </div>
                 <div className="mt-2">
                   <input
