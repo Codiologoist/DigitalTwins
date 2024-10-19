@@ -3,8 +3,9 @@ import Table from './Table';
 
 // Define types for doctor data
 interface Doctor {
-  'Full Name': string;
-  'Personal Number': string;
+  'First Name': string;
+  'Last Name': string;
+  'SSN': string;
   'Username': string;
   'Password': string;
 }
@@ -17,7 +18,7 @@ interface DoctorTableProps {
   }
 
   const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
-    const columns = ['Full Name', 'Personal Number', 'Username', 'Password'];
+    const columns = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
 
     return <Table columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
 };

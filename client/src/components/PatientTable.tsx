@@ -5,11 +5,11 @@ import Table from './Table';
 interface Patient {
   'First Name': string;
   'Last Name': string;
-  'Personal Number': string;
+  'SSN': string;
 }
 
 const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
-  const columns = ['First Name', 'Last Name', 'Personal Number'];
+  const columns = ['First Name', 'Last Name', 'SSN'];
 
   return <Table columns={columns} data={data} />;
 };

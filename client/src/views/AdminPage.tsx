@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const AdminPage: React.FC = () => {
     const navigate = useNavigate(); // Initialize useNavigate
     const [doctorData, setDoctorData] = useState([
-      { 'Full Name': 'Dr. John Doe', 'Personal Number': '987654', 'Username': 'jdoe', 'Password': 'password123' },
-      { 'Full Name': 'Dr. Jane Smith', 'Personal Number': '456789', 'Username': 'jsmith', 'Password': 'password456' }
+      { 'First Name': 'Robert', 'Last Name': 'Brown', 'SSN': '123456', 'Username': 'rbrown', 'Password': 'password789' },
+      { 'First Name': 'Emily', 'Last Name': 'Davis', 'SSN': '654321', 'Username': 'edavis', 'Password': 'password012' }
     ]);
   
      // Handle editing a doctor
