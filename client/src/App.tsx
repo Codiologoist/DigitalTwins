@@ -1,16 +1,14 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import HomeView from "./views/HomeView.tsx";
-import AdminPage from './views/AdminPage.tsx';
-import PatientListPage from './views/PatientListPage.tsx';
+import AdminsPage from './views/AdminsPage.tsx';
+import DoctorsPage from './views/DoctorsPage.tsx';
 import EditDoctorPage from './views/EditDoctorPage.tsx';
 import Monitor from './components/MonitorComponent.tsx';
 import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
 import NavBar from './components/NavbarComponent.tsx';
-import DoctorPageComponent from './components/DoctorPageComponent.tsx'
 import {useEffect, useState} from 'react';
 import NotFound from './components/NotFoundComponent.tsx';
-import AdminPageComponent from './components/AdminPageComponent.tsx';
 
 const App = () => {
   
@@ -40,9 +38,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomeView />} /> 
             <Route path=":patientId/monitor" element={<Monitor />} />
+            <Route path="/editDoctor" element={<EditDoctorPage />} /> {/* replace it later on here and in adminspage naviagtion when clicked on edit button */}
             <Route path="/login" element={<LoginComponent />} />
-            <Route path="/doctors/:SSN" element={<DoctorPageComponent />}/> {/* using /doctors/12 -> fake SSN for testing purpose, to be replaced */}
-            <Route path="/doctors" element={<AdminPageComponent />}/> {/* Admin page route, blank page for now, to be replaced */}
+            <Route path="/doctors/:SSN" element={<DoctorsPage  />}/> {/* using /doctors/12 -> fake SSN for testing purpose, to be replaced */}
+            <Route path="/doctors" element={<AdminsPage />}/> {/* Admin page route, blank page for now, to be replaced */}
             <Route path="*" element={<NotFound />}/> {/* Catch-all route for handling 404 pages */}
         </Routes>
       </div>
