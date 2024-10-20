@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const AdminPage: React.FC = () => {
     const navigate = useNavigate(); // Initialize useNavigate
     const [doctorData, setDoctorData] = useState([
-      { 'First Name': 'Robert', 'Last Name': 'Brown', 'SSN': '123456', 'Username': 'rbrown', 'Password': 'password789' },
-      { 'First Name': 'Emily', 'Last Name': 'Davis', 'SSN': '654321', 'Username': 'edavis', 'Password': 'password012' }
+      {'_id': '111', firstName: 'John', lastName: 'Doe', 'SSN': '987654', username: 'jdoe', password: 'password123' },
+      {'_id': '222', firstName: 'Jane', lastName: 'Smith', 'SSN': '456789', username: 'jsmith', password: 'password456' }
     ]);
   
      // Handle editing a doctor
@@ -19,7 +19,7 @@ const AdminPage: React.FC = () => {
     // Handle deleting a doctor with confirmation
     const handleDelete = (doctor: any) => {
         // Show confirmation dialog
-        const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor['Full Name']}?`);
+        const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor['First Name']} ${doctor['Last Name']}?`);
         
         // If user confirms deletion
         if (confirmDelete) {

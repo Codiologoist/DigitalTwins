@@ -1,13 +1,15 @@
 import React from 'react';
 import Table from './Table';
+import { mapDataToHeaders } from '../functions/dataMapper';
 
 // Define types for doctor data
 interface Doctor {
-  'First Name': string;
-  'Last Name': string;
+  '_id': string;
+  'firstName': string;
+  'lastName': string;
   'SSN': string;
-  'Username': string;
-  'Password': string;
+  'username': string;
+  'password': string;
 }
 
 // Define props for DoctorTable, including onEdit and onDelete
@@ -19,8 +21,18 @@ interface DoctorTableProps {
 
   const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
     const columns = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
+    const headersMapping = {
+      'First Name': 'firstName',
+      'Last Name': 'lastName',
+      'SSN': 'SSN',
+      'Username': 'username',
+      'Password': 'password'
+    };
 
-    return <Table columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
+     // Use the utility function to map data to headers
+  const mappedTableData = mapDataToHeaders(data, headersMapping);
+
+    return <Table columns={columns} data={mappedTableData} onEdit={onEdit} onDelete={onDelete} />;
 };
 
 export default DoctorTable;

@@ -1,13 +1,15 @@
 import React from 'react';
 import PatientTable from '../components/PatientTable';
 
+
 const PatientListPage: React.FC = () => {
-  const patientData = [
-    {'First Name': 'John', 'Last Name': 'Doe', SSN: '198504121234' },
-    {'First Name': 'Jane', 'Last Name': 'Smith', SSN: '199203058765' },
-    {'First Name': 'Emily', 'Last Name': 'Johnson', SSN: '197812253456' },
-    {'First Name': 'Michael', 'Last Name': 'Brown', SSN: '200001019876' },
-    {'First Name': 'Sarah', 'Last Name': 'Davis', SSN: '199507172345' }
+  const patientData = [ 
+    {'_id': '123', firstName: 'David', lastName: 'Svenson', SSN: '200205156835' },
+    {'_id': '321', firstName: 'John', lastName: 'Doe', SSN: '198504121234' },
+    {'_id': '567', firstName: 'Jane', lastName: 'Smith', SSN: '199203058765' },
+    {'_id': '234', firstName: 'Emily', lastName: 'Johnson', SSN: '197812253456' },
+    {'_id': '568', firstName: 'Michael', lastName: 'Brown', SSN: '200001019876' },
+    {'_id': '891', firstName: 'Sarah', lastName: 'Davis', SSN: '199507172345' }
   ];
 
   return (
