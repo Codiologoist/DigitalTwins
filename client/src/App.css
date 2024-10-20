@@ -6,4 +6,54 @@ html, body, #root {
   padding: 0;
   color: lime; /*text color*/
 }
+.table-wrapper {
+  padding: 20px;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+}
 
+.table {
+  width: 100%;
+  border-collapse: collapse; /* Remove space between borders */
+  margin: 20px 0; /* Space above and below the table */
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc; /* Add a light border to cells */
+  padding: 10px; /* Space inside cells */
+  text-align: left; /* Align text to the left */
+  color: #333; /* Dark gray text color for the table */
+}
+
+.table th {
+  background-color: #f4f4f4; /* Light grey background for header */
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light grey for even rows */
+}
+
+.table tr:hover {
+  background-color: #f1f1f1; /* Highlight row on hover */
+}
+
+/* Add styles specifically for action buttons */
+.actions {
+  display: flex;               /* Use flexbox for layout */
+  gap: 15px;                  /* Space between buttons */
+  margin-top: 10px;           /* Space above the action buttons */
+}
+
+.actions button {
+  background-color: transparent; /* No background for cleaner look */
+  border: none;                  /* Remove default border */
+  color: #013d7c;                /* Change text color to a shade of blue */
+  text-decoration: underline;     /* Underline the text */
+  cursor: pointer;               /* Pointer cursor on hover */
+  transition: color 0.3s;        /* Smooth color transition */
+  font-weight: 500;
+}
+
+.actions button:hover {
+  color: #0056b3;                /* Darker blue on hover for better visibility */
+}
