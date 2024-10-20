@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { PatientData } from "../models/Data";
+import { PatientData, Data } from "../models/Data";
 import Patient from "../models/Patient";
+import mongoose from "mongoose";
+
 
 /**
  * Reads a file from the decrypted_data directory and returns its contents as a JSON object.
@@ -36,9 +38,9 @@ const updatePatientData = async () => {
   // Every 5 seconds a new data document is appended
   // We want the data for the past 12 hours to be in the database
   // Older data will be deleted
-  // 12 * 60 * 60 / 5 = 720
+  // 12 * 60 * 60 / 5 = 8640
   // So at all times we have 720 data documents
-  const maxDocs = 720;
+  const maxDocs = 8640;
   let data: { [key: string]: PatientData } = {};
   try {
     data = getDecryptedData();
@@ -52,6 +54,51 @@ const updatePatientData = async () => {
     return;
   }
   if (patient.data["ABP,Dias"].length >= maxDocs) {
+    let dataDoc = await Data.findByIdAndDelete(patient.data["ABP,Dias"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["ABP,Mean"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["ABP,Syst"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["HR,na"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["RR,na"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["SpO2,na"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["Tvesic,na"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["rSO2,Left"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
+    dataDoc = await Data.findByIdAndDelete(patient.data["rSO2,Right"][0]);
+    if (!dataDoc) {
+      console.log("Patient data not found");
+      return;
+    }
     patient.data["ABP,Dias"].shift();
     patient.data["ABP,Mean"].shift();
     patient.data["ABP,Syst"].shift();
@@ -62,15 +109,34 @@ const updatePatientData = async () => {
     patient.data["rSO2,Left"].shift();
     patient.data["rSO2,Right"].shift();
   }
-  patient.data["ABP,Dias"].push(data["ABP,Dias"]);
-  patient.data["ABP,Mean"].push(data["ABP,Mean"]);
-  patient.data["ABP,Syst"].push(data["ABP,Syst"]);
-  patient.data["HR,na"].push(data["HR,na"]);
-  patient.data["RR,na"].push(data["RR,na"]);
-  patient.data["SpO2,na"].push(data["SpO2,na"]);
-  patient.data["Tvesic,na"].push(data["Tvesic,na"]);
-  patient.data["rSO2,Left"].push(data["rSO2,Left"]);
-  patient.data["rSO2,Right"].push(data["rSO2,Right"]);
+
+  let dataDoc = new Data(data["ABP,Dias"]);
+  patient.data["ABP,Dias"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["ABP,Mean"]);
+  patient.data["ABP,Mean"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["ABP,Syst"]);
+  patient.data["ABP,Syst"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["HR,na"]);
+  patient.data["HR,na"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["RR,na"]);
+  patient.data["RR,na"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["SpO2,na"]);
+  patient.data["SpO2,na"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["Tvesic,na"]);
+  patient.data["Tvesic,na"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["rSO2,Left"]);
+  patient.data["rSO2,Left"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
+  dataDoc = new Data(data["rSO2,Right"]);
+  patient.data["rSO2,Right"].push(dataDoc._id as mongoose.Types.ObjectId);
+  await dataDoc.save();
   await patient.save();
 }
 
