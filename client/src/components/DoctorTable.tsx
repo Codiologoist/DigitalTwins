@@ -1,6 +1,5 @@
 import React from 'react';
 import Table from './Table';
-import { mapDataToHeaders } from '../functions/dataMapper';
 
 // Define types for doctor data
 export interface Doctor {
@@ -21,18 +20,17 @@ interface DoctorTableProps {
 
   const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
     const columns: string[] = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
-    const headersMapping = {
-      'First Name': 'firstName',
-      'Last Name': 'lastName',
-      'SSN': 'SSN',
-      'Username': 'username',
-      'Password': 'password'
-    };
+    
+    // Map data to the required structure directly within the component
+  const mappedTableData = data.map(doctor => ({
+    'First Name': doctor.firstName,
+    'Last Name': doctor.lastName,
+    'SSN': doctor.SSN,
+    'Username': doctor.username,
+    'Password': doctor.password
+  }));
 
-     // Use the utility function to map data to headers
-  const mappedTableData = mapDataToHeaders(data, headersMapping);
-
-    return <Table columns={columns} data={mappedTableData} onEdit={onEdit} onDelete={onDelete} />;
+  return <Table columns={columns} data={mappedTableData} onEdit={onEdit} onDelete={onDelete} />;
 };
 
 export default DoctorTable;

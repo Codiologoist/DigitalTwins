@@ -1,12 +1,14 @@
+import React from 'react';
+
 // Define types for the props
-interface TableProps<T> {
-  columns: (keyof T)[];
-  data: T[];  // Array of objects representing the table rows
-  onEdit?: (row: T) => void; // Optional edit function for admin
-  onDelete?: (row: T) => void; // Optional delete function for admin
+interface TableProps {
+  columns: string[];
+  data: Array<{ [key: string]: any }>;  // Array of objects representing the table rows, each with key-value pairs for cell data
+  onEdit?: (row: any) => void; // Optional edit function for admin
+  onDelete?: (row: any) => void; // Optional delete function for admin
 }
 
-const Table= <T,> ({ columns, data, onEdit, onDelete }: TableProps<T>) => {
+const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -14,7 +16,7 @@ const Table= <T,> ({ columns, data, onEdit, onDelete }: TableProps<T>) => {
           <tr>
             {/* Map through the columns to create table header cells */}
             {columns.map((column, index) => (
-              <th key={index}>{String(column)}</th>// Use the index as the key for header cells 
+              <th key={index}>{column}</th>// Use the index as the key for header cells 
             ))}
             {onEdit && onDelete && <th>Actions</th>} {/* Conditional column for actions */}
           </tr>
@@ -25,7 +27,7 @@ const Table= <T,> ({ columns, data, onEdit, onDelete }: TableProps<T>) => {
             <tr key={rowIndex}> {/* Use the row index as the key for rows */}
               {/* Map through the columns to create table data cells */}
               {columns.map((column, colIndex) => (
-                <td key={colIndex}>{row[column] as unknown as string | number}</td>
+                <td key={colIndex}>{row[column]}</td>  // Display the data for each cell based on column name
               ))}
               {onEdit && onDelete && ( // show action buttons only for admin
                 <td>
