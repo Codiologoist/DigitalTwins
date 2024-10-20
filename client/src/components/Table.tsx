@@ -4,8 +4,8 @@ import React from 'react';
 interface TableProps {
   columns: string[];
   data: Array<{ [key: string]: any }>;  // Array of objects representing the table rows, each with key-value pairs for cell data
-  onEdit?: (row: any) => void; // Optional edit function for admin
-  onDelete?: (row: any) => void; // Optional delete function for admin
+  onEdit?: (row: { [key: string]: string | number }) => void; // Optional edit function for admin
+  onDelete?: (row: { [key: string]: string | number }) => void; // Optional delete function for admin
 }
 
 const Table: React.FC<TableProps> = ({ columns, data, onEdit, onDelete }) => {
