@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 // Define types for patient data
-interface Patient {
+export interface Patient {
   '_id': string;
   'firstName': string;
   'lastName': string;
@@ -30,8 +30,12 @@ const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
   // Map data to include onClick handler for last name and SSN
   const tableData = data.map((patient) => ({
     ...patient,
-    'lastName': <span onClick={() => handleNavigation(patient._id)} style={{ cursor: 'pointer', color: 'darkblue' }}>{patient.lastName}</span>,
-    'SSN': <span onClick={() => handleNavigation(patient._id)} style={{ cursor: 'pointer', color: 'darkblue' }}>{patient.SSN}</span>,
+    'lastName': <span onClick={() => handleNavigation(patient._id)} style={{ cursor: 'pointer', color: 'darkblue' }}>
+      {patient.lastName}
+      </span>,
+    'SSN': <span onClick={() => handleNavigation(patient._id)} style={{ cursor: 'pointer', color: 'darkblue' }}>   
+      {patient.SSN}
+      </span>,
   }));
 
   // Use the utility function to map data to headers

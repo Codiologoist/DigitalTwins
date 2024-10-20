@@ -1,9 +1,9 @@
 import React from 'react';
-import PatientTable from '../components/PatientTable';
+import PatientTable, {Patient} from '../components/PatientTable';
 
 
 const PatientListPage: React.FC = () => {
-  const patientData = [ 
+  const patientData: Patient[]  = [ 
     {'_id': '123', firstName: 'David', lastName: 'Svenson', SSN: '200205156835' },
     {'_id': '321', firstName: 'John', lastName: 'Doe', SSN: '198504121234' },
     {'_id': '567', firstName: 'Jane', lastName: 'Smith', SSN: '199203058765' },

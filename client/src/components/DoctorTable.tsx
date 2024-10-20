@@ -3,7 +3,7 @@ import Table from './Table';
 import { mapDataToHeaders } from '../functions/dataMapper';
 
 // Define types for doctor data
-interface Doctor {
+export interface Doctor {
   '_id': string;
   'firstName': string;
   'lastName': string;
@@ -20,7 +20,7 @@ interface DoctorTableProps {
   }
 
   const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
-    const columns = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
+    const columns: string[] = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
     const headersMapping = {
       'First Name': 'firstName',
       'Last Name': 'lastName',
