@@ -27,7 +27,6 @@ const DataSchema: Schema = new Schema({
   start_date_time: { 
     type: String, 
     required: true,
-    unique: true
   },
   time_vector: { 
     type: [Number], 
@@ -44,57 +43,79 @@ const DataSchema: Schema = new Schema({
 });
 
 export interface AllDataType extends Document{
-    ["ABP,Dias"]: PatientData[],
-    ["ABP,Mean"]: PatientData[],
-    ["ABP,Syst"]: PatientData[],
-    ["HR,na"]: PatientData[],
-    ["RR,na"]: PatientData[],
-    ["SpO2,na"]: PatientData[],
-    ["Tvesic,na"]: PatientData[],
-    ["rSO2,Left"]: PatientData[],
-    ["rSO2,Right"]: PatientData[],
+    ["ABP,Dias"]: mongoose.Types.ObjectId[],
+    ["ABP,Mean"]: mongoose.Types.ObjectId[],
+    ["ABP,Syst"]: mongoose.Types.ObjectId[],
+    ["HR,na"]: mongoose.Types.ObjectId[],
+    ["RR,na"]: mongoose.Types.ObjectId[],
+    ["SpO2,na"]: mongoose.Types.ObjectId[],
+    ["Tvesic,na"]: mongoose.Types.ObjectId[],
+    ["rSO2,Left"]: mongoose.Types.ObjectId[],
+    ["rSO2,Right"]: mongoose.Types.ObjectId[],
     // Add more data types if needed 
 }
 
 const AllDataTypeSchema: Schema = new Schema({
     ["ABP,Dias"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["ABP,Mean"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["ABP,Syst"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["HR,na"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["RR,na"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data", 
         required: true 
     },
     ["SpO2,na"]: {
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["Tvesic,na"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     ["rSO2,Left"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data", 
         required: true 
     },
     ["rSO2,Right"]: { 
-        type: [DataSchema], 
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Data",
         required: true 
     },
     // Add more data types if needed 
 });
+
+export interface DataTypes {
+  ["ABP,Dias"]: PatientData;
+  ["ABP,Mean"]: PatientData;
+  ["ABP,Syst"]: PatientData;
+  ["HR,na"]: PatientData;
+  ["RR,na"]: PatientData;
+  ["SpO2,na"]: PatientData;
+  ["Tvesic,na"]: PatientData;
+  ["rSO2,Left"]: PatientData;
+  ["rSO2,Right"]: PatientData;
+  // Add more data types if needed 
+}
 
 const Data = mongoose.model<PatientData>("Data", DataSchema);
 const AllData = mongoose.model<AllDataType>("AllData", AllDataTypeSchema);
