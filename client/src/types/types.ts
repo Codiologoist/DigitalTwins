@@ -35,3 +35,9 @@ export interface Patient {
     firstName: string;
     lastName: string;
 }
+
+export interface NavigationLink {
+  name: string;
+  href: string;
+  current: boolean;
+}

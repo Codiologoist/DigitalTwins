@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { AllDataType } from "../types";
+import { AllDataType } from "../types/types";
 import { fetchPatientData } from "../utils.ts";
 
 // Custom hook to manage the patient data
@@ -20,6 +20,7 @@ const usePatientData = () => {
     // Initializes the state for checking that data is currently being loaded 
     const [loading, setLoading] = useState(true);
     // Initializes the state for tracking the current index in the dataset
+     
     const [currentIndex, setCurrentIndex] = useState(0);  
     // Initializes the state 'fetchedData' with an object consisting of multiple data types of patients
     const [fetchedData, setFetchedData] = useState<AllDataType>({
@@ -137,6 +138,7 @@ const usePatientData = () => {
                         }
                     }
                 });
+                console.log("Current Index:", currentIndex);
                 return nextIndex; // Updates currentIndex to the next index                            
                 }
             )};
@@ -150,7 +152,7 @@ const usePatientData = () => {
             clearInterval(fetchIntervalId); 
             clearInterval(updateIntervalId);
         }
-    }, [fetchedData])
+    }, [windowSize,fetchedData])
     return {visibleData, loading};
 }
 

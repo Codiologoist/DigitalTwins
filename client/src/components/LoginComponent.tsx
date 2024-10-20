@@ -4,7 +4,7 @@ import icu_image from "../assets/patientImage.png";
 export default function LoginComponent() {
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
   };
