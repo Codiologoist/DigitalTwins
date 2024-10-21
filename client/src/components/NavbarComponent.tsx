@@ -49,7 +49,7 @@ const defaultNavigation: NavigationLink[] = [
 ];
 
 export default function Navbar({ userRole, isLoggedIn, onLogout }: NavbarProps) {
-  const [localUserRole, setLocalUserRole] = useState<'doctor' | 'admin' | null>(null);
+  const [, setLocalUserRole] = useState<'doctor' | 'admin' | null>(null);
   const navigate = useNavigate();
   // Function to handle logout
   const handleLogout = () => {
