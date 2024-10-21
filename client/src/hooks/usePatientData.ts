@@ -44,7 +44,7 @@ const usePatientData = () => {
         // Fetch data every 10 seconds
         const fetchData = async() => {
             try {
-                const fetchedDataSet = await fetchPatientData("1", "data");
+                const fetchedDataSet = await fetchPatientData(localStorage.getItem("SSN") as string, "data");
                 console.log("fetched data from backend:", fetchedDataSet);
                 setFetchedData({
                     ["ABP,Dias"]: {
