@@ -5,8 +5,10 @@ import morgan from "morgan";
 import cors from "cors";
 import apiRoutes from "./routes/api";
 import patientRoutes from "./routes/patient";
-import adminRoutes from "./routes/admin"; // Add Admin routes
+import adminRoutes from "./routes/admin";
+import loginRoutes from "./routes/login"
 import { notFoundHandler } from "./middlewares/errorHandler";
+import { authenticate } from "./middlewares/authMiddleware";
 
 // Load environment variables
 dotenv.config();
@@ -44,6 +46,7 @@ app.use(express.json());
 app.use("/api/v1", apiRoutes);
 app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1", loginRoutes);
 
 // Apply error handler
 app.use(notFoundHandler);
