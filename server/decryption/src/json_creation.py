@@ -8,7 +8,7 @@ class JsonCreation:
     """
     Class to create the json files using all the extracted values from the binary files.
     """
-    def __init__(self, data_qual_str, data_qual_time, measurement, start_date_time, time_vector, units, files):
+    def __init__(self, data_qual_str, data_qual_time, measurement, start_date_time, time_vector, units, files, full_name):
         self.data_qual_str = data_qual_str
         self.data_qual_time = data_qual_time
         self.measurement = measurement
@@ -16,6 +16,7 @@ class JsonCreation:
         self.time_vector = time_vector
         self.units = units
         self.files = files
+        self.full_name = full_name
 
     def save_json(self):
         # Change directory to json
@@ -29,7 +30,8 @@ class JsonCreation:
                         'measurement_data': self.measurement[self.files[i]],
                         'start_date_time': self.start_date_time[0],
                         'time_vector': self.time_vector[self.files[i]],
-                        'units': self.units[self.files[i]]}
+                        'units': self.units[self.files[i]],
+                        'full_name': self.full_name}
             self.convert_to_json(json_dict, self.files[i][5:] + ".json")
             print(f'Json File Created: {self.files[i][5:] + ".json"}')
 

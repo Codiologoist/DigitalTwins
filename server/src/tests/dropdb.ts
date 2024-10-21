@@ -1,8 +1,11 @@
 import { MongooseError } from "mongoose";
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Variables
-var mongoURI = process.env.MONGO_URI;
+const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
     console.error('Missing MONGO_URI for dropping test database.');

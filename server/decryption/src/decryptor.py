@@ -38,7 +38,7 @@ def main():
     qual_str = data.extract_qual_string()
 
     # Create json files from the binary extracted values
-    json = json_creation.JsonCreation(qual_str, qual_dict, data_dict, patient_start_str, index_dict, units, data_file_list)
+    json = json_creation.JsonCreation(qual_str, qual_dict, data_dict, patient_start_str, index_dict, units, data_file_list, patient_name)
     json.save_json()
 
     

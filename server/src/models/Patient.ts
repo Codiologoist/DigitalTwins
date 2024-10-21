@@ -1,26 +1,38 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { AllDataType, AllDataTypeSchema } from "./Data";
 
 // Define the data type interface PatientData
-export interface PatientData {
-  data_qual_str: string[];
-  data_qual_time: number[];
-  measurement_data: number[];
-  start_date_time: string;
-  time_vector: number[];
-  units: string[];
+export interface PatientDocument extends Document {
+  name: {
+    firstName: string;
+    lastName: string;
+  },
+  SSN: string,
+  data: AllDataType,
 }
-
-// Defines the Document extension for Mongoose
-interface PatientDocument extends Document, PatientData {}
 
 // Define Mongoose Schema
 const PatientSchema: Schema = new Schema({
-  data_qual_str: { type: [String], required: true },
-  data_qual_time: { type: [Number], required: true },
-  measurement_data: { type: [Number], required: true },
-  start_date_time: { type: String, required: true },
-  time_vector: { type: [Number], required: true },
-  units: { type: [String], required: true },
+  name: {
+    firstName: {
+      type: String,
+      maxlength: 50,
+    },
+    lastName: {
+      type: String,
+      maxlength: 50,
+    },
+  },
+  SSN: {
+    type: String,
+    required: true,
+    unique: true,
+    maxlength: 12,
+    minlength: 12
+  },
+  data: {
+    type: AllDataTypeSchema,
+  }
 });
 
 const Patient = mongoose.model<PatientDocument>("Patient", PatientSchema);
