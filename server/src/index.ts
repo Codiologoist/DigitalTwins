@@ -43,6 +43,7 @@ app.use(
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // Apply routes
 app.use("/api/v1", apiRoutes);
@@ -57,6 +58,9 @@ app.use(notFoundHandler);
 app.listen(port, () => {
   console.log(`HTTP Server running on port ${port}`);
 });
+
+// Update patient data every 5 minutes
+updatePatientDataInterval();
 
 // Update patient data every 5 minutes
 updatePatientDataInterval();
