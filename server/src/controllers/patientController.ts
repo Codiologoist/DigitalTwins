@@ -206,15 +206,15 @@ export const getPatientDataFromDatabase = async (req: Request, res: Response) =>
 
     // Construct the DataDoc object
     const DataDoc: DataTypes = {
-      "ABP,Syst": abpSyst as PatientData,
-      "ABP,Mean": abpMean as PatientData,
-      "ABP,Dias": abpDias as PatientData,
-      "HR,na": hrNa as PatientData,
-      "RR,na": rrNa as PatientData,
-      "SpO2,na": spo2Na as PatientData,
-      "Tvesic,na": tvesicNa as PatientData,
-      "rSO2,Left": rso2Left as PatientData,
-      "rSO2,Right": rso2Right as PatientData,
+      "ABP,Syst": abpSyst,
+      "ABP,Mean": abpMean,
+      "ABP,Dias": abpDias,
+      "HR,na": hrNa,
+      "RR,na": rrNa,
+      "SpO2,na": spo2Na,
+      "Tvesic,na": tvesicNa,
+      "rSO2,Left": rso2Left,
+      "rSO2,Right": rso2Right,
     };
 
     return res.status(200).json({

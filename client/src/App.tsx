@@ -5,12 +5,29 @@ import AdminsPage from './views/AdminsPage.tsx';
 import DoctorsPage from './views/DoctorsPage.tsx';
 import EditDoctorPage from './views/EditDoctorPage.tsx';
 import Monitor from './components/MonitorComponent.tsx';
+import api from './api.ts';
 import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
 import NavBar from './components/NavbarComponent.tsx';
 import {useEffect, useState} from 'react';
 import NotFound from './components/NotFoundComponent.tsx';
 
 const App = () => {
+    // create Dummy patient
+    const patient = {
+      SSN: "199901045678",
+      name : {
+        firstName: "C001",
+        lastName: "",
+      },
+    };
+
+    api.post('/patients', patient).then((response) => {
+      console.log(response);
+      localStorage.setItem('SSN', response.data.patient.SSN);
+    }).catch((error) => {
+      console.log(error);
+    })
+
   
   const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null); // State for tracking the user's role: 'doctor', 'admin', or null (for not logged in)
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for tracking the login status of the user
