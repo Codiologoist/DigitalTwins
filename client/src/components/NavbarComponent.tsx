@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faSignOutAlt, faUserShield, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavigationLink } from '../types/types';
+import { useEffect,useState } from 'react';
 
 //** This file uses the navbar template from Tailwind */
 
@@ -48,6 +49,7 @@ const defaultNavigation: NavigationLink[] = [
 ];
 
 export default function Navbar({ userRole, isLoggedIn, onLogout }: NavbarProps) {
+  const [, setLocalUserRole] = useState<'doctor' | 'admin' | null>(null);
   const navigate = useNavigate();
   // Function to handle logout
   const handleLogout = () => {
@@ -57,6 +59,13 @@ export default function Navbar({ userRole, isLoggedIn, onLogout }: NavbarProps) 
   // Determine the navigation links based on the user role, or use default if the role is null
   const navigation : NavigationLink[] = userRole ? getNavigationLinks[userRole] : defaultNavigation;
 
+  useEffect(() => {
+    const storedUserRole = localStorage.getItem('userRole');
+    if (storedUserRole) {
+      setLocalUserRole(storedUserRole as 'doctor' | 'admin');
+    }
+  }, []);
+  
   return (
     <Disclosure as="nav" className="bg-indigo-800 bg-opacity-80 fixed top-0 w-full z-10 border border-indigo-200/20">
       {({ open }) => (

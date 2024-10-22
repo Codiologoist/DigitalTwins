@@ -1,15 +1,18 @@
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import icu_image from "../assets/patientImage.png";
 import { useState } from "react";
-import Navbar from './NavbarComponent';
 
-export default function LoginComponent() {
+// Define the props for LoginComponent
+interface LoginComponentProps {
+  onLogin: (role: 'doctor' | 'admin') => void; // Define onLogin as a prop
+}
+
+export default function LoginComponent({ onLogin }: LoginComponentProps) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
+  const [, setIsLoggedIn] = useState(false);
+  // const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,9 +28,13 @@ export default function LoginComponent() {
       if (data.success) {
         // Store Token and navigate
         localStorage.setItem("token", data.token);
-        setUserRole(data.role);
+        localStorage.setItem("userRole", data.role);
+        // Update the App state with onLogin
+        // Call onLogin function passed from App component
+        onLogin(data.role);
+        //setUserRole(data.role);
         setIsLoggedIn(true);
-        navigate('/123/monitor'); // The patient Id "123" is hard-coded value for now
+        navigate('/doctors/12'); // The patient Id "123" is hard-coded value for now
       } 
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -42,25 +49,13 @@ export default function LoginComponent() {
 
   return (
     <>
-      <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={() => {
+      {/* <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={() => {
         setIsLoggedIn(false);
         setUserRole(null);
         localStorage.removeItem('token');
-      }} />
+      }} /> */}
       
       <div className="relative isolate min-h-screen">
-        {/* Background container */}
-        <div
-          style={{
-            backgroundImage: `url(${icu_image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            height: '100vh',
-            opacity: 0.1,
-          }}
-          className="absolute inset-0 -z-10"
-        ></div>
-
         {/* Content container */}
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-40 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">

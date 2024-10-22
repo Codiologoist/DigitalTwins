@@ -1,5 +1,34 @@
 import { Request, Response } from "express";
 import Doctor from "../models/Doctor";
+import Admin from "../models/Admin";
+
+// Controller to create a admin
+export const createAdmin = async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+
+  // Verify that the request body contains the necessary information
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required" });
+  }
+
+  try {
+    // Check whether the user name already exists
+    const existingAdmin = await Admin.findOne({ username });
+    if (existingAdmin) {
+      return res.status(400).json({ message: "Admin with this username already exists" });
+    }
+
+    // Create a new administrator and save it
+    const newAdmin = new Admin({ username, password });
+    await newAdmin.save();
+
+    // A successful response is returned
+    res.status(201).json({ message: "Admin created successfully" });
+  } catch (error: any) {
+    // Catch possible errors and return server error responses
+    res.status(500).json({ message: "Error creating admin", error: error.message });
+  }
+};
 
 // Controller to get all doctors
 export const getAllDoctors = async (req: Request, res: Response) => {
