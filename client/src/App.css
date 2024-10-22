@@ -8,6 +8,7 @@ html, body, #root {
 }
 .table-wrapper {
   padding: 20px;
+  padding-top: 80px; /* Adjust this value based on the height of your navbar */
   overflow-x: auto; /* Allow horizontal scrolling if needed */
 }
 
@@ -57,3 +58,39 @@ html, body, #root {
 .actions button:hover {
   color: #0056b3;                /* Darker blue on hover for better visibility */
 }
+
+.add-doctor-button-container {
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  padding: 0 20px 20px 20px; /* Adjust padding as needed */
+}
+
+.add-doctor-button {
+  background-color: none; /* Change to a shade that matches your theme (like purple) */
+  color: white; /* White text */
+  padding: 0% 1%; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  align-items: center; /* Center items vertically */
+  font-weight: 500;
+}
+
+.add-doctor-button button {
+  background-color: rgb(103, 65, 205); /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 10px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.add-doctor-button button:hover {
+  background-color: rgb(75, 184, 75); /* Darker green on hover */
+}
+
+.plus-sign {
+  color: white; /* Ensure plus sign is white */
+  margin-right: 8px; /* Space between plus sign and text */
+}
+

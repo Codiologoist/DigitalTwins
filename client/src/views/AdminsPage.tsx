@@ -36,8 +36,15 @@ const AdminPage: React.FC = () => {
   
     return (
       <div className="page-container">
-        <h1>Manage Doctors</h1>
         <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
+        {/* Add Doctor Button Positioned to the right */}
+        <div className="add-doctor-button-container">
+          <div className="add-doctor-button">
+             <button>
+               <span className="plus-sign">➕</span> Add Doctor
+             </button>
+          </div>
+        </div>
       </div>
     );
   };

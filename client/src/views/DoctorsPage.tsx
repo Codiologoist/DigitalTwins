@@ -14,7 +14,6 @@ const PatientListPage: React.FC = () => {
 
   return (
     <div className="page-container">
-      <h1>Patient List</h1>
       <PatientTable data={patientData} />
     </div>
   );
