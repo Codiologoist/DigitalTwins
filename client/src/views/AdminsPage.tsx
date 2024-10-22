@@ -34,13 +34,29 @@ const AdminPage: React.FC = () => {
       }
    };
   
+
+    // Function to add a new doctor
+    const handleAddDoctor = () => {
+      const newDoctor: Doctor = {
+          _id: (doctorData.length + 1).toString(), // Simple ID generation
+          firstName: 'New',
+          lastName: 'Doctor',
+          SSN: '000000',
+          username: 'newdoctor',
+          password: 'newpassword123'
+      };
+
+      // Add the new doctor to the state
+      setDoctorData([...doctorData, newDoctor]);
+  };
+
     return (
       <div className="page-container">
         <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
         {/* Add Doctor Button Positioned to the right */}
         <div className="add-doctor-button-container">
           <div className="add-doctor-button">
-             <button>
+             <button onClick={handleAddDoctor}>
                <span className="plus-sign">➕</span> Add Doctor
              </button>
           </div>
