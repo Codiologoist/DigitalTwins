@@ -1,15 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import DoctorTable, {Doctor} from '../components/DoctorTable';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from 'axios'; // Import axios to make API calls
 
 
 const AdminPage: React.FC = () => {
     const navigate = useNavigate(); // Initialize useNavigate
-    const [doctorData, setDoctorData] = useState<Doctor[]>([
-      { _id: '111', firstName: 'John', lastName: 'Doe', SSN: '987654', username: 'jdoe', password: 'password123' },
-      { _id: '222', firstName: 'Jane', lastName: 'Smith', SSN: '456789', username: 'jsmith', password: 'password456' }
-    ]);
-  
+    const [doctorData, setDoctorData] = useState<Doctor[]>([]);  // Initialize state for doctor data
+    
+    // Fetch doctors from the backend when the component mounts
+    useEffect(() => {
+      const fetchDoctors = async () => {
+          try {
+              const response = await axios.get('/admin/doctors'); // Use relative URL
+              setDoctorData(response.data.data); // Update state with the fetched doctors
+          } catch (error) {
+              console.error('Error fetching doctors:', error);
+          }
+      };
+
+      fetchDoctors(); // Call the function to fetch doctors
+    }, []); // Empty dependency array means this runs once when the component mounts
   
      // Handle editing a doctor
     const handleEdit = (doctor: Doctor) => {
