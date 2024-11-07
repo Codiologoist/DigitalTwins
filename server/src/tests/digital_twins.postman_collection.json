@@ -1,11 +1,133 @@
 {
 	"info": {
-		"_postman_id": "b33279df-9e82-4b01-9707-be3acb24dd74",
-		"name": "DigitalTwins",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_postman_id": "b2ad76a2-1964-4678-ad33-80b62199ce1b",
+		"name": "digital_twins",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "29464613"
 	},
 	"item": [
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "Create Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"pm.collectionVariables.set(\"SSN\", res.patient.SSN);",
+									"",
+									"pm.test(\"Status code is 201\", function() {",
+									"    pm.response.to.have.status(201)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"C001\",\n        \"lastName\" : \"\"\n    },\n    \"SSN\" : \"200201046543\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/patients"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Patients",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/api/v1/patients"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Data from Database",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/Database?index=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"Database"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specific Data  from Database",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/Database/ABP,Dias?index=0s",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"Database",
+								"ABP,Dias"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "0s"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "PatientData",
 			"item": [
@@ -20,7 +142,8 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -39,21 +162,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data"
 					},
 					"response": []
 				},
@@ -68,29 +177,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Dias",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"ABP,Dias"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias"
 					},
 					"response": []
 				},
@@ -105,29 +200,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Mean",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"ABP,Mean"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean"
 					},
 					"response": []
 				},
@@ -142,29 +223,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/ABP,Syst",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"ABP,Syst"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst"
 					},
 					"response": []
 				},
@@ -179,29 +246,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/HR,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"HR,na"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na"
 					},
 					"response": []
 				},
@@ -216,29 +269,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/RR,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"RR,na"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na"
 					},
 					"response": []
 				},
@@ -253,29 +292,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/SpO2,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"SpO2,na"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na"
 					},
 					"response": []
 				},
@@ -290,29 +315,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/Tvesic,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"Tvesic,na"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na"
 					},
 					"response": []
 				},
@@ -327,29 +338,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/rSO2,Left",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"rSO2,Left"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left"
 					},
 					"response": []
 				},
@@ -364,29 +361,15 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/1/data/rSO2,Right",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"1",
-								"data",
-								"rSO2,Right"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right"
 					},
 					"response": []
 				}
@@ -426,27 +409,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Aaliyah\",\r\n  \"lastName\": \"Johnson\",\r\n  \"SSN\": \"199907208962\",\r\n  \"username\": \"aaliyah.johnson\",\r\n  \"password\": \"securePassword105\"\r\n}\r\n",
+							"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"SSN\": \"199904208945\",\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePassword123\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/admin/doctors"
 					},
 					"response": []
 				},
@@ -484,20 +454,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/admin/doctors"
 					},
 					"response": []
 				},
@@ -539,21 +496,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors",
-								"199904208945"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/admin/doctors/199904208945"
 					},
 					"response": []
 				},
@@ -592,21 +535,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors",
-								"199904208945"
-							]
-						}
+						"url": "http://localhost:5000/api/v1/admin/doctors/199904208945"
 					},
 					"response": []
 				}
@@ -617,20 +546,38 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:5000/api/v1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"api",
-						"v1"
-					]
-				}
+				"url": "http://localhost:5000/api/v1"
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SSN",
+			"value": "200201046543",
+			"type": "string"
 		}
 	]
 }
