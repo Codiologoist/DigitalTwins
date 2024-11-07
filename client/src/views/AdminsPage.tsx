@@ -16,19 +16,21 @@ const AdminPage: React.FC = () => {
      navigate('/editDoctor', { state: { doctor } }); // modify the path as needed
     };
   
+    // Handle deleting a doctor with confirmation
     const handleDelete = (doctor: Doctor) => {
-      console.log('Doctor object before deletion:', doctor); // This will log the correct doctor object with lowercase keys
+       console.log('Doctor object before deletion:', doctor); // Log the entire doctor object
+      // Show confirmation dialog
       const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
-      
+
+      // If user confirms deletion
       if (confirmDelete) {
-        // Filter out the doctor from the list
+        console.log('Deleted doctor:', doctor);
+        // Remove the doctor from the list by filtering out the selected doctor
         setDoctorData(doctorData.filter(d => d._id !== doctor._id));
-        console.log('Deleted doctor:', doctor); // Logs the doctor data after deletion
       } else {
-        console.log('Deletion canceled');
+      console.log('Deletion canceled');
       }
-    };
-    
+   };
   
 
     // Function to add a new doctor
