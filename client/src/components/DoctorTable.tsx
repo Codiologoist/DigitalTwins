@@ -19,18 +19,9 @@ interface DoctorTableProps {
   }
 
   const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
-    const columns: string[] = ['First Name','Last Name' , 'SSN', 'Username', 'Password'];
-    
-    // Map data to the required structure directly within the component
-  const mappedTableData = data.map(doctor => ({
-    'First Name': doctor.firstName,
-    'Last Name': doctor.lastName,
-    'SSN': doctor.SSN,
-    'Username': doctor.username,
-    'Password': doctor.password
-  }));
+    const columns: string[] = ['firstName','lastName' , 'SSN', 'username', 'password'];
 
-  return <Table columns={columns} data={mappedTableData} onEdit={onEdit} onDelete={onDelete} />;
+  return <Table columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
 };
 
 export default DoctorTable;
