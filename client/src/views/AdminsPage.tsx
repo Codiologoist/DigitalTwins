@@ -35,7 +35,7 @@ const AdminPage: React.FC = () => {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
 
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/doctors/${doctor._id}`)
+      axios.delete(`http://localhost:5000/api/v1/admin/doctors/${doctor.SSN}`)
         .then(() => {
           setDoctorData(doctorData.filter(d => d._id !== doctor._id));
         })
@@ -48,7 +48,7 @@ const AdminPage: React.FC = () => {
 
   // Function to save the changes in the modal
   const handleSaveChanges = (updatedDoctor: Doctor) => {
-    axios.put(`http://localhost:5000/doctors/${updatedDoctor._id}`, updatedDoctor)
+    axios.patch(`http://localhost:5000/api/v1/admin/doctors/${updatedDoctor.SSN}`, updatedDoctor)
       .then(() => {
         const updatedDoctorData = doctorData.map((doctor) =>
           doctor._id === updatedDoctor._id ? updatedDoctor : doctor
@@ -74,7 +74,7 @@ const AdminPage: React.FC = () => {
     };
 
     // Send a POST request to the backend to add the new doctor
-    axios.post('http://localhost:5000/doctors', newDoctor)
+    axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
       .then(response => {
         // After successful creation, update the state with the new doctor
         setDoctorData([...doctorData, response.data]);
