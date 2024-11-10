@@ -35,7 +35,7 @@ const AdminPage: React.FC = () => {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
 
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/api/v1/admin/doctors/${doctor.SSN}`)
+      axios.delete(`http://localhost:5000/api/v1/admin/doctors/${doctor._id}`)
         .then(() => {
           setDoctorData(doctorData.filter(d => d._id !== doctor._id));
         })
@@ -49,14 +49,14 @@ const AdminPage: React.FC = () => {
   // Save the changes or new doctor in the modal
   const handleSaveChanges = (newDoctor: Doctor) => {
     if (newDoctor.SSN) { // If doctor has SSN (exists), update
-      axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor.SSN}`, newDoctor)
+      axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor._id}`, newDoctor)
         .then(() => {
           setDoctorData(doctorData.map(d => (d.SSN === newDoctor.SSN ? newDoctor : d)));
           setIsModalOpen(false);
         })
         .catch(error => {
           console.error("Error updating doctor:", error);
-          alert('An error occurred while updating the doctor');
+          alert(error.response?.data.message ||'An error occurred while updating the doctor');
         });
     } else { // If doctor does not have SSN, create a new doctor
       axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
         })
         .catch(error => {
           console.error("Error adding doctor:", error);
-          alert('An error occurred while adding the doctor');
+          alert(error.response?.data.message ||'An error occurred while adding the doctor');
         });
     }
   };

@@ -16,10 +16,27 @@ const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose, title }) => {
   };
 
   const handleSave = () => {
-    if (!localDoctor.firstName || !localDoctor.lastName || !localDoctor.SSN || !localDoctor.username || !localDoctor.password) {
-      alert('Please fill out all fields.');
+    if (!localDoctor.firstName) {
+      alert('First Name is required.');
       return;
     }
+    if (!localDoctor.lastName) {
+      alert('Last Name is required.');
+      return;
+    }
+    if (!localDoctor.SSN) {
+      alert('SSN is required.');
+      return;
+    }
+    if (!localDoctor.username) {
+      alert('Username is required.');
+      return;
+    }
+    if (!localDoctor.password) {
+      alert('Password is required.');
+      return;
+    }
+  
     onSave(localDoctor);
   };
 
