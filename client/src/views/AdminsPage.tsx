@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import DoctorTable, {Doctor} from '../components/DoctorTable';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import Modal from '../components/Modal'
 
 const AdminPage: React.FC = () => {
     const navigate = useNavigate(); // Initialize useNavigate
@@ -8,12 +9,14 @@ const AdminPage: React.FC = () => {
       { _id: '111', firstName: 'John', lastName: 'Doe', SSN: '987654', username: 'jdoe', password: 'password123' },
       { _id: '222', firstName: 'Jane', lastName: 'Smith', SSN: '456789', username: 'jsmith', password: 'password456' }
     ]);
+
+    const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null); // For modal
+    const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
   
      // Handle editing a doctor
     const handleEdit = (doctor: Doctor) => {
-     console.log('Edit doctor:', doctor);
-     // Navigate to the EditDoctorPage, passing the doctor's data
-     navigate('/editDoctor', { state: { doctor } }); // modify the path as needed
+      setSelectedDoctor(doctor); // Set the selected doctor
+      setIsModalOpen(true); // Open the modal
     };
   
     // Handle deleting a doctor with confirmation
@@ -31,6 +34,15 @@ const AdminPage: React.FC = () => {
       console.log('Deletion canceled');
       }
    };
+
+   // Function to save the changes in the modal
+  const handleSaveChanges = (updatedDoctor: Doctor) => {
+    const updatedDoctorData = doctorData.map((doctor) =>
+      doctor._id === updatedDoctor._id ? updatedDoctor : doctor
+    );
+    setDoctorData(updatedDoctorData); // Update the state with the modified doctor
+    setIsModalOpen(false); // Close the modal
+  };
   
 
     // Function to add a new doctor
@@ -48,19 +60,35 @@ const AdminPage: React.FC = () => {
       setDoctorData([...doctorData, newDoctor]);
   };
 
-    return (
-      <div className="page-container">
-        <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
-        {/* Add Doctor Button Positioned to the right */}
-        <div className="add-doctor-button-container">
-          <div className="add-doctor-button">
-             <button onClick={handleAddDoctor}>
-               <span className="plus-sign">➕</span> Add Doctor
-             </button>
-          </div>
+  return (
+    <div className="page-container">
+      <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
+      <div className="add-doctor-button-container">
+        <div className="add-doctor-button">
+          <button onClick={handleAddDoctor}>
+            <span className="plus-sign">➕</span> Add Doctor
+          </button>
         </div>
       </div>
-    );
-  };
-  
-  export default AdminPage;
+
+      {/* Modal for editing the doctor */}
+      {isModalOpen && selectedDoctor && (
+        <Modal
+          firstName={selectedDoctor.firstName}
+          lastName={selectedDoctor.lastName}
+          ssn={selectedDoctor.SSN}
+          username={selectedDoctor.username}
+          password={selectedDoctor.password}
+          onChange={(field, value) => {
+            if (selectedDoctor) {
+              const updatedDoctor = { ...selectedDoctor, [field]: value };
+              handleSaveChanges(updatedDoctor); // Save the changes
+            }
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+export default AdminPage;

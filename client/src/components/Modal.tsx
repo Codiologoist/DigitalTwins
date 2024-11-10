@@ -1,70 +1,97 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-interface ModalProps {}
+interface ModalProps {
+  firstName: string;
+  lastName: string;
+  ssn: string;
+  username: string;
+  password: string;
+  onChange: (field: string, value: string) => void;
+}
 
-export const Modal: React.FC<ModalProps> = () => {
+const Modal: React.FC<ModalProps> = ({
+  firstName,
+  lastName,
+  ssn,
+  username,
+  password,
+  onChange,
+}) => {
+  // Local state to handle the form fields
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    SSN: "",
-    username: "",
-    password: "",
+    firstName,
+    lastName,
+    ssn,
+    username,
+    password,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle field changes
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+      // Call onChange callback with field name and new value
+      onChange(name, value);
+      return updatedData;
     });
   };
 
   return (
-    <div className="modal-container">
-      <div className="modal">Modal</div>
-      <form>
-        <div>
-          <label htmlFor="firstName">First Name</label>
+    <div className="modal-overlay">
+      <div className="modal">
+        <h1 className='modal-heading'>Edit Doctor</h1>
+        <form>
+          <label>First Name</label>
           <input
+            type="text"
             name="firstName"
             value={formData.firstName}
-            onChange={handleChange}
+            onChange={handleFieldChange}
+            className="modal-input"
           />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name</label>
+
+          <label>Last Name</label>
           <input
+            type="text"
             name="lastName"
             value={formData.lastName}
-            onChange={handleChange}
+            onChange={handleFieldChange}
+            className="modal-input"
           />
-        </div>
-        <div>
-          <label htmlFor="SSN">SSN</label>
+
+          <label>SSN</label>
           <input
-            name="SSN"
-            value={formData.SSN}
-            onChange={handleChange}
+            type="text"
+            name="ssn"
+            value={formData.ssn}
+            onChange={handleFieldChange}
+            className="modal-input"
           />
-        </div>
-        <div>
-          <label htmlFor="username">Username</label>
+
+          <label>Username</label>
           <input
+            type="text"
             name="username"
             value={formData.username}
-            onChange={handleChange}
+            onChange={handleFieldChange}
+            className="modal-input"
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
+
+          <label>Password</label>
           <input
-            name="password"
             type="password"
+            name="password"
             value={formData.password}
-            onChange={handleChange}
+            onChange={handleFieldChange}
+            className="modal-input"
           />
-        </div>
-      </form>
+
+          <button className='save-button' type="submit">Save</button>
+        </form>
+      </div>
     </div>
   );
 };
+
+export default Modal;
