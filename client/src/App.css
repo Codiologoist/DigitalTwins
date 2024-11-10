@@ -108,17 +108,49 @@ html, body, #root {
   z-index: 1000;
 }
 
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 27, 28, 0.5); /* Darkened background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
 /* Modal Content */
 .modal {
   background-color: #ffffff; /* White background for the modal */
-  padding: 50px;
+  padding: 20px 50px; /* Reduced padding for a cleaner look */
   border-radius: 10px;
   width: 100%;
   max-width: 500px; /* Adjust the width to ensure it's centered and neat */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 20px; /* More spacing for a more organized layout */
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #ff0000; /* Red color on hover */
 }
 
 /* Heading Style */
@@ -171,41 +203,4 @@ label {
 
 .save-button:hover {
   background-color: #4a148c; /* Darker purple on hover */
-}
-
-/* Edit/Delete Button Style */
-button.edit, button.delete {
-  background-color: #f0f0f0; /* Light gray for edit/delete buttons */
-  color: #333333;
-  border: 1px solid #cccccc; /* Subtle border */
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button.edit:hover, button.delete:hover {
-  background-color: #dddddd; /* Slight darkening on hover for edit/delete buttons */
-}
-
-/* Error/Validation message styling */
-.error-message {
-  color: #e74c3c; /* Red color for error messages */
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Input Text Inside Fields */
-input::placeholder {
-  color: #777777; /* Light gray placeholder text */
-}
-
-/* Avoid turning green when hovering over the Edit/Delete buttons */
-button:focus {
-  outline: none; /* Prevent outline on focus */
-}
-
-button.edit:focus, button.delete:focus {
-  outline: none; /* Prevent outline on focus */
 }

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import DoctorTable, {Doctor} from '../components/DoctorTable';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+//import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Modal from '../components/Modal'
 
 const AdminPage: React.FC = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
+    //const navigate = useNavigate(); // Initialize useNavigate
     const [doctorData, setDoctorData] = useState<Doctor[]>([
       { _id: '111', firstName: 'John', lastName: 'Doe', SSN: '987654', username: 'jdoe', password: 'password123' },
       { _id: '222', firstName: 'Jane', lastName: 'Smith', SSN: '456789', username: 'jsmith', password: 'password456' }
@@ -74,17 +74,9 @@ const AdminPage: React.FC = () => {
       {/* Modal for editing the doctor */}
       {isModalOpen && selectedDoctor && (
         <Modal
-          firstName={selectedDoctor.firstName}
-          lastName={selectedDoctor.lastName}
-          ssn={selectedDoctor.SSN}
-          username={selectedDoctor.username}
-          password={selectedDoctor.password}
-          onChange={(field, value) => {
-            if (selectedDoctor) {
-              const updatedDoctor = { ...selectedDoctor, [field]: value };
-              handleSaveChanges(updatedDoctor); // Save the changes
-            }
-          }}
+          doctor={selectedDoctor}
+          onSave={handleSaveChanges}
+          onClose={() => setIsModalOpen(false)}
         />
       )}
     </div>

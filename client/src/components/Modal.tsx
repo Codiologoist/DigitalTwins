@@ -1,94 +1,80 @@
 import React, { useState } from 'react';
+import { Doctor } from '../components/DoctorTable';
 
 interface ModalProps {
-  firstName: string;
-  lastName: string;
-  ssn: string;
-  username: string;
-  password: string;
-  onChange: (field: string, value: string) => void;
+  doctor: Doctor;
+  onSave: (updatedDoctor: Doctor) => void;
+  onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({
-  firstName,
-  lastName,
-  ssn,
-  username,
-  password,
-  onChange,
-}) => {
-  // Local state to handle the form fields
-  const [formData, setFormData] = useState({
-    firstName,
-    lastName,
-    ssn,
-    username,
-    password,
-  });
+const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose }) => {
+  const [localDoctor, setLocalDoctor] = useState<Doctor>(doctor);
 
-  // Handle field changes
-  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => {
-      const updatedData = { ...prevData, [name]: value };
-      // Call onChange callback with field name and new value
-      onChange(name, value);
-      return updatedData;
-    });
+  const handleChange = (field: keyof Doctor, value: string) => {
+    setLocalDoctor({ ...localDoctor, [field]: value });
+  };
+
+  const handleSave = () => {
+    onSave(localDoctor);
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h1 className='modal-heading'>Edit Doctor</h1>
+        <button className="close-button" onClick={onClose}>
+          &times;
+        </button>
+        <h2 className="modal-heading">Edit Doctor</h2>
         <form>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleFieldChange}
-            className="modal-input"
-          />
-
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleFieldChange}
-            className="modal-input"
-          />
-
-          <label>SSN</label>
-          <input
-            type="text"
-            name="ssn"
-            value={formData.ssn}
-            onChange={handleFieldChange}
-            className="modal-input"
-          />
-
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleFieldChange}
-            className="modal-input"
-          />
-
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleFieldChange}
-            className="modal-input"
-          />
-
-          <button className='save-button' type="submit">Save</button>
+          <label>
+            First Name:
+            <input
+              className="modal-input"
+              type="text"
+              value={localDoctor.firstName}
+              onChange={(e) => handleChange('firstName', e.target.value)}
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              className="modal-input"
+              type="text"
+              value={localDoctor.lastName}
+              onChange={(e) => handleChange('lastName', e.target.value)}
+            />
+          </label>
+          <label>
+            SSN:
+            <input
+              className="modal-input"
+              type="text"
+              value={localDoctor.SSN}
+              onChange={(e) => handleChange('SSN', e.target.value)}
+            />
+          </label>
+          <label>
+            Username:
+            <input
+              className="modal-input"
+              type="text"
+              value={localDoctor.username}
+              onChange={(e) => handleChange('username', e.target.value)}
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              className="modal-input"
+              type="password"
+              value={localDoctor.password}
+              onChange={(e) => handleChange('password', e.target.value)}
+            />
+          </label>
         </form>
+        <div className="modal-buttons">
+          <button className="save-button" onClick={handleSave}>Save</button>
+        </div>
       </div>
     </div>
   );
