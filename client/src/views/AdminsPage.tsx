@@ -46,43 +46,42 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  // Function to save the changes in the modal
-  const handleSaveChanges = (updatedDoctor: Doctor) => {
-    axios.patch(`http://localhost:5000/api/v1/admin/doctors/${updatedDoctor.SSN}`, updatedDoctor)
-      .then(() => {
-        const updatedDoctorData = doctorData.map((doctor) =>
-          doctor._id === updatedDoctor._id ? updatedDoctor : doctor
-        );
-        setDoctorData(updatedDoctorData);
-        setIsModalOpen(false);
-      })
-      .catch(error => {
-        console.error("Error updating doctor:", error);
-        alert('An error occurred while updating the doctor');
-      });
+  // Save the changes or new doctor in the modal
+  const handleSaveChanges = (newDoctor: Doctor) => {
+    if (newDoctor.SSN) { // If doctor has SSN (exists), update
+      axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor.SSN}`, newDoctor)
+        .then(() => {
+          setDoctorData(doctorData.map(d => (d.SSN === newDoctor.SSN ? newDoctor : d)));
+          setIsModalOpen(false);
+        })
+        .catch(error => {
+          console.error("Error updating doctor:", error);
+          alert('An error occurred while updating the doctor');
+        });
+    } else { // If doctor does not have SSN, create a new doctor
+      axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
+        .then(response => {
+          setDoctorData([...doctorData, response.data]);
+          setIsModalOpen(false);
+        })
+        .catch(error => {
+          console.error("Error adding doctor:", error);
+          alert('An error occurred while adding the doctor');
+        });
+    }
   };
 
   // Function to add a new doctor
   const handleAddDoctor = () => {
-    const newDoctor: Doctor = {
-      _id: (doctorData.length + 1).toString(), // Simple ID generation
-      firstName: 'New',
-      lastName: 'Doctor',
-      SSN: '000000',
-      username: 'newdoctor',
-      password: 'newpassword123'
-    };
-
-    // Send a POST request to the backend to add the new doctor
-    axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
-      .then(response => {
-        // After successful creation, update the state with the new doctor
-        setDoctorData([...doctorData, response.data]);
-      })
-      .catch(error => {
-        console.error("Error adding doctor:", error);
-        alert('An error occurred while adding the doctor');
-      });
+    setSelectedDoctor({
+      _id: '',  // New doctor has no ID initially
+      firstName: '',
+      lastName: '',
+      SSN: '',
+      username: '',
+      password: ''
+    });
+    setIsModalOpen(true); // Open the modal for adding a new doctor
   };
 
   return (
@@ -101,12 +100,13 @@ const AdminPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Modal for editing the doctor */}
+          {/* Modal for ADDING/editing the doctor */}
           {isModalOpen && selectedDoctor && (
             <Modal
               doctor={selectedDoctor}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
+              title={selectedDoctor._id ? "Edit Doctor" : "Add Doctor"} // Dynamic modal title
             />
           )}
         </>

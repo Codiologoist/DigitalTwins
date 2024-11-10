@@ -5,9 +5,10 @@ interface ModalProps {
   doctor: Doctor;
   onSave: (updatedDoctor: Doctor) => void;
   onClose: () => void;
+  title: string;  // Add title prop to accept dynamic title
 }
 
-const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose, title }) => {
   const [localDoctor, setLocalDoctor] = useState<Doctor>(doctor);
 
   const handleChange = (field: keyof Doctor, value: string) => {
@@ -15,6 +16,10 @@ const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose }) => {
   };
 
   const handleSave = () => {
+    if (!localDoctor.firstName || !localDoctor.lastName || !localDoctor.SSN || !localDoctor.username || !localDoctor.password) {
+      alert('Please fill out all fields.');
+      return;
+    }
     onSave(localDoctor);
   };
 
@@ -24,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose }) => {
         <button className="close-button" onClick={onClose}>
           &times;
         </button>
-        <h2 className="modal-heading">Edit Doctor</h2>
+        <h2 className="modal-heading">{title}</h2> {/* Use title prop here */}
         <form>
           <label>
             First Name:
