@@ -11,7 +11,7 @@ class FolderExtraction:
         self.folder = folder
 
     def extract_folders(self):
-        data_files, index_files, settings_files, data_qual_time, data_qual_str, patient_information = [], [], [], [], [], []
+        data_files, index_files, settings_files, patient_information = [], [], [], ''
         data_path = os.path.join(pathlib.Path(__file__).parent.resolve(), "data", "")
         directory = os.fsencode(data_path)
 
@@ -19,24 +19,29 @@ class FolderExtraction:
         # Based on the filenames separate the necessary files into their associated list.
         # This way we can easily iterate over all the files of a certain type in binary_extraction.
         for file in os.listdir(directory):
-            filename = self.folder + os.fsdecode(file)
-            if os.fsdecode("NumericQuality") in filename and filename.endswith(",data"):
-                data_qual_str.append(filename)
-            elif os.fsdecode("Float") in filename and filename.endswith(",data"):
-                if os.fsdecode("NumericQuality") in filename:
+            filename = os.fsdecode(file)  # Decode the filename from bytes to string
+            if "NumericQuality" in filename or "WaveQuality" in filename:
+                continue
+            elif "Char" in filename:
+                continue
+            elif "Impedance" in filename:
+                continue
+            elif "Composite" in filename:
+                continue
+            elif filename == "patient.info":
+                patient_information = filename
+            elif "Float" or "Integer" in filename:
+                if "Alert" in filename:
                     continue
-                if os.fsdecode("Alert") in filename:
+                if "MarkEvent" in filename:
                     continue
-                if os.fsdecode("MarkEvent") in filename:
-                    continue
-                data_files.append(filename)
-            elif os.fsdecode("NumericQuality") in filename and filename.endswith(",index"):
-                data_qual_time.append(filename)
-            elif os.fsdecode("Float") in filename and filename.endswith(",index"):
-                index_files.append(filename)
-            elif os.fsdecode("Float") in filename and filename.endswith(",settings"):
-                settings_files.append(filename)
-            elif filename.endswith(".info"):
-                patient_information.append(filename)
+                if filename.endswith(",data"):
+                    data_files.append(filename)
+                elif filename.endswith(",index"):
+                    index_files.append(filename)
+                elif filename.endswith(",settings"):
+                    settings_files.append(filename)
+            else:
+                continue
 
-        return data_files, index_files, settings_files, data_qual_time, data_qual_str, patient_information
+        return data_files, index_files, settings_files, patient_information
