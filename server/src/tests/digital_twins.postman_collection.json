@@ -542,6 +542,19 @@
 			]
 		},
 		{
+			"name": "Admins",
+			"item": [
+				{
+					"name": "Post Admin",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get welcome message",
 			"request": {
 				"method": "GET",
