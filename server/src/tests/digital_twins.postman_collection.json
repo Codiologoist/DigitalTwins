@@ -496,7 +496,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/67181f83c05d223b01694b84"
+						"url": "http://localhost:5000/api/v1/admin/doctors/67181f93c05d223b01694bfe"
 					},
 					"response": []
 				},
@@ -535,7 +535,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/67181f83c05d223b01694b84"
+						"url": "http://localhost:5000/api/v1/admin/doctors/67314e7c25f0abea2b9aaaae"
 					},
 					"response": []
 				}
