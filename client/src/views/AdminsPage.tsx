@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import DoctorTable, { Doctor } from '../components/DoctorTable';
 import Modal from '../components/Modal';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const AdminPage: React.FC = () => {
+  const navigate = useNavigate();
   const [doctorData, setDoctorData] = useState<Doctor[]>([]);  // Start with an empty array for doctor data
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null); // For modal
   const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
@@ -11,6 +14,16 @@ const AdminPage: React.FC = () => {
 
   // Fetch doctor data from the server
   useEffect(() => {
+     // Check if the user is logged in and is an admin
+    const userRole = localStorage.getItem('userRole');
+    const token = localStorage.getItem('token');
+
+    if (!token || userRole !== 'admin') {
+      // If not logged in or not an admin, redirect to login page
+      navigate('/login');
+      return;
+    }
+
     axios.get('http://localhost:5000/api/v1/admin/doctors')
       .then(response => {
         console.log('Doctors fetched:', response.data);  // Debugging log
