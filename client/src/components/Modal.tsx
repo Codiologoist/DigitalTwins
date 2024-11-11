@@ -24,8 +24,8 @@ const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose, title }) => {
       alert('Last Name is required.');
       return;
     }
-    if (!localDoctor.SSN) {
-      alert('SSN is required.');
+    if (!localDoctor.SSN || !/^\d{12}$/.test(localDoctor.SSN)) { // Validate SSN format if applicable
+      alert('SSN is required and must be a valid 12-digit number.');
       return;
     }
     if (!localDoctor.username) {
@@ -37,9 +37,9 @@ const Modal: React.FC<ModalProps> = ({ doctor, onSave, onClose, title }) => {
       return;
     }
   
-    onSave(localDoctor);
+    onSave(localDoctor);  // Save changes when form is valid
   };
-
+  
   return (
     <div className="modal-overlay">
       <div className="modal">

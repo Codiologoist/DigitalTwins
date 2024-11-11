@@ -48,17 +48,17 @@ const AdminPage: React.FC = () => {
 
   // Save the changes or new doctor in the modal
   const handleSaveChanges = (newDoctor: Doctor) => {
-    if (newDoctor.SSN) { // If doctor has SSN (exists), update
+    if (newDoctor._id) {  // Ensure it is updating an existing doctor
       axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor._id}`, newDoctor)
         .then(() => {
-          setDoctorData(doctorData.map(d => (d.SSN === newDoctor.SSN ? newDoctor : d)));
+          setDoctorData(doctorData.map(d => (d._id === newDoctor._id ? newDoctor : d))); // Match by _id
           setIsModalOpen(false);
         })
         .catch(error => {
           console.error("Error updating doctor:", error);
-          alert(error.response?.data.message ||'An error occurred while updating the doctor');
+          alert(error.response?.data.message || 'An error occurred while updating the doctor');
         });
-    } else { // If doctor does not have SSN, create a new doctor
+    } else {  // Handle adding a new doctor
       axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
         .then(response => {
           setDoctorData([...doctorData, response.data]);
@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
         })
         .catch(error => {
           console.error("Error adding doctor:", error);
-          alert(error.response?.data.message ||'An error occurred while adding the doctor');
+          alert(error.response?.data.message || 'An error occurred while adding the doctor');
         });
     }
   };
