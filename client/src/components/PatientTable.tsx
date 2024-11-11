@@ -1,7 +1,5 @@
 import React from 'react';
-import Table from './Table';
 import { useNavigate } from 'react-router-dom';
-
 
 // Define types for patient data
 export interface Patient {
@@ -12,8 +10,6 @@ export interface Patient {
 }
 
 const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
-  const columns = ['First Name', 'Last Name', 'SSN'];
- 
   const navigate = useNavigate();
 
   // Function to handle navigation
@@ -21,28 +17,42 @@ const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
     navigate(`/${patientId}/monitor`);
   };
 
-  // Map data to include onClick handler for last name and SSN
-  const mappedTableData = data.map((patient) => ({
-    'First Name': patient.firstName || 'N/A',  // Fallback if missing
-    'Last Name': (
-      <span
-        onClick={() => handleNavigation(patient._id)}
-        style={{ cursor: 'pointer', color: 'darkblue' }}
-      >
-        {patient.lastName}
-      </span>
-    ),
-    'SSN': (
-      <span
-        onClick={() => handleNavigation(patient._id)}
-        style={{ cursor: 'pointer', color: 'darkblue' }}
-      >
-        {patient.SSN}
-      </span>
-    ),
-  }));
-
-  return <Table columns={columns} data={mappedTableData} />;
+  return (
+    <div className="table-wrapper">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>SSN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((patient, rowIndex) => (
+            <tr key={rowIndex}>
+              <td>{patient.firstName || 'N/A'}</td>
+              <td>
+                <span
+                  onClick={() => handleNavigation(patient._id)}
+                  style={{ cursor: 'pointer', color: 'darkblue' }}
+                >
+                  {patient.lastName}
+                </span>
+              </td>
+              <td>
+                <span
+                  onClick={() => handleNavigation(patient._id)}
+                  style={{ cursor: 'pointer', color: 'darkblue' }}
+                >
+                  {patient.SSN}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default PatientTable;
