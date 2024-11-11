@@ -409,7 +409,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"SSN\": \"199904208945\",\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePassword123\"\r\n}\r\n",
+							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -547,8 +547,18 @@
 				{
 					"name": "Post Admin",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/admin"
 					},
 					"response": []
 				}
