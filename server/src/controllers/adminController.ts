@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Doctor from "../models/Doctor";
 import Admin from "../models/Admin";
+import bcrypt from "bcryptjs";
 
 // Controller to create an admin
 export const createAdmin = async (req: Request, res: Response) => {
@@ -66,6 +67,7 @@ export const createDoctor = async (req: Request, res: Response) => {
 export const getAllDoctors = async (req: Request, res: Response) => {
   try {
     const doctors = await Doctor.find();
+    //for loop for decrypting passwords
     res.status(200).json({ success: true, data: doctors });
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
@@ -133,7 +135,11 @@ export const updateDoctor = async (req: Request, res: Response) => {
     if (firstName) updateFields.firstName = firstName;
     if (lastName) updateFields.lastName = lastName;
     if (username) updateFields.username = username;
-    if (password) updateFields.password = password;
+    //FIX TO HASH THE PASSWORD
+    if (password) {
+      const salt = await bcrypt.genSalt(10); // Generate a salt
+      updateFields.password = await bcrypt.hash(password, salt);  // Hash the password with salt
+    }
     if (SSN) updateFields.SSN = SSN;
 
     const updatedDoctor = await Doctor.findOneAndUpdate(
