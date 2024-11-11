@@ -33,7 +33,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"C001\",\n        \"lastName\" : \"\"\n    },\n    \"SSN\" : \"200201046543\"\n}",
+							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"Mr\",\n        \"lastName\" : \"Something\"\n    },\n    \"SSN\" : \"200203046643\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
