@@ -489,14 +489,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"username\": \"jane.smith\",\r\n  \"password\": \"newSecurePassword456\"\r\n}\r\n",
+							"raw": "{\r\n\"firstName\": \"Robert\",\r\n\"lastName\": \"Garcia\",\r\n\"SSN\": \"199910208951\",\r\n\"username\": \"robert.garcia\",\r\n\"password\": \"hahaha\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/199904208945"
+						"url": "http://localhost:5000/api/v1/admin/doctors/67181f83c05d223b01694b84"
 					},
 					"response": []
 				},
@@ -535,7 +535,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/199904208945"
+						"url": "http://localhost:5000/api/v1/admin/doctors/67181f83c05d223b01694b84"
 					},
 					"response": []
 				}
