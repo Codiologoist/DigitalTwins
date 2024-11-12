@@ -409,7 +409,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
+							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -489,14 +489,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"firstName\": \"Robert\",\r\n\"lastName\": \"Garcia\",\r\n\"SSN\": \"199910208951\",\r\n\"username\": \"robert.garcia\",\r\n\"password\": \"hahaha\"\r\n}\r\n",
+							"raw": "{\r\n \"firstName\": \"New Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/67181f93c05d223b01694bfe"
+						"url": "http://localhost:5000/api/v1/admin/doctors/6733c1718b2675d21fd41b4a"
 					},
 					"response": []
 				},
@@ -535,7 +535,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/67314e7c25f0abea2b9aaaae"
+						"url": "http://localhost:5000/api/v1/admin/doctors/6733c1808b2675d21fd41bc5"
 					},
 					"response": []
 				}
