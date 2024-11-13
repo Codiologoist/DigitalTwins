@@ -20,7 +20,6 @@ async function readFile(fileName: string): Promise<PatientData> {
   return JSON.parse(data);
 }
 
-
 /**
  * Retrieves all decrypted patient data from the decrypted_data directory.
  * 
