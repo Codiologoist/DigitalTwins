@@ -20,6 +20,7 @@ class FolderExtraction:
         # This way we can easily iterate over all the files of a certain type in binary_extraction.
         for file in os.listdir(directory):
             filename = os.fsdecode(file)  # Decode the filename from bytes to string
+            filename = os.path.join("data", filename)
             if "NumericQuality" in filename or "WaveQuality" in filename:
                 continue
             elif "Char" in filename:
@@ -28,7 +29,7 @@ class FolderExtraction:
                 continue
             elif "Composite" in filename:
                 continue
-            elif filename == "patient.info":
+            elif filename.endswith("patient.info"):
                 patient_information = filename
             elif "Float" or "Integer" in filename:
                 if "Alert" in filename:
