@@ -3,63 +3,31 @@ import pathlib
 import numpy as np
 import json
 
+def save_to_json(data_dict, directory):
+    output_dir = os.path.join(os.path.dirname(__file__), directory)
+    os.makedirs(output_dir, exist_ok=True)
 
-class JsonCreation:
-    """
-    Class to create the json files using all the extracted values from the binary files.
-    """
-    def __init__(self, data_qual_str, data_qual_time, measurement, start_date_time, time_vector, units, files, full_name):
-        self.data_qual_str = data_qual_str
-        self.data_qual_time = data_qual_time
-        self.measurement = measurement
-        self.start_date_time = start_date_time
-        self.time_vector = time_vector
-        self.units = units
-        self.files = files
-        self.full_name = full_name
+    for data_file in data_dict.get('decrypted_data', []):
+        signal_data = {
+            'signal_type': data_file['signal_type'],
+            'data': []
+        }
 
-    def save_json(self):
-        # Change directory to json
-        json_path = os.path.join(pathlib.Path(__file__).parent.resolve(), "../../decrypted_data", "")
-        os.chdir(json_path)
+        for run in data_file['data']:
+            run_data = {
+                'samples': run['samples'].tolist(),
+                'timestamps': run['timestamps'].tolist(),
+                'num_samples': run['num_samples'],
+                'duration': run['duration'],
+                'sample_rate': run['sample_rate'],
+                'sample_interval': run['sample_interval'],
+                'start_time': run['start_time']
+            }
 
-        # Iterate over all the files and create a json file with the corresponding values
-        for i in range(len(self.files)):
-            json_dict = {'data_qual_str': self.data_qual_str[self.files[i]],
-                        'data_qual_time': self.data_qual_time[self.files[i]],
-                        'measurement_data': self.measurement[self.files[i]],
-                        'start_date_time': self.start_date_time[0],
-                        'time_vector': self.time_vector[self.files[i]],
-                        'units': self.units[self.files[i]],
-                        'full_name': self.full_name}
-            self.convert_to_json(json_dict, self.files[i][5:] + ".json")
-            print(f'Json File Created: {self.files[i][5:] + ".json"}')
-
-        # Change directory back to main
-        os.chdir(os.path.normpath(os.getcwd() + os.sep + os.pardir))
-    
-    def convert_to_json(self, data_dict, output_json_path):
-        """Convert the .json file data to .json."""
-        if data_dict is None:
-            print("No data to convert. Please load the .json file first.")
-            return
-
-        try:
-            # Convert numpy arrays and bytes to JSON-compatible forjsons
-            data_for_json = {}
-            for key, value in data_dict.items():
-                if isinstance(value, bytes):
-                    data_for_json[key] = value.decode()  # Convert bytes to string
-                elif isinstance(value, (list, tuple)):
-                    data_for_json[key] = list(value)
-                elif isinstance(value, np.ndarray):
-                    data_for_json[key] = value.tolist()  # Convert numpy arrays to lists
-                else:
-                    data_for_json[key] = value
-            
-            # Write data to JSON file
-            with open(output_json_path, 'w') as json_file:
-                json.dump(data_for_json, json_file, indent=4)
-            print(f"Data successfully written to {output_json_path}")
-        except Exception as e:
-            print(f"Error converting to JSON: {e}")
+            signal_data['data'].append(run_data)
+        signal_data['patient_first_name'] = data_dict['patient_first_name']
+        signal_data['patient_last_name'] = data_dict['patient_last_name']
+        signal_data['admission_time'] = data_dict['admission_time']
+        file_path = os.path.join(output_dir, f"{signal_data['signal_type']}.json")
+        with open(file_path, 'w') as json_file:
+            json.dump(signal_data, json_file, indent=4)
