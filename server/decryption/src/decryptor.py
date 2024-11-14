@@ -4,7 +4,7 @@ import folder_extraction
 import json_creation
 import copy_latest
 
-# Main function that calls the extraction and visualization methods
+# Main function that calls the exttracts data
 def main():
 
     # Copies all the files from the Moberg Monitor into the data folder
