@@ -17,6 +17,7 @@ def save_to_json(data_dict, directory):
     for data_file in data_dict.get('decrypted_data', []):           # Iterate over all data files in decrypted_data
         signal_data = {                                             # Create dictionary to store signal data
             'signal_type': data_file['signal_type'],
+            'unit': data_file['unit'],
             'data': []
         }
 
@@ -28,7 +29,7 @@ def save_to_json(data_dict, directory):
                 'duration': run['duration'],                # Duration of run
                 'sample_rate': run['sample_rate'],          # Sample rate in Hz
                 'sample_interval': run['sample_interval'],  # Interval between each data sample
-                'start_time': run['start_time']             # Start time of run
+                'start_time': run['start_time'],            # Start time of run
             }
 
             signal_data['data'].append(run_data)
