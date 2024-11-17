@@ -17,7 +17,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
       });
     }
     // Fetch patient data (simulated)
-    const patientData: { [key: string]: PatientData } = getDecryptedData();
+    const patientData: { [key: string]: PatientData } = await getDecryptedData();
 
     return res.status(200).json({
       success: true,
@@ -48,7 +48,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
       });
     }
     // Fetch patient data (simulated)
-    const patientData: { [key: string]: PatientData } = getDecryptedData();
+    const patientData: { [key: string]: PatientData } = await getDecryptedData();
 
     // Check if the requested category exists in patientData
     if (!patientData.hasOwnProperty(category)) {
@@ -149,143 +149,3 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 }
-
-export const getPatientDataFromDatabase = async (req: Request, res: Response) => {
-  const { SSN } = req.params;
-  const { index } = req.query;
-
-  try {
-    // Find the patient
-    const patient = await Patient.findOne({ SSN });
-
-    if (!patient) {
-      return res.status(404).json({
-        success: false,
-        message: `Patient with SSN ${SSN} not found`,
-      });
-    }
-
-    // Ensure the index is provided and is a valid number, default to 0 if not provided
-    const indexNumber = parseInt(index as string, 10) || 0;
-    if (isNaN(indexNumber) || indexNumber < 0) {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid index value. Please provide a positive number.`,
-      });
-    }
-
-    // Get the maximum length of the data
-    const maxLen = patient.data["ABP,Dias"].length;
-    if (indexNumber >= maxLen) {
-      return res.status(400).json({
-        success: false,
-        message: `Index ${indexNumber} out of bounds. Max index is ${maxLen - 1}.`,
-      });
-    }
-
-    // Use Promise.all to fetch the data in parallel for efficiency
-    const [abpSyst, abpMean, abpDias, hrNa, rrNa, spo2Na, tvesicNa, rso2Left, rso2Right] = await Promise.all([
-      Data.findById(patient.data["ABP,Syst"][indexNumber]),
-      Data.findById(patient.data["ABP,Mean"][indexNumber]),
-      Data.findById(patient.data["ABP,Dias"][indexNumber]),
-      Data.findById(patient.data["HR,na"][indexNumber]),
-      Data.findById(patient.data["RR,na"][indexNumber]),
-      Data.findById(patient.data["SpO2,na"][indexNumber]),
-      Data.findById(patient.data["Tvesic,na"][indexNumber]),
-      Data.findById(patient.data["rSO2,Left"][indexNumber]),
-      Data.findById(patient.data["rSO2,Right"][indexNumber]),
-    ]);
-
-    // Handle case where any of the data is missing
-    if (!abpSyst || !abpMean || !abpDias || !hrNa || !rrNa || !spo2Na || !tvesicNa || !rso2Left || !rso2Right) {
-      return res.status(404).json({
-        success: false,
-        message: `Data not found for one or more categories at index ${indexNumber}.`,
-      });
-    }
-
-    // Construct the DataDoc object
-    const DataDoc: DataTypes = {
-      "ABP,Syst": abpSyst,
-      "ABP,Mean": abpMean,
-      "ABP,Dias": abpDias,
-      "HR,na": hrNa,
-      "RR,na": rrNa,
-      "SpO2,na": spo2Na,
-      "Tvesic,na": tvesicNa,
-      "rSO2,Left": rso2Left,
-      "rSO2,Right": rso2Right,
-    };
-
-    return res.status(200).json({
-      success: true,
-      data: DataDoc,
-    });
-
-  } catch (error: any) {
-    console.error(`Error fetching patient: ${error.message || error}`);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
-  }
-};
-
-export const getSpecificPatientDataFromDatabase = async (req: Request, res: Response) => {
-  const { SSN, category } = req.params;
-  const { index } = req.query;
-
-  try {
-    // Find the patient
-    const patient = await Patient.findOne({ SSN });
-
-    if (!patient) {
-      return res.status(404).json({
-        success: false,
-        message: `Patient with SSN ${SSN} not found`,
-      });
-    }
-
-    // Ensure the index is provided and is a valid number
-    const indexNumber = parseInt(index as string, 10);
-    if (isNaN(indexNumber) || indexNumber < 0) {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid index value. Please provide a valid number.`,
-      });
-    }
-
-    // Use bracket notation to access the requested category in patient.data
-    const categoryDataArray = patient.data[category as keyof typeof patient.data];
-
-    // Check if the category exists and the index is valid
-    if (!categoryDataArray || indexNumber >= categoryDataArray.length) {
-      return res.status(404).json({
-        success: false,
-        message: `Index ${indexNumber} is out of bounds for category ${category}`,
-      });
-    }
-
-    // Retrieve the ObjectId at the specified index
-    const objectIdAtIndex = categoryDataArray[indexNumber];
-
-    // Populate the specific ObjectId
-    const populatedData = await Data.findById(objectIdAtIndex);
-
-    if (!populatedData) {
-      return res.status(404).json({
-        success: false,
-        message: `Data not found at index ${indexNumber} for category ${category}`,
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: populatedData,
-    });
-  } catch (error: any) {
-    console.error(`Error fetching patient data: ${error.message || error}`);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
-  }
-};
