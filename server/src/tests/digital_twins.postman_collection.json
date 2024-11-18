@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a98a39d7-5a68-4aed-9dec-c1742e25f9d8",
+		"_postman_id": "d625dc47-28ce-4188-9936-29d63fd1abe6",
 		"name": "digital_twins",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "29464613"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28868794"
 	},
 	"item": [
 		{
@@ -40,7 +40,19 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/patients"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients"
+							]
+						}
 					},
 					"response": []
 				},
@@ -63,7 +75,19 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients"
+							]
+						}
 					},
 					"response": []
 				}
@@ -103,7 +127,21 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data"
+							]
+						}
 					},
 					"response": []
 				},
@@ -126,7 +164,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,Dias"
+							]
+						}
 					},
 					"response": []
 				},
@@ -149,7 +202,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,Mean"
+							]
+						}
 					},
 					"response": []
 				},
@@ -172,7 +240,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,Syst"
+							]
+						}
 					},
 					"response": []
 				},
@@ -271,7 +354,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"HR,na"
+							]
+						}
 					},
 					"response": []
 				},
@@ -294,7 +392,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"RR,na"
+							]
+						}
 					},
 					"response": []
 				},
@@ -317,7 +430,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"SpO2,na"
+							]
+						}
 					},
 					"response": []
 				},
@@ -340,7 +468,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"Tvesic,na"
+							]
+						}
 					},
 					"response": []
 				},
@@ -363,7 +506,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Left"
+							]
+						}
 					},
 					"response": []
 				},
@@ -386,7 +544,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Right"
+							]
+						}
 					},
 					"response": []
 				},
@@ -713,11 +886,13 @@
 									"pm.test(\"Doctor is successfully created\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"John\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Doe\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"199904208945\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"john.doe\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Sophia\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Lee\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"580923456789\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"sophia.lee\");\r",
 									"});\r",
+									"let res = pm.response.json()\r",
+									"pm.collectionVariables.set(\"DOCID\", res.data._id)\r",
 									""
 								],
 								"type": "text/javascript",
@@ -737,7 +912,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors"
+							]
+						}
 					},
 					"response": []
 				},
@@ -760,9 +948,9 @@
 									"\r",
 									"pm.test(\"Check if the doctor exists in the list with username and password\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    const doctor = jsonData.data.find(doc => doc.SSN === \"199904208945\");\r",
+									"    const doctor = jsonData.data.find(doc => doc.SSN === \"580923456789\");\r",
 									"    pm.expect(doctor).to.not.be.undefined;\r",
-									"    pm.expect(doctor).to.have.property(\"username\", \"john.doe\");\r",
+									"    pm.expect(doctor).to.have.property(\"username\", \"sophia.lee\");\r",
 									"    pm.expect(doctor).to.have.property(\"password\"); // Ensure password is present, though unhashed\r",
 									"});\r",
 									""
@@ -775,7 +963,20 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:5000/api/v1/admin/doctors"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors"
+							]
+						}
 					},
 					"response": []
 				},
@@ -793,10 +994,9 @@
 									"pm.test(\"Doctor is successfully updated\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Jane\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Smith\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"jane.smith\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"password\"); // Ensure password is updated\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Emma\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Muller\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"emma.muller\");\r",
 									"});\r",
 									""
 								],
@@ -810,14 +1010,28 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"firstName\": \"New Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
+							"raw": "{\r\n \"firstName\": \"Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/6733c1718b2675d21fd41b4a"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors",
+								"{{DOCID}}"
+							]
+						}
 					},
 					"response": []
 				},
@@ -856,7 +1070,21 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin/doctors/6733c1808b2675d21fd41bc5"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors",
+								"{{DOCID}}"
+							]
+						}
 					},
 					"response": []
 				}
@@ -879,7 +1107,19 @@
 								}
 							}
 						},
-						"url": "http://localhost:5000/api/v1/admin"
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin"
+							]
+						}
 					},
 					"response": []
 				}
@@ -890,7 +1130,18 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:5000/api/v1"
+				"url": {
+					"raw": "http://localhost:5000/api/v1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1"
+					]
+				}
 			},
 			"response": []
 		}
@@ -921,6 +1172,11 @@
 		{
 			"key": "SSN",
 			"value": "200201046543",
+			"type": "string"
+		},
+		{
+			"key": "DOCID",
+			"value": "",
 			"type": "string"
 		}
 	]
