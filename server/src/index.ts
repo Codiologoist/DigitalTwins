@@ -9,7 +9,6 @@ import adminRoutes from "./routes/admin";
 import loginRoutes from "./routes/login"
 import { notFoundHandler } from "./middlewares/errorHandler";
 import { authenticate } from "./middlewares/authMiddleware";
-import { updatePatientDataInterval } from "./services/utils";
 import Admin from './models/Admin'; // Import Admin model
 
 // Load environment variables
@@ -83,9 +82,3 @@ app.listen(port, () => {
   // Call createAdmin function when the server starts
   createAdmin();
 });
-
-// Update patient data every 5 minutes
-updatePatientDataInterval();
-
-// Update patient data every 5 minutes
-updatePatientDataInterval();

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b2ad76a2-1964-4678-ad33-80b62199ce1b",
+		"_postman_id": "a98a39d7-5a68-4aed-9dec-c1742e25f9d8",
 		"name": "digital_twins",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "29464613"
@@ -64,65 +64,6 @@
 						"method": "GET",
 						"header": [],
 						"url": "http://localhost:5000/api/v1/patients"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Data from Database",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/Database?index=0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"Database"
-							],
-							"query": [
-								{
-									"key": "index",
-									"value": "0"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Specific Data  from Database",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/Database/ABP,Dias?index=0s",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"Database",
-								"ABP,Dias"
-							],
-							"query": [
-								{
-									"key": "index",
-									"value": "0s"
-								}
-							]
-						}
 					},
 					"response": []
 				}
@@ -232,6 +173,82 @@
 						"method": "GET",
 						"header": [],
 						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ABP,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,Syst"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ABP,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,na"
+							]
+						}
 					},
 					"response": []
 				},
@@ -370,6 +387,310 @@
 						"method": "GET",
 						"header": [],
 						"url": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ECG,II",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"SpO2,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get CO2,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"Tvesic,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get RESP,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Left"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PLETH,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Right"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ECG,II",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ECG,II",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ECG,II"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get CO2,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/CO2,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"CO2,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get RESP,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RESP,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"RESP,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PLETH,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/PLETH,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"PLETH,na"
+							]
+						}
 					},
 					"response": []
 				}
