@@ -8,6 +8,8 @@ import patientRoutes from "./routes/patient";
 import adminRoutes from "./routes/admin";
 import loginRoutes from "./routes/login"
 import { notFoundHandler } from "./middlewares/errorHandler";
+import { authenticate } from "./middlewares/authMiddleware";
+import Admin from './models/Admin'; // Import Admin model
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +30,29 @@ const connectDB = async () => {
 // Connect to MongoDB
 connectDB();
 
+const createAdmin = async () => {
+  try {
+    // Check if the admin user already exists
+    const adminExists = await Admin.findOne({ username: 'admin' });
+
+    if (!adminExists) {
+      // Create a new admin if not found
+      const newAdmin = new Admin({
+        username: 'admin123', // Admin username
+        password: 'iamtheadmin', // The password to be set for the admin, should be hashed
+      });
+
+      // Save the new admin to the database
+      await newAdmin.save();
+      console.log('Admin user created successfully.');
+    } else {
+      console.log('Admin user already exists.');
+    }
+  } catch (err) {
+    console.error('Error creating admin:', err);
+  }
+};
+
 // Initialize express application
 const app = express();
 const port = process.env.PORT || 5000;
@@ -40,7 +65,6 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 // Apply routes
@@ -55,4 +79,6 @@ app.use(notFoundHandler);
 // Start HTTP server
 app.listen(port, () => {
   console.log(`HTTP Server running on port ${port}`);
+  // Call createAdmin function when the server starts
+  createAdmin();
 });

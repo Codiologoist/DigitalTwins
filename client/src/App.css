@@ -8,6 +8,7 @@ html, body, #root {
 }
 .table-wrapper {
   padding: 20px;
+  padding-top: 80px; /* Adjust this value based on the height of your navbar */
   overflow-x: auto; /* Allow horizontal scrolling if needed */
 }
 
@@ -56,4 +57,150 @@ html, body, #root {
 
 .actions button:hover {
   color: #0056b3;                /* Darker blue on hover for better visibility */
+}
+
+.add-doctor-button-container {
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  padding: 0 20px 20px 20px; /* Adjust padding as needed */
+}
+
+.add-doctor-button {
+  background-color: none; /* Change to a shade that matches your theme (like purple) */
+  color: white; /* White text */
+  padding: 0% 1%; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  align-items: center; /* Center items vertically */
+  font-weight: 500;
+}
+
+.add-doctor-button button {
+  background-color: rgb(103, 65, 205); /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 10px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.add-doctor-button button:hover {
+  background-color: rgb(75, 184, 75); /* Darker green on hover */
+}
+
+.plus-sign {
+  color: white; /* Ensure plus sign is white */
+  margin-right: 8px; /* Space between plus sign and text */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 27, 28, 0.5); /* Darkened background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 27, 28, 0.5); /* Darkened background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal {
+  background-color: #ffffff; /* White background for the modal */
+  padding: 20px 50px; /* Reduced padding for a cleaner look */
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px; /* Adjust the width to ensure it's centered and neat */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* More spacing for a more organized layout */
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #ff0000; /* Red color on hover */
+}
+
+/* Heading Style */
+.modal-heading {
+  text-align: center;
+  font-size: x-large; 
+  margin-bottom: 20px;
+  color: #6a1b9a; /* Purple text for the heading */
+  font-weight: 800;
+}
+
+/* Label Style */
+label {
+  font-size: medium;
+  font-weight: 300;
+  margin-bottom: 5px;
+  color: #3c1c43; /* Slightly lighter for label text */
+}
+
+/* Input Field Style */
+.modal-input {
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #e4c7ff;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #f3e5f5; /* Light purple background for inputs */
+  color: #593f3f; /* Dark text inside the input fields */
+  transition: border-color 0.3s ease;
+}
+
+.modal-input:focus {
+  border-color: #6a1b9a; /* Purple border when focused */
+  outline: none;
+}
+
+/* Button Style (Save Button) */
+.save-button {
+  background-color: #6a1b9a; /* Purple for Save button */
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Full width button for consistency */
+}
+
+.save-button:hover {
+  background-color: #4a148c; /* Darker purple on hover */
 }

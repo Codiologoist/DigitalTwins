@@ -34,7 +34,12 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
         onLogin(data.role);
         //setUserRole(data.role);
         setIsLoggedIn(true);
-        navigate('/doctors/12'); // The patient Id "123" is hard-coded value for now
+        // Navigate based on user role
+        if (data.role === 'admin') {
+          navigate('/doctors'); // Redirect admin to /doctors page
+        } else if (data.role === 'doctor') {
+          navigate('/doctors/12'); // Redirect doctor to their page (use dynamic ID later)
+        }
       } 
     } catch (error) {
       if (axios.isAxiosError(error)) {

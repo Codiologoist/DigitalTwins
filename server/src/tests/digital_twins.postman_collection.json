@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a98a39d7-5a68-4aed-9dec-c1742e25f9d8",
+		"_postman_id": "d625dc47-28ce-4188-9936-29d63fd1abe6",
 		"name": "digital_twins",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28868794"
@@ -33,7 +33,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"C001\",\n        \"lastName\" : \"\"\n    },\n    \"SSN\" : \"200201046543\"\n}",
+							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"Mr\",\n        \"lastName\" : \"Something\"\n    },\n    \"SSN\" : \"200203046643\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -223,6 +223,44 @@
 				},
 				{
 					"name": "Get ABP,Syst",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"ABP,Syst"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ABP,na",
 					"event": [
 						{
 							"listen": "test",
@@ -545,6 +583,158 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"SpO2,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get CO2,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"Tvesic,na"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get RESP,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Left"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PLETH,na",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"{{SSN}}",
+								"data",
+								"rSO2,Right"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ECG,II",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ECG,II",
 							"protocol": "http",
 							"host": [
@@ -696,11 +886,13 @@
 									"pm.test(\"Doctor is successfully created\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"John\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Doe\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"199904208945\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"john.doe\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Sophia\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Lee\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"580923456789\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"sophia.lee\");\r",
 									"});\r",
+									"let res = pm.response.json()\r",
+									"pm.collectionVariables.set(\"DOCID\", res.data._id)\r",
 									""
 								],
 								"type": "text/javascript",
@@ -713,7 +905,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"SSN\": \"199904208945\",\r\n  \"username\": \"john.doe\",\r\n  \"password\": \"securePassword123\"\r\n}\r\n",
+							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -756,9 +948,9 @@
 									"\r",
 									"pm.test(\"Check if the doctor exists in the list with username and password\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    const doctor = jsonData.data.find(doc => doc.SSN === \"199904208945\");\r",
+									"    const doctor = jsonData.data.find(doc => doc.SSN === \"580923456789\");\r",
 									"    pm.expect(doctor).to.not.be.undefined;\r",
-									"    pm.expect(doctor).to.have.property(\"username\", \"john.doe\");\r",
+									"    pm.expect(doctor).to.have.property(\"username\", \"sophia.lee\");\r",
 									"    pm.expect(doctor).to.have.property(\"password\"); // Ensure password is present, though unhashed\r",
 									"});\r",
 									""
@@ -802,10 +994,9 @@
 									"pm.test(\"Doctor is successfully updated\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Jane\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Smith\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"jane.smith\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"password\"); // Ensure password is updated\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Emma\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Muller\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"emma.muller\");\r",
 									"});\r",
 									""
 								],
@@ -819,7 +1010,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"username\": \"jane.smith\",\r\n  \"password\": \"newSecurePassword456\"\r\n}\r\n",
+							"raw": "{\r\n \"firstName\": \"Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -827,7 +1018,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -838,7 +1029,7 @@
 								"v1",
 								"admin",
 								"doctors",
-								"199904208945"
+								"{{DOCID}}"
 							]
 						}
 					},
@@ -880,7 +1071,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/199904208945",
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -891,7 +1082,42 @@
 								"v1",
 								"admin",
 								"doctors",
-								"199904208945"
+								"{{DOCID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admins",
+			"item": [
+				{
+					"name": "Post Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin"
 							]
 						}
 					},
@@ -946,6 +1172,11 @@
 		{
 			"key": "SSN",
 			"value": "200201046543",
+			"type": "string"
+		},
+		{
+			"key": "DOCID",
+			"value": "",
 			"type": "string"
 		}
 	]
