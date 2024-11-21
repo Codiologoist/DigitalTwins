@@ -1,20 +1,37 @@
 // Defines the structure of the data used for rendering the graph in the RowComponent.
 export interface DataType {
-    time_vector: number[];
-    measurement_data: number[];
+    duration: number;
+    num_samples: number;
+    sample_interval: number;
+    sample_rate: number;
+    samples: number[]; // Array of sample values
+    start_time: number; 
+    timestamps: number[]; 
+    unit: string; 
 }
+
+// Represents processed data for a single signal
+export interface ProcessedDataType {
+    time_vector: number[]; // Flattened timestamps (processed)
+    measurement_data: number[]; // Flattened samples (processed)
+    sample_interval?: number; 
+}
+
 
 // Defines the general structure for the data contains different patient measurement data
 export interface AllDataType {
-    ["ABP,Dias"]: DataType,
-    ["ABP,Mean"]: DataType,
-    ["ABP,Syst"]: DataType,
-    ["HR,na"]: DataType,
-    ["RR,na"]: DataType,
-    ["SpO2,na"]: DataType,
-    ["Tvesic,na"]: DataType,
-    ["rSO2,Left"]: DataType,
-    ["rSO2,Right"]: DataType,
+    ["ECG,II"]: ProcessedDataType,
+    ["ABP,na"]: ProcessedDataType,
+    ["RESP,na"]: ProcessedDataType,
+    ["ABP,Dias"]: ProcessedDataType,
+    ["ABP,Mean"]: ProcessedDataType,
+    ["ABP,Syst"]: ProcessedDataType,
+    ["HR,na"]: ProcessedDataType,
+    ["RR,na"]: ProcessedDataType,
+    ["SpO2,na"]: ProcessedDataType,
+    ["Tvesic,na"]: ProcessedDataType,
+    ["rSO2,Left"]: ProcessedDataType,
+    ["rSO2,Right"]: ProcessedDataType,
     // Add more data types if needed 
 }
 
