@@ -204,3 +204,19 @@ label {
 .save-button:hover {
   background-color: #4a148c; /* Darker purple on hover */
 }
+
+.data_trend-button {
+  border: 1px solid lightgray;
+  background-color: black;  
+  color: lightgray;     
+  width: 100px;      
+  height: 30px;      
+  border-radius: 5px;      
+  font-size: 16px;     
+  cursor: pointer;
+}
+
+.data_trend-button:hover {
+  border-color: gray;       
+  background-color: #2e2e2e; 
+}
