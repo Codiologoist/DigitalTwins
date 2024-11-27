@@ -30,7 +30,7 @@ class FolderExtraction:
                 continue
             elif "Impedance" in filename:
                 continue
-            elif "Composite" in filename:
+            elif "EEG,Composite,SampleSeries" in filename:
                 continue
             elif filename.endswith("patient.info"):
                 patient_information = filename          # Store the patient information file
