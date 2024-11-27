@@ -7,9 +7,11 @@ import apiRoutes from "./routes/api";
 import patientRoutes from "./routes/patient";
 import adminRoutes from "./routes/admin";
 import loginRoutes from "./routes/login"
+import decryptedDataRoutes from "./routes/decryptedData";
 import { notFoundHandler } from "./middlewares/errorHandler";
 import { authenticate } from "./middlewares/authMiddleware";
 import Admin from './models/Admin'; // Import Admin model
+
 
 // Load environment variables
 dotenv.config();
@@ -72,13 +74,29 @@ app.use("/api/v1", apiRoutes);
 app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1", loginRoutes);
+app.use("/decrypted-data", decryptedDataRoutes);
+
 
 // Apply error handler
 app.use(notFoundHandler);
 
-// Start HTTP server
-app.listen(port, () => {
-  console.log(`HTTP Server running on port ${port}`);
-  // Call createAdmin function when the server starts
-  createAdmin();
-});
+// Connect to MongoDB and create the admin
+const startServer = async () => {
+  try {
+    // Ensure DB connection is successful before starting the server
+    await connectDB();
+
+    // Call createAdmin function when the server starts
+    await createAdmin();
+
+    // Start HTTP server after successful DB connection and admin creation
+    app.listen(port, () => {
+      console.log(`HTTP Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Error during server startup:', error);
+  }
+};
+
+// Start server
+startServer();
