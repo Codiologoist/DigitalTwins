@@ -7,8 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import json
-from decryptedDataController import save_decrypted_data
-
 
 # Main function to run the decryption process
 def main():
@@ -29,11 +27,6 @@ def main():
     
     # Save the decrypted data to json files (which get sent to frontend)
     json_creation.save_to_json(decrypted_data_files, "../../decrypted_data")
-
-    # call the controller function to save the decrypted data to the database
-    save_decrypted_data(decrypted_data_files)  # Assuming `save_decrypted_data` is your controller function
-
-    #-----------------------------------------
 
     # Initialize the figure for plotting
     fig, ax = plt.subplots(figsize=(20, 6))  # Increase figure size
