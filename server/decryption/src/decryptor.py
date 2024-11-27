@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import json
+from save_decrypted_data import save_all_json_files
+
 
 # Main function to run the decryption process
 def main():
@@ -28,6 +30,12 @@ def main():
     # Save the decrypted data to json files (which get sent to frontend)
     json_creation.save_to_json(decrypted_data_files, "../../decrypted_data")
 
+      # Call the function to save decrypted data into the MongoDB database
+    print("Saving decrypted data to database...")
+    save_all_json_files()  # This will iterate over the decrypted files and save them to MongoDB
+    print("Decrypted data saved to database successfully!")
+
+    #-----------------------------------------------------------
     # Initialize the figure for plotting
     fig, ax = plt.subplots(figsize=(20, 6))  # Increase figure size
     
