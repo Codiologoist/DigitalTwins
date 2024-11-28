@@ -1,11 +1,23 @@
+import React, { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { Patient } from "../types/types.ts";
+import DataTrendModal from "./DataTrendModal";
 
 interface PatientHeaderProps {
     patient: Patient;
 }
 
 const PatientHeader: React.FC<PatientHeaderProps> = ({patient}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showDataTrend = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
             <FaUser/>
@@ -28,11 +40,13 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({patient}) => {
                         <option value="1h">Last 1 Hour</option>
                         <option value="12h">Last 12 Hours</option>
                     </select>
-                    <button type="button" className="data_trend-button">ECG</button>
-                    <button type="button" className="data_trend-button">ABP</button>
-                    <button type="button" className="data_trend-button">RESP</button>
+                    <button type="button" className="data_trend-button" onClick={showDataTrend}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={showDataTrend}>ABP</button>
+                    <button type="button" className="data_trend-button" onClick={showDataTrend}>RESP</button>
                 </div>
             </div>
+
+            <DataTrendModal isOpen={isModalOpen} onClose={closeModal} />
 
         </div>
     )
