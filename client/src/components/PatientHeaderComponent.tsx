@@ -24,13 +24,28 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
   
       try {
         const response = await api.get(`/patients/${SSN}/data/${category}`);
-        const fetchedData = response.data?.data;
+        const fetchedData = response.data.data;
+        const dataArray = fetchedData?.data;
         
-        if (fetchedData && Array.isArray(fetchedData)) {
-            const ecgSignal = fetchedData[0]; // You could also loop through and handle multiple signals
-            const timestamps = ecgSignal.timestamps;
-            const samples = ecgSignal.samples;
+        if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
+            const ecgSignal = dataArray[0]; // You could also loop through and handle multiple signals
+            let timestamps = ecgSignal.timestamps;
+            let samples = ecgSignal.samples;
       
+            // Limit number of data points
+            const maxDataPoints = 5000;
+            if (timestamps.length > maxDataPoints) {
+                timestamps = timestamps.slice(0, maxDataPoints);
+                samples = samples.slice(0, maxDataPoints);
+            }
+        
+            // Limit the values of the data (e.g., set a min and max range for Y-axis values)
+            const minValue = -1.5;
+            const maxValue = 1.5;
+        
+            samples = samples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
+        
+
             // Prepare data for chart
             const chartData = {
               labels: timestamps, // Timestamps as X-axis

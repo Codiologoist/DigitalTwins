@@ -32,20 +32,42 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-xl font-bold mb-4">Data Trend Details</h2>
+    <div className="data_modal-overlay">
+      <div className="data_modal">
+        <h2 className="modal-heading">Data Trend Details</h2>
 
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
 
-        {/* Only show the chart if data is available */}
+        {/* Render the chart only when data is valid */}
         {!loading && !error && data && typeof data !== 'string' && (
-          <div className="mb-4">
-            <Line data={data as ChartData<'line'>} />
+          <div className="chart-container mb-4">
+            <div  style={{ minWidth: '5000px' }} >
+                <Line data={data as ChartData<'line'>} 
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false, // 禁用默认的宽高比，允许自定义尺寸
+                        scales: {
+                          x: {
+                            ticks: {
+                              maxRotation: 45, // 调整X轴标签的旋转角度
+                              minRotation: 45,
+                            },
+                          },
+                          y: {
+                            beginAtZero: true,
+                            ticks: {
+                              stepSize: 0.5, // 控制Y轴刻度的间隔
+                            },
+                          },
+                        },
+                      }}
+                      style={{ width: "100%", height: "400px" }}/>
+            </div>
           </div>
         )}
 
+        {/* Show a message when there's no data */}
         {!loading && !error && !data && <p>No data available.</p>}
 
         <div className="flex justify-end">
