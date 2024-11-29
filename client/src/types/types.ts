@@ -15,6 +15,7 @@ export interface ProcessedDataType {
     time_vector: number[]; // Flattened timestamps (processed)
     measurement_data: number[]; // Flattened samples (processed)
     sample_interval?: number; 
+    start_time: number; 
 }
 
 
@@ -23,15 +24,15 @@ export interface AllDataType {
     ["ECG,II"]: ProcessedDataType,
     ["ABP,na"]: ProcessedDataType,
     ["RESP,na"]: ProcessedDataType,
-    ["ABP,Dias"]: ProcessedDataType,
-    ["ABP,Mean"]: ProcessedDataType,
-    ["ABP,Syst"]: ProcessedDataType,
-    ["HR,na"]: ProcessedDataType,
-    ["RR,na"]: ProcessedDataType,
-    ["SpO2,na"]: ProcessedDataType,
-    ["Tvesic,na"]: ProcessedDataType,
-    ["rSO2,Left"]: ProcessedDataType,
-    ["rSO2,Right"]: ProcessedDataType,
+    // ["ABP,Dias"]: ProcessedDataType,
+    // ["ABP,Mean"]: ProcessedDataType,
+    // ["ABP,Syst"]: ProcessedDataType,
+    // ["HR,na"]: ProcessedDataType,
+    // ["RR,na"]: ProcessedDataType,
+    // ["SpO2,na"]: ProcessedDataType,
+    // ["Tvesic,na"]: ProcessedDataType,
+    // ["rSO2,Left"]: ProcessedDataType,
+    // ["rSO2,Right"]: ProcessedDataType,
     // Add more data types if needed 
 }
 

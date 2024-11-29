@@ -37,7 +37,7 @@ const useSelectedPatient = (patientId: number | string) => {
 // More specifically, it fetches data (e.g., ABP, heart rate, etc.) and displays them in separate rows using the RowComponent.
 const Monitor: React.FC = () => {
     const {visibleData, loading} = usePatientData();
-    console.log("visibleData in monitor", visibleData);
+    console.log("hiiii visibleData in monitor", visibleData);
     // const [selectedPatient] = useState<Patient>(mockSelectedPatient); // Simulate that a patient is selected and display their data
     const {patientId} = useParams();
     const {selectedPatient, isLoading: isPatientLoading, isNotFound} = useSelectedPatient(Number(patientId));

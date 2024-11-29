@@ -17,6 +17,9 @@
     "@heroicons/react": "^2.1.5",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.7",
+    "chart.js": "^3.9.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-streaming": "^2.0.0",
     "plotly.js": "^2.35.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@types/chart.js": "^2.9.41",
     "@types/plotly.js": "^2.33.4",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
