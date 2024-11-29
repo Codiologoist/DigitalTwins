@@ -34,6 +34,7 @@ export interface Patient {
     id: number;
     firstName: string;
     lastName: string;
+    SSN: string;
 }
 
 export interface NavigationLink {
