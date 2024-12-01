@@ -18,10 +18,10 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const [loading, setLoading] = useState(false); // Track loading state (true if data is loading)
     const [error, setError] = useState<string | null>(null); // Store any error message
     const SSN = localStorage.getItem('SSN'); // Retrieve SSN from local storage
-    const [timeRange, setTimeRange] = useState(60); // State to store selected time range in seconds
+    const [timePoint, setTimePoint] = useState(1); // State to store selected time point in minutes
 
-    // Method to fetch and display data trend for the selected category
-    const showDataTrend = async (category: string) => {
+    // Method to fetch and display data trend for the selected category at the selected time point
+    const showDataTrend = async (category: string, timePoint: number) => {
         setIsModalOpen(true); // Open the modal
         setLoading(true); // Set loading state to true
         setError(null); // Clear any existing errors
@@ -31,25 +31,28 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             const response = await api.get(`/patients/${SSN}/data/${category}`);
             const fetchedData = response.data.data; // Get the data part of the response
             const dataArray = fetchedData?.data; // Extract the data array
+            const sampleFrequency = 500;
             
             if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
                 const ecgSignal = dataArray[0]; // For now, use the first signal in the data array
                 let timestamps = ecgSignal.timestamps; // ECG timestamps
                 let samples = ecgSignal.samples; // ECG sample values
+                console.log('Timestamps length:', timestamps.length);
+                console.log('Samples length:', samples.length);
                 
                 // Convert timestamps to human-readable time format
                 const baseTime = new Date(); 
-                const startTime = new Date(baseTime.getTime() - timeRange * 1000); // Calculate start time based on timeRange
+                const startTime = new Date(baseTime.getTime() - timePoint * 60 * 1000); // Calculate start time based on timePoint
                 timestamps = timestamps.map((ts: number) => {
                     const date = new Date(startTime.getTime() + ts * 1000); // Convert timestamp to date object
                     return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
                 });
 
-                // Limit the number of data points displayed on the chart
-                const maxDataPoints = timeRange * 500; // Limit by timeRange and factor to adjust data density
-                if (timestamps.length > maxDataPoints) {
-                    timestamps = timestamps.slice(0, maxDataPoints); // Slice to limit data points
-                    samples = samples.slice(0, maxDataPoints); // Slice corresponding sample data
+                // Divide data range
+                const dataRange = 10 * sampleFrequency; // Divide data range for one-minute data
+                if (timestamps.length > dataRange) {
+                    timestamps = timestamps.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for timestamps
+                    samples = samples.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for samples
                 }
 
                 // Limit the range of the sample values for the Y-axis
@@ -92,6 +95,26 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         setError(null); // Clear any existing errors
     };
 
+    // Method to handle Look Up (go forward 1 minute)
+    const lookUp = async () => {
+        setTimePoint((prevTimePoint) => {
+            const newTimePoint = prevTimePoint + 1; // Increment timePoint
+            showDataTrend("ECG,II", newTimePoint); // Trigger data reload for new timePoint
+            return newTimePoint;
+        });
+    };
+
+    // Method to handle Look Down (go back 1 minute)
+    const lookDown = async () => {
+        setTimePoint((prevTimePoint) => {
+            const newTimePoint = Math.max(prevTimePoint - 1, 1); // Ensure the timePoint doesn't go below 1 minute
+            showDataTrend("ECG,II", newTimePoint); // Trigger data reload for new timePoint
+            return newTimePoint;
+        });
+    };
+
+    
+
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
             <FaUser/> {/* Display user icon */}
@@ -102,25 +125,35 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             <h1 className="hidden lg:block px-20">|</h1>
             
             <div className="flex items-center space-x-2 w-full lg:w-auto">
-                <h1 className="font-bold pr-5">Data Trend:</h1> {/* Label for Data Trend section */}
+                <h1 className="font-bold pr-5">Search Data Trend:</h1> {/* Label for Data Trend section */}
                 
                 <div className="flex space-x-5 flex-wrap">
-                    {/* Dropdown to select the time range */}
-                    <select
-                        className="bg-black text-white border border-lightgray rounded-md px-3 focus:outline-none focus:ring-2"
-                        aria-label="Select time range"
-                        value={timeRange} // Set value from state
-                        onChange={(e) => setTimeRange(Number(e.target.value))} // Update state when value changes
-                    >
-                        <option value={60}>Last 1 Min</option>
-                        <option value={600}>Last 10 Mins</option>
-                        <option value={1800}>Last 30 Mins</option>
-                        <option value={3600}>Last 1 Hour</option>
-                    </select>
+
+                    {/* Input field to enter the time point in minutes */}
+                    <div className="flex items-center space-x-1 mr-10">
+                        <input
+                            type="number"
+                            className="bg-black text-white border border-lightgray rounded-md px-2 w-20 focus:outline-none focus:ring-2"
+                            aria-label="Enter time point in minutes"
+                            placeholder="Minutes"
+                            value={timePoint} // Display time point in minutes
+                            min="1" // Prevent values less than 1
+                            onChange={(e) => {
+                                const inputValue = Number(e.target.value);
+                                if (inputValue > 0) {
+                                    setTimePoint(inputValue); // Set the timePoint in minutes
+                                } else {
+                                    setTimePoint(1); // Default to 1 minute if invalid
+                                }
+                            }}
+                        />
+                        <span className="text-white">minutes ago</span>
+                    </div>
+                    
                     {/* Buttons to trigger fetching different categories of data */}
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II")}>ECG</button>
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("abp")}>ABP</button>
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("resp")}>RESP</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("abp", timePoint)}>ABP</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("resp", timePoint)}>RESP</button>
                 </div>
             </div>
 
@@ -131,7 +164,9 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 loading={loading} // Pass loading state
                 data={data} // Pass data (chart data or error message)
                 error={error} // Pass error message
-                timeRange={timeRange} // Pass timeRange for chart configuration
+                timeRange={60} // Pass timePoint for chart configuration
+                lookUp={lookUp} // Pass LookUp function
+                lookDown={lookDown} // Pass LookDown function
             />
         </div>
     );

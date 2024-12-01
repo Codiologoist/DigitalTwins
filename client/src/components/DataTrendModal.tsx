@@ -21,6 +21,8 @@ interface DataTrendModalProps {
   data: ChartData<'line'> | string | null; // The data to be displayed in the chart (could be Chart.js data, an error message, or null)
   error: string | null;   // Error message, if any
   timeRange: number;      // The time range value (used to adjust chart width)
+  lookUp: () => void;     // Function to move to the previous time point (look up)
+  lookDown: () => void;   // Function to move to the next time point (look down)
 }
 
 // DataTrendModal component for displaying the data trend in a modal
@@ -30,14 +32,24 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
   loading,     // Loading state
   data,        // The data to be displayed in the chart
   error,       // Error message, if any
-  timeRange    // Time range (used for chart styling)
+  timeRange,   // Time range (used for chart styling)
+  lookUp,      // Look up (move to previous minute)
+  lookDown     // Look down (move to next minute)
 }) => {
   if (!isOpen) return null; // If the modal is not open, do not render anything
 
   return (
-    <div className="data_modal-overlay"> {/* Overlay for the modal */}
-      <div className="data_modal">  {/* The modal content */}
-        <h2 className="modal-heading">Data Trend Details</h2> {/* Modal title */}
+    <div className="data_modal-overlay">
+      <div className="data_modal">
+
+        <button 
+          onClick={onClose} 
+          className="absolute top-2 right-3 bg-gray-200 text-gray-800 rounded-full p-3 hover:bg-gray-300"
+        >
+          ✕
+        </button>
+
+        <h2 className="modal-heading">Data Trend View</h2> {/* Modal title */}
 
         {loading && <p>Loading...</p>}  {/* Show loading message if data is being fetched */}
         {error && <p className="text-red-500">{error}</p>}  {/* Show error message if there's an error */}
@@ -45,7 +57,7 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
         {/* Render the chart only if data is available and not a string (i.e., not an error message) */}
         {!loading && !error && data && typeof data !== 'string' && (
           <div className="chart-container mb-4"> {/* Container for the chart */}
-            <div  style={{ minWidth: `${timeRange * 100}px` }} > {/* Set dynamic min-width based on timeRange */}
+            <div style={{ minWidth: `${timeRange * 100}px` }}> {/* Set dynamic min-width based on timeRange */}
                 <Line 
                   data={data as ChartData<'line'>} 
                   options={{
@@ -75,13 +87,18 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
         {/* Show a message when there's no data */}
         {!loading && !error && !data && <p>No data available.</p>}
 
-        {/* Close button */}
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <button
-            onClick={onClose}  // Call the onClose function when clicked
-            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"  // Styling for the close button
+            onClick={lookUp} 
+            className="bg-purple-800 text-white py-2 px-4 rounded-md hover:bg-purple-600"
           >
-            Close
+            Look up
+          </button>
+          <button
+            onClick={lookDown} 
+            className="bg-purple-800 text-white py-2 px-4 rounded-md hover:bg-purple-600"
+          >
+            Look down
           </button>
         </div>
       </div>
