@@ -1,9 +1,12 @@
 import os
 import json
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Reuse the MongoDB URI from TypeScript connection
-mongo_uri = "mongodb://localhost:27017/"
+mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
 
 # Access the same database and collection used in index.ts

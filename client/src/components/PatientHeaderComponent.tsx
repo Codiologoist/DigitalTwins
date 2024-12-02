@@ -49,7 +49,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 });
 
                 // Divide data range
-                const dataRange = 10 * sampleFrequency; // Divide data range for one-minute data
+                const dataRange = 60 * sampleFrequency; // Divide data range for one-minute data
                 if (timestamps.length > dataRange) {
                     timestamps = timestamps.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for timestamps
                     samples = samples.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for samples
