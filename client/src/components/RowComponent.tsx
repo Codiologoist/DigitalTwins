@@ -5,8 +5,12 @@ import "chartjs-adapter-date-fns";
 
 // import { RowData } from "../types/types";
 Chart.register(streamingPlugin);
+
 // Define the data point type
 type ChartPoint = { x: number; y: number };
+
+// Create number buffer
+const dataBuffer: ChartPoint[] = [];
 
 type RowComponentProps = {
   title: string;
@@ -16,7 +20,7 @@ type RowComponentProps = {
   data: {
     time_vector: number[];
     measurement_data: number[];
-    sample_interval: number;
+    sample_rates: number[];
     start_time: number;
   };
   optionPart?: React.ReactNode;
@@ -34,7 +38,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const chartInstanceRef = useRef<Chart | null>(null);
 
   // State to keep track of the last plotted time
-  const [lastPlottedTime, setLastPlottedTime] = useState<number | null>(null);
+  const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -110,9 +114,9 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
     // Convert `time_vector` to UNIX timestamps
     let startTimestamp = data.start_time;
-    // const adjustedTimeVector = data.time_vector.map((elapsedTime) => startTimestamp + elapsedTime * 1000);
     startTimestamp = startTimestamp / 1000; // Convert it to milliseconds
 
+    //TODO: Change pausing to work based off first timestamp in data.time_vector instead
     // Check if the new data is stale and the last dataset hash
     if (lastPlottedTime !== null && startTimestamp <= lastPlottedTime) {
       console.log("No new data available. Pausing plotting...");
@@ -124,52 +128,56 @@ const RowComponent: React.FC<RowComponentProps> = ({
       setLastPlottedTime(startTimestamp); // Update the last plotted time
     }
 
-    // Append the new data points one by one with the interval specified
-    let index = 0;
-    const addNextPoint = () => {
-      if (isPaused) {
-        console.log("Plotting is paused. No new data to add.");
-        return; // Skip adding new points if plotting is paused
-      } else {
-        console.log("New data available. Resuming plotting...");
-        setIsPaused(false);
-        setLastPlottedTime(startTimestamp); // Update the last plotted time
+    // Calculate the batch size for updates
+    const batchIntervalMs = 50; // Update every 50ms
+    const avgSampleRate =
+      data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
+    const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Calculate the number of samples per batch
+
+    const MAX_BUFFER_SIZE = 15 * avgSampleRate; // Buffer size is approx. 15 seconds
+
+    let currentIndex = 0;
+
+    const plotBatch = () => {
+      if (isPaused || currentIndex >= data.time_vector.length) {
+        console.log("Paused or all points plotted. Stopping updates.");
+        return;
       }
 
-      if (index < data.time_vector.length) {
-        const time = startTimestamp + data.time_vector[index];
-        const value = data.measurement_data[index];
+      // Update batchEndIndex to increment by samplesPerBatch, assign length of data.time_vector to batchEndIndex
+      // when currentIndex + samplesPerBatch is greater than data.time_vector.length (avoid out of bounds error)
+      const batchEndIndex = Math.min(
+        currentIndex + samplesPerBatch,
+        data.time_vector.length
+      );
+      for (let i = currentIndex; i < batchEndIndex; i++) {
+        const time = startTimestamp + data.time_vector[i]; // Convert to ms
+        const value = data.measurement_data[i];
+        // dataset.data.push({ x: time, y: value });
+        dataBuffer.push({ x: time, y: value });
+      }
 
-        //TODO: Calculate batch size
-        //TODO: loop X times (per batch size) to add multiple points at once, move index inside loop etc.
-        dataset.data.push({
-          x: time,
-          y: value,
-        });
-        // console.log(`Adding point x: ${time}, y: ${value}`); // Log each point being added
+      while (dataBuffer.length > MAX_BUFFER_SIZE) {
+        dataBuffer.shift();
+      }
 
-        // Remove old points if beyond the 30-second window
-        // const cutoffTime = time - 30000; // Keep the last 30 seconds
-        const cutoffTime = time - 5000; // Keep the last 30 seconds
-        dataset.data = (dataset.data as ChartPoint[]).filter(
-          (point) => point.x >= cutoffTime
-        );
+      dataset.data = dataBuffer; // Update the dataset with the new data
 
-        // Assign a new reference to force Chart.js to recognize changes
-        // chart.data.datasets[0].data = [...dataset.data];
-        chart.update(); // Trigger a redraw of the chart
+      currentIndex = batchEndIndex; // Update the current index for next execution
 
-        // Schedule the next point to be added
-        index += 1;
-        console.log("!!!data.sample_interval:", data.sample_interval);
-        setTimeout(addNextPoint, data.sample_interval * 1000); // Use data.sample_interval here
+      chart.update("quiet"); // Update the chart without animation
+
+      // Schedule the next batch
+      if (currentIndex < data.time_vector.length) {
+        setTimeout(plotBatch, batchIntervalMs);
       } else {
-        console.log("All points for this batch have been added");
+        console.log("All points for the current data run have been plotted.");
+        setIsPaused(true); // Pause if all points are plotted
       }
     };
 
-    addNextPoint();
-  }, [data]);
+    plotBatch();
+  }, [data, isPaused, firstTimestamp]);
 
   const currentValue =
     data.measurement_data[data.measurement_data.length - 1] || 0;
