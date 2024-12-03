@@ -9,9 +9,6 @@ Chart.register(streamingPlugin);
 // Define the data point type
 type ChartPoint = { x: number; y: number };
 
-// Create number buffer
-const dataBuffer: ChartPoint[] = [];
-
 type RowComponentProps = {
   title: string;
   unit: string;
@@ -37,11 +34,14 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
+  const [lastPlottedTime, setLastPlottedTime] = useState<number | null>(null);
+
   // State to keep track of the last plotted time
   const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    
     // Check if the chartRef (canvas element) is available
     if (!chartRef.current) {
       console.error("Canvas element is not found.");
@@ -106,6 +106,8 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
   // Update the chart when data changes
   useEffect(() => {
+    // Create number buffer
+    const dataBuffer: ChartPoint[] = [];
     if (!chartInstanceRef.current) return;
 
     const chart = chartInstanceRef.current;
@@ -129,16 +131,17 @@ const RowComponent: React.FC<RowComponentProps> = ({
     }
 
     // Calculate the batch size for updates
-    const batchIntervalMs = 50; // Update every 50ms
+    const batchIntervalMs = 100; // Update every 50ms
     const avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
     const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Calculate the number of samples per batch
 
-    const MAX_BUFFER_SIZE = 15 * avgSampleRate; // Buffer size is approx. 15 seconds
+    const MAX_BUFFER_SIZE = 10 * avgSampleRate; // Buffer size is approx. 15 seconds
 
     let currentIndex = 0;
 
     const plotBatch = () => {
+      console.log(title, "!!!!Adding batch!!!!!", currentIndex)
       if (isPaused || currentIndex >= data.time_vector.length) {
         console.log("Paused or all points plotted. Stopping updates.");
         return;
@@ -151,7 +154,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
         data.time_vector.length
       );
       for (let i = currentIndex; i < batchEndIndex; i++) {
-        const time = startTimestamp + data.time_vector[i]; // Convert to ms
+        const time = startTimestamp + data.time_vector[i]; 
         const value = data.measurement_data[i];
         // dataset.data.push({ x: time, y: value });
         dataBuffer.push({ x: time, y: value });
