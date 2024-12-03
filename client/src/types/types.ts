@@ -17,6 +17,7 @@ export interface ProcessedDataType {
   sample_rates: number[];
   sample_interval: number;
   start_time?: number;
+  data?: DataType[]; 
 }
 
 // Defines the general structure for the data contains different patient measurement data
