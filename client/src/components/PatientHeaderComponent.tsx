@@ -39,12 +39,11 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 let samples = ecgSignal.samples; // ECG sample values
                 console.log('Timestamps length:', timestamps.length);
                 console.log('Samples length:', samples.length);
+                console.log('start_time:', ecgSignal.start_time);
                 
-                // Convert timestamps to human-readable time format
-                const baseTime = new Date(); 
-                const startTime = new Date(baseTime.getTime() - timePoint * 60 * 1000); // Calculate start time based on timePoint
+                const startTime = new Date(ecgSignal.start_time / 1000); // Convert start_time to a millisecond timestamp
                 timestamps = timestamps.map((ts: number) => {
-                    const date = new Date(startTime.getTime() + ts * 1000); // Convert timestamp to date object
+                    const date = new Date(startTime.getTime() + ts * 1000); // Calculate the time according to start_time and ts
                     return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
                 });
 
