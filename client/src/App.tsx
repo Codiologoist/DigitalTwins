@@ -13,20 +13,20 @@ import PrivateRoute from './components/PrivateRouteComponent.tsx';
 
 const App = () => {
     // create Dummy patient
-    // const patient = {
-    //   SSN: "199901045678",
-    //   name : {
-    //     firstName: "C001",
-    //     lastName: "",
-    //   },
-    // };
+    const patient = {
+      SSN: "199901045678",
+      name : {
+        firstName: "C001",
+        lastName: "",
+      },
+    };
 
-    // api.post('/patients', patient).then((response) => {
-    //   console.log(response);
-    //   localStorage.setItem('SSN', response.data.patient.SSN);
-    // }).catch((error) => {
-    //   console.log(error);
-    // })
+    api.post('/patients', patient).then((response) => {
+      console.log(response);
+      localStorage.setItem('SSN', response.data.patient.SSN);
+    }).catch((error) => {
+      console.log(error);
+    })
 
   
   const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null); // State for tracking the user's role: 'doctor', 'admin', or null (for not logged in)
