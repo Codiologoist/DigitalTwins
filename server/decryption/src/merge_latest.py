@@ -56,7 +56,7 @@ def calculate_file_hash(file_path):
         return None
 
 # Function to merge data
-def merge_json_data(latest_file, integrated_file):
+def merge_json_data(latest_file, merged_file):
 
     # Check if latest_file exists; if not, exit
     if not os.path.exists(latest_file):
@@ -68,55 +68,55 @@ def merge_json_data(latest_file, integrated_file):
     if latest_data is None:
         return
     
-    # If integrated_file does not exist, create it and copy latest_file data
-    if not os.path.exists(integrated_file):
-        save_json(integrated_file, latest_data)
+    # If merged_file does not exist, create it and copy latest_file data
+    if not os.path.exists(merged_file):
+        save_json(merged_file, latest_data)
         return
 
-    # Load the integrated JSON data file
-    integrated_data = load_json(integrated_file)
-    if integrated_data is None:
+    # Load the merged JSON data file
+    merged_data = load_json(merged_file)
+    if merged_data is None:
         return
     
     # Check if the 'data' section is of the correct format
-    if not isinstance(integrated_data.get("data"), list) or not isinstance(latest_data.get("data"), list):
+    if not isinstance(merged_data.get("data"), list) or not isinstance(latest_data.get("data"), list):
         print("Error: 'data' field should be of list type")
         return
     
     # Check if "last_merged_hashes" exists and compare its value
-    if "last_merged_hashes" in integrated_data and integrated_data["last_merged_hashes"] == calculate_file_hash(latest_file):
+    if "last_merged_hashes" in merged_data and merged_data["last_merged_hashes"] == calculate_file_hash(latest_file):
         return
 
-    length = min(len(integrated_data["data"]), len(latest_data["data"]))
+    length = min(len(merged_data["data"]), len(latest_data["data"]))
     
     # Merge the 'data' sections
     for i in range(length):
         # Validate the format of the new and old data
-        if not validate_data_format(latest_data["data"][i]) or not validate_data_format(integrated_data["data"][i]):
+        if not validate_data_format(latest_data["data"][i]) or not validate_data_format(merged_data["data"][i]):
             print(f"Data format validation failed, skipping merge for item {i}")
             continue
         
         # Merge the data
         try:
-            latest_data["data"][i]["samples"].extend(integrated_data["data"][i]["samples"]) 
-            integrated_data["data"][i]["samples"] = latest_data["data"][i]["samples"] 
+            latest_data["data"][i]["samples"].extend(merged_data["data"][i]["samples"]) 
+            merged_data["data"][i]["samples"] = latest_data["data"][i]["samples"] 
 
-            latest_data["data"][i]["timestamps"].extend(integrated_data["data"][i]["timestamps"])
-            integrated_data["data"][i]["timestamps"] = latest_data["data"][i]["timestamps"]
+            latest_data["data"][i]["timestamps"].extend(merged_data["data"][i]["timestamps"])
+            merged_data["data"][i]["timestamps"] = latest_data["data"][i]["timestamps"]
 
-            integrated_data["data"][i]["num_samples"] += latest_data["data"][i]["num_samples"]
+            merged_data["data"][i]["num_samples"] += latest_data["data"][i]["num_samples"]
 
-            integrated_data["data"][i]["duration"] += latest_data["data"][i]["duration"]
+            merged_data["data"][i]["duration"] += latest_data["data"][i]["duration"]
             
-            integrated_data["data"][i]["sample_rate"] = integrated_data["data"][i]["num_samples"] / integrated_data["data"][i]["duration"]
+            merged_data["data"][i]["sample_rate"] = merged_data["data"][i]["num_samples"] / merged_data["data"][i]["duration"]
 
-            integrated_data["data"][i]["sample_interval"] = 1 / integrated_data["data"][i]["sample_rate"]
+            merged_data["data"][i]["sample_interval"] = 1 / merged_data["data"][i]["sample_rate"]
 
-            integrated_data["last_merged_hashes"] = calculate_file_hash(latest_file)
+            merged_data["last_merged_hashes"] = calculate_file_hash(latest_file)
 
         except KeyError as e:
             print(f"Missing key {e}, skipping merge for this data item")
             continue
 
     # Save the merged data back to the old file
-    save_json(integrated_file, integrated_data)
+    save_json(merged_file, merged_data)

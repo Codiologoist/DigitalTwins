@@ -1,9 +1,9 @@
-import React, { useState } from "react"; // Import React and useState hook
-import { FaUser } from "react-icons/fa"; // Import FaUser icon from react-icons
-import { Patient } from "../types/types.ts"; // Import the Patient type
-import DataTrendModal from "./DataTrendModal"; // Import DataTrendModal component
-import api from "../api"; // Import the API instance for making API requests
-import { ChartData } from 'chart.js'; // Import the ChartData type for chart data
+import React, { useState } from "react";
+import { FaUser } from "react-icons/fa";
+import { Patient } from "../types/types.ts";
+import DataTrendModal from "./DataTrendModal";
+import api from "../api";
+import { ChartData } from 'chart.js';
 
 // Define the interface for the props of the PatientHeader component
 interface PatientHeaderProps {
@@ -109,7 +109,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             if(newTimePoint > maxTimePoint){
                 newTimePoint = maxTimePoint;
             }
-            showDataTrend("ECG,II", newTimePoint); // Trigger data reload for new timePoint
+            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
             return newTimePoint;
         });
     };
@@ -118,7 +118,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const lookDown = async () => {
         setTimePoint((prevTimePoint) => {
             const newTimePoint = Math.max(prevTimePoint - 1, 1); // Ensure the timePoint doesn't go below 1 minute
-            showDataTrend("ECG,II", newTimePoint); // Trigger data reload for new timePoint
+            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
             return newTimePoint;
         });
     };
@@ -162,7 +162,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                         />
                         <select
                             className="bg-black text-white border border-lightgray rounded-md px-2 w-24 focus:outline-none focus:ring-2 ml-4"
-                            aria-label="Select data category"
+                            aria-label="Select time interval"
                             onChange={(e) => {
                                 const newInterval = Number(e.target.value);
                                 setSelectedTimeInterval(newInterval);
@@ -176,7 +176,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     </div>
                     
                     {/* Buttons to trigger fetching different categories of data */}
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II,Merged", timePoint)}>ECG</button>
                 </div>
             </div>
 
