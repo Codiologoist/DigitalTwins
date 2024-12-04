@@ -19,6 +19,8 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const [error, setError] = useState<string | null>(null); // Store any error message
     const SSN = localStorage.getItem('SSN'); // Retrieve SSN from local storage
     const [timePoint, setTimePoint] = useState(1); // State to store selected time point in minutes
+    const [selectedTimeInterval, setSelectedTimeInterval] = useState(60);
+    const [maxTimePoint, setMaxTimePoint] = useState(60);
 
     // Method to fetch and display data trend for the selected category at the selected time point
     const showDataTrend = async (category: string, timePoint: number) => {
@@ -48,11 +50,16 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 });
 
                 // Divide data range
-                const dataRange = 60 * sampleFrequency; // Divide data range for one-minute data
-                if (timestamps.length > dataRange) {
-                    timestamps = timestamps.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for timestamps
-                    samples = samples.slice((timePoint - 1) * dataRange, timePoint * dataRange); // Slice range for samples
+                let dataRange = selectedTimeInterval * sampleFrequency; // Divide data range for one-minute data
+                if (timestamps.length < dataRange) {
+                    dataRange =  timestamps.length;
                 }
+                const startIndex = Math.max(timestamps.length - timePoint * dataRange, 0);
+                const endIndex = timestamps.length - (timePoint - 1) * dataRange;
+                setMaxTimePoint(Math.ceil(timestamps.length / dataRange));
+                console.log("MaxTimePoint", Math.ceil(timestamps.length / dataRange));
+                timestamps = timestamps.slice(startIndex, endIndex);
+                samples = samples.slice(startIndex, endIndex); // Slice range for samples
 
                 // Limit the range of the sample values for the Y-axis
                 const minValue = -1.5; 
@@ -94,10 +101,14 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         setError(null); // Clear any existing errors
     };
 
+
     // Method to handle Look Up (go forward 1 minute)
     const lookUp = async () => {
         setTimePoint((prevTimePoint) => {
-            const newTimePoint = prevTimePoint + 1; // Increment timePoint
+            let newTimePoint = prevTimePoint + 1; // Increment timePoint
+            if(newTimePoint > maxTimePoint){
+                newTimePoint = maxTimePoint;
+            }
             showDataTrend("ECG,II", newTimePoint); // Trigger data reload for new timePoint
             return newTimePoint;
         });
@@ -112,7 +123,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         });
     };
 
-    
 
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
@@ -124,7 +134,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             <h1 className="hidden lg:block px-20">|</h1>
             
             <div className="flex items-center space-x-2 w-full lg:w-auto">
-                <h1 className="font-bold pr-5">Search Data Trend:</h1> {/* Label for Data Trend section */}
+                <h1 className="font-bold pr-5">Previous Data View:</h1> {/* Label for Data Trend section */}
                 
                 <div className="flex space-x-5 flex-wrap">
 
@@ -140,19 +150,33 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                             onChange={(e) => {
                                 const inputValue = Number(e.target.value);
                                 if (inputValue > 0) {
-                                    setTimePoint(inputValue); // Set the timePoint in minutes
+                                    if(inputValue > maxTimePoint){
+                                        setTimePoint(maxTimePoint);
+                                    }else{
+                                        setTimePoint(inputValue); // Set the timePoint in minutes
+                                    }
                                 } else {
                                     setTimePoint(1); // Default to 1 minute if invalid
                                 }
                             }}
                         />
-                        <span className="text-white">minutes ago</span>
+                        <select
+                            className="bg-black text-white border border-lightgray rounded-md px-2 w-24 focus:outline-none focus:ring-2 ml-4"
+                            aria-label="Select data category"
+                            onChange={(e) => {
+                                const newInterval = Number(e.target.value);
+                                setSelectedTimeInterval(newInterval);
+                                setMaxTimePoint(60);
+                            }}
+                        >I
+                            <option value={60}>min</option>
+                            <option value={10}>10s</option>
+                        </select>
+                        <span className="text-white"> ago </span>
                     </div>
                     
                     {/* Buttons to trigger fetching different categories of data */}
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("abp", timePoint)}>ABP</button>
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("resp", timePoint)}>RESP</button>
                 </div>
             </div>
 
