@@ -25,6 +25,6 @@ def main():
     # Save the decrypted data to json files (which get sent to frontend)
     json_creation.save_to_json(decrypted_data_files, "../../decrypted_data")
 
-    merge_latest.merge_json_data("../../decrypted_data/ECG,II.json", "../../decrypted_data/ECG,II,all.json")
+    merge_latest.merge_json_data("../../decrypted_data/ECG,II.json", "../../decrypted_data/ECG,II,integrated.json")
 
 main()
