@@ -7,6 +7,7 @@ interface DoctorDocument extends Document {
   SSN: string;
   username: string;
   password: string;
+  type: string;
   comparePassword(candidatePassword: string): Promise<boolean>; // Password comparison
 }
 
@@ -16,6 +17,7 @@ const DoctorSchema: Schema = new Schema({
   SSN: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  type: { type: String, default: "doctor" },
 });
 
 // Encrypt passwords using bcrypt
