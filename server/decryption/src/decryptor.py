@@ -3,6 +3,7 @@ import binary_extraction
 import folder_extraction
 import json_creation
 import copy_latest
+import merge_latest
 
 # Main function to run the decryption process
 def main():
@@ -23,5 +24,7 @@ def main():
     
     # Save the decrypted data to json files (which get sent to frontend)
     json_creation.save_to_json(decrypted_data_files, "../../decrypted_data")
+
+    merge_latest.merge_json_data("../../decrypted_data/ECG,II.json", "../../decrypted_data/ECG,II,Merged.json")
 
 main()

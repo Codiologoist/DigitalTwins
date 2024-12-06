@@ -49,6 +49,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
     }
     // Fetch patient data (simulated)
     const patientData: { [key: string]: PatientData } = await getDecryptedData();
+    console.log(patientData);
 
     // Check if the requested category exists in patientData
     if (!patientData.hasOwnProperty(category)) {

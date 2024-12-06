@@ -37,6 +37,7 @@ const useSelectedPatient = (patientId: number | string) => {
 // More specifically, it fetches data (e.g., ABP, heart rate, etc.) and displays them in separate rows using the RowComponent.
 const Monitor: React.FC = () => {
     const {visibleData, loading} = usePatientData();
+    console.log("hiiii visibleData in monitor", visibleData);
     // const [selectedPatient] = useState<Patient>(mockSelectedPatient); // Simulate that a patient is selected and display their data
     const {patientId} = useParams();
     const {selectedPatient, isLoading: isPatientLoading, isNotFound} = useSelectedPatient(Number(patientId));
@@ -71,15 +72,18 @@ const Monitor: React.FC = () => {
 
     // An array of row objects, each representing a row of data type to be displayed.
     const rowData = [
-        {title: "HR", unit: "bpm", color: "lightgreen", data: visibleData["HR,na"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
-        { title: "RR", unit: "%", color: "green", data: visibleData["RR,na"], numberColor: "green" },
-        { title: "ABP", unit: "mmHg", color: "red", data: visibleData["ABP,Dias"], optionPart: "120/80", numberColor: "red" },
-        { title: "ABP Mean", unit: "BPM", color: "darkyellow", data: visibleData["ABP,Mean"], numberColor: "darkyellow" },
-        { title: "ABP Syst", unit: "Celsius", color: "green", data: visibleData["ABP,Syst"], numberColor: "green" },
-        { title: "SpO2", unit: "mmHg", color: "lightblue", data: visibleData["SpO2,na"], numberColor: "lightblue" },
-        { title: "Tvesic", unit: "bpm", color: "purple", data: visibleData["Tvesic,na"], numberColor: "green" },
-        { title: "rSO2 Left", unit: "", color: "yellow", data: visibleData["rSO2,Left"], numberColor: "yellow" },
-        { title: "rSO2 Right", unit: "", color: "yellow", data: visibleData["rSO2,Right"], numberColor: "yellow" },
+        {title: "ECG", unit: "mV", color: "lightgreen", data: visibleData["ECG,II"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
+        {title: "ABP,na", unit: "mmHg", color: "lightgreen", data: visibleData["ABP,na"], numberColor: "lightgreen"},
+        {title: "RESP,na", unit: "Ohms", color: "lightgreen", data: visibleData["RESP,na"], numberColor: "lightgreen"},
+        // {title: "HR", unit: "bpm", color: "lightgreen", data: visibleData["HR,na"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
+        // { title: "RR", unit: "%", color: "green", data: visibleData["RR,na"], numberColor: "green" },
+        // { title: "ABP", unit: "mmHg", color: "red", data: visibleData["ABP,Dias"], optionPart: "120/80", numberColor: "red" },
+        // { title: "ABP Mean", unit: "BPM", color: "darkyellow", data: visibleData["ABP,Mean"], numberColor: "darkyellow" },
+        // { title: "ABP Syst", unit: "Celsius", color: "green", data: visibleData["ABP,Syst"], numberColor: "green" },
+        // { title: "SpO2", unit: "mmHg", color: "lightblue", data: visibleData["SpO2,na"], numberColor: "lightblue" },
+        // { title: "Tvesic", unit: "bpm", color: "purple", data: visibleData["Tvesic,na"], numberColor: "green" },
+        // { title: "rSO2 Left", unit: "", color: "yellow", data: visibleData["rSO2,Left"], numberColor: "yellow" },
+        // { title: "rSO2 Right", unit: "", color: "yellow", data: visibleData["rSO2,Right"], numberColor: "yellow" },
         // Add more rows if needed
     ]
 

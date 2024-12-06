@@ -11,11 +11,35 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [, setIsLoggedIn] = useState(false);
   // const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    let hasError = false;
+    setError(null);
+
+    // Check if username is empty
+    if (!username.trim()) {
+      setUsernameError("Username is required.");
+      hasError = true;
+    } else {
+      setUsernameError(null);
+    }
+
+    // Check if password is empty
+    if (!password.trim()) {
+      setPasswordError("Password is required.");
+      hasError = true;
+    } else {
+      setPasswordError(null);
+    }
+
+    if (hasError) return; // Stop submission if validation fails
 
     try {
       const response = await axios.post("http://localhost:5000/api/v1/login", {
@@ -44,7 +68,7 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
     } catch (error) {
       if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message;
-          alert(errorMessage);
+          setError(errorMessage);
       } else {
           console.error("Login request failed:", error);
       }
@@ -75,9 +99,14 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+            {error && (
+              <div className="mb-4 rounded-md bg-red-100 p-3 text-red-700">
+                {error}
+              </div>
+            )}
+            <form className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium font-bold leading-6 text-gray-900">
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Username
                 </label>
                 <div className="mt-2">
@@ -89,9 +118,14 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
                     autoComplete="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className={`block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ${
+                      usernameError ? 'ring-red-500' : 'ring-gray-300'
+                    } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />
                 </div>
+                {usernameError && (
+                  <p className="mt-2 text-sm text-red-600">{usernameError}</p>
+                )}
               </div>
 
               <div>
@@ -110,9 +144,14 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full rounded-md border-0 pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className={`block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ${
+                      passwordError ? 'ring-red-500' : 'ring-gray-300'
+                    } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />
                 </div>
+                {passwordError && (
+                  <p className="mt-2 text-sm text-red-600">{passwordError}</p>
+                )}
               </div>
 
               <div>

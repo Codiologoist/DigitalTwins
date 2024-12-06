@@ -30,17 +30,8 @@ class FolderExtraction:
                 continue
             elif "Impedance" in filename:
                 continue
-            elif "Composite" in filename:
-                if "Alert" in filename:
-                    continue
-                if "MarkEvent" in filename:
-                    continue
-                if filename.endswith(",data"):          # Store the data files
-                    data_files.append(filename)
-                elif filename.endswith(",index"):       # Store the index files
-                    index_files.append(filename)
-                elif filename.endswith(",settings"):    # Store the settings files
-                    settings_files.append(filename)
+            elif "EEG,Composite,SampleSeries" in filename:
+                continue
             elif filename.endswith("patient.info"):
                 patient_information = filename          # Store the patient information file
             elif "Float" or "Integer" in filename:
@@ -58,3 +49,4 @@ class FolderExtraction:
                 continue
 
         return data_files, index_files, settings_files, patient_information
+
