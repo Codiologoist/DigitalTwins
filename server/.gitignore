@@ -28,6 +28,7 @@ yarn-error.log*
 /decryption/src/venv
 /decryption/src/binary_extraction.py
 /decryption/src/data
+/decryption/src/index_info
 /decrypted_data
 **/venv/
 **/decoded/
