@@ -1,5 +1,6 @@
 import { RowData } from "../types/types";
-import RowComponent from "./RowComponent";
+import RowComponent from "./RowComponent"; // Choose to use different drawing methods
+//import RowComponent from "./RowComponent_alternative"; // Choose to use different drawing methods
 
 interface PatientSignalsProps {
     rowData: RowData[];
