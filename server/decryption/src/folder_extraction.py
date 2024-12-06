@@ -49,3 +49,4 @@ class FolderExtraction:
                 continue
 
         return data_files, index_files, settings_files, patient_information
+
