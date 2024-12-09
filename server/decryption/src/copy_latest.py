@@ -10,5 +10,4 @@ def copy_files():
 
     # Copy all the files within the newest folder on the Moberg Monitor into the data folder
     dest = os.path.join(os.getcwd(), 'data')
-    # newest_folder = max(glob.glob(os.path.join(directory, '*/')), key=os.path.getmtime)
     shutil.copytree(directory, dest, dirs_exist_ok=True)
