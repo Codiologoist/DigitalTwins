@@ -30,7 +30,7 @@ class FolderExtraction:
                 continue
             elif "Impedance" in filename:
                 continue
-            elif "Composite" in filename:
+            elif "EEG,Composite,SampleSeries" in filename:
                 if "Alert" in filename:
                     continue
                 if "MarkEvent" in filename:
@@ -58,3 +58,4 @@ class FolderExtraction:
                 continue
 
         return data_files, index_files, settings_files, patient_information
+

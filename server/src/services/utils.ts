@@ -35,10 +35,13 @@ async function readFile(fileName: string): Promise<PatientData> {
 export const getDecryptedData = async (): Promise<{ [key: string]: PatientData }> => {
   const directory: string = path.join(__dirname, "../../decrypted_data");
   const files: string[] = fs.readdirSync(directory);
+
   const data: { [key: string]: PatientData } = {};
   for (const file of files) {
-    let splitedFile = file.split(".");
-    data[`${splitedFile[0]}`] = await readFile(file);
+    if (file !== '.DS_Store') {
+      let splitedFile = file.split(".");    
+      data[`${splitedFile[0]}`] = await readFile(file);
+    }
   }
   return data;
 };
