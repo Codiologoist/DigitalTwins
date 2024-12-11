@@ -101,7 +101,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         setError(null); // Clear any existing errors
     };
 
-
+    {/* 
     // Method to handle Look Up (go forward 1 minute)
     const lookUp = async () => {
         setTimePoint((prevTimePoint) => {
@@ -122,7 +122,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             return newTimePoint;
         });
     };
-
+    */}
 
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
@@ -172,8 +172,8 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 data={data} // Pass data (chart data or error message)
                 error={error} // Pass error message
                 timeRange={60} // Pass timePoint for chart configuration
-                lookUp={lookUp} // Pass LookUp function
-                lookDown={lookDown} // Pass LookDown function
+                //lookUp={lookUp} // Pass LookUp function
+                //lookDown={lookDown} // Pass LookDown function
             />
         </div>
     );

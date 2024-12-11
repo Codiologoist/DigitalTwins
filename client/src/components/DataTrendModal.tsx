@@ -21,8 +21,8 @@ interface DataTrendModalProps {
   data: ChartData<'line'> | string | null; // The data to be displayed in the chart (could be Chart.js data, an error message, or null)
   error: string | null;   // Error message, if any
   timeRange: number;      // The time range value (used to adjust chart width)
-  lookUp: () => void;     // Function to move to the previous time point (look up)
-  lookDown: () => void;   // Function to move to the next time point (look down)
+  //lookUp: () => void;     // Function to move to the previous time point (look up)
+  //lookDown: () => void;   // Function to move to the next time point (look down)
 }
 
 // DataTrendModal component for displaying the data trend in a modal
@@ -33,8 +33,8 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
   data,        // The data to be displayed in the chart
   error,       // Error message, if any
   timeRange,   // Time range (used for chart styling)
-  lookUp,      // Look up (move to previous minute)
-  lookDown     // Look down (move to next minute)
+  //lookUp,      // Look up (move to previous minute)
+  //lookDown     // Look down (move to next minute)
 }) => {
   if (!isOpen) return null; // If the modal is not open, do not render anything
 
@@ -86,7 +86,7 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
 
         {/* Show a message when there's no data */}
         {!loading && !error && !data && <p>No data available.</p>}
-
+      {/*
         <div className="flex justify-between">
           <button
             onClick={lookUp} 
@@ -100,7 +100,8 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
           >
             Look down
           </button>
-        </div>
+        </div>        
+      */}
       </div>
     </div>
   );
