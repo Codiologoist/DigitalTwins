@@ -134,32 +134,13 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             <h1 className="hidden lg:block px-20">|</h1>
             
             <div className="flex items-center space-x-2 w-full lg:w-auto">
-                <h1 className="font-bold pr-5">Previous Data View:</h1> {/* Label for Data Trend section */}
+                <h1 className="font-bold pr-5">Trend Data View:</h1> {/* Label for Data Trend section */}
                 
                 <div className="flex space-x-5 flex-wrap">
 
                     {/* Input field to enter the time point in minutes */}
                     <div className="flex items-center space-x-1 mr-10">
-                        <input
-                            type="number"
-                            className="bg-black text-white border border-lightgray rounded-md px-2 w-20 focus:outline-none focus:ring-2"
-                            aria-label="Enter time point in minutes"
-                            placeholder="Minutes"
-                            value={timePoint} // Display time point in minutes
-                            min="1" // Prevent values less than 1
-                            onChange={(e) => {
-                                const inputValue = Number(e.target.value);
-                                if (inputValue > 0) {
-                                    if(inputValue > maxTimePoint){
-                                        setTimePoint(maxTimePoint);
-                                    }else{
-                                        setTimePoint(inputValue); // Set the timePoint in minutes
-                                    }
-                                } else {
-                                    setTimePoint(1); // Default to 1 minute if invalid
-                                }
-                            }}
-                        />
+                    
                         <select
                             className="bg-black text-white border border-lightgray rounded-md px-2 w-24 focus:outline-none focus:ring-2 ml-4"
                             aria-label="Select time interval"
@@ -169,8 +150,11 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                                 setMaxTimePoint(60);
                             }}
                         >I
-                            <option value={60}>min</option>
-                            <option value={10}>10s</option>
+                            <option value={60}>1min</option>
+                            <option value={600}>10mins</option>
+                            <option value={1800}>30mins</option>
+                            <option value={3600}>1hr</option>
+                
                         </select>
                         <span className="text-white"> ago </span>
                     </div>
