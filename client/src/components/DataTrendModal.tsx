@@ -52,7 +52,7 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
         <h2 className="modal-heading">Data Trend View</h2> {/* Modal title */}
 
         {loading && <p>Loading...</p>}  {/* Show loading message if data is being fetched */}
-        {error && <p className="text-red-500">{error}</p>}  {/* Show error message if there's an error */}
+        {error && <p className="text-red-500">Oops! Something went wrong while loading the data. Please try again.</p>} {/* Show error message if there's an error */}
 
         {/* Render the chart only if data is available and not a string (i.e., not an error message) */}
         {!loading && !error && data && typeof data !== 'string' && (
