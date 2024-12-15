@@ -57,7 +57,7 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
         {/* Render the chart only if data is available and not a string (i.e., not an error message) */}
         {!loading && !error && data && typeof data !== 'string' && (
           <div className="chart-container mb-4"> {/* Container for the chart */}
-            <div style={{ minWidth: `${timeRange * 100}px` }}> {/* Set dynamic min-width based on timeRange */}
+            <div style={{ minWidth: `${timeRange * 10}px` }}> {/* Set dynamic min-width based on timeRange */}
                 <Line 
                   data={data as ChartData<'line'>} 
                   options={{
