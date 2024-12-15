@@ -75,6 +75,8 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                             data: samples, // ECG signal values for the Y-axis
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
+                            borderWidth: 2,
+                            pointRadius: 0,
                         },
                     ],
                 };
