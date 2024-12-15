@@ -62,8 +62,8 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 samples = samples.slice(startIndex, endIndex); // Slice range for samples
 
                 // Limit the range of the sample values for the Y-axis
-                const minValue = -1.5; 
-                const maxValue = 1.5;
+                const minValue = -2.0; 
+                const maxValue = 3.0;
                 samples = samples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
 
                 // Prepare the chart data object
