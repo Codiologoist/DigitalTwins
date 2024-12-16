@@ -31,6 +31,7 @@ class FolderExtraction:
             elif "Impedance" in filename:
                 continue
             elif "EEG,Composite,SampleSeries" in filename:
+                continue
                 if "Alert" in filename:
                     continue
                 if "MarkEvent" in filename:
