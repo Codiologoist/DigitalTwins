@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getDecryptedData } from "../services/utils";
+import { getDecryptedData, getDecryptedDataFromDB } from "../services/utils";
 import { PatientData, AllData, Data, DataTypes} from "../models/Data";
 import Patient from "../models/Patient";
 

@@ -45,3 +45,31 @@ export const getDecryptedData = async (): Promise<{ [key: string]: PatientData }
   }
   return data;
 };
+
+// Function to retrieve decrypted data from MongoDB using Mongoose
+export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: PatientData }> => {
+  try {
+
+    // Using Mongoose query data
+    const documents = await Data.find();
+
+    console.log("Retrieved documents from MongoDB:", documents);
+
+    // Map the retrieved documents into the desired format
+    const data: { [key: string]: PatientData } = {};
+
+    documents.forEach((doc) => {
+      // For each document, use the signal_type as the key
+      const signalType = doc.signal_type;
+
+      // Add the document directly to the result object using signal_type as the key
+      // `doc` is already a Mongoose document, so it is automatically typed as `PatientData`
+      data[signalType] = doc;
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error retrieving decrypted data from MongoDB:", error);
+    throw new Error("Failed to fetch data from MongoDB");
+  }
+};

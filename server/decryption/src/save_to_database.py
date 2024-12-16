@@ -64,9 +64,32 @@ for file_path in json_files:
 
     print(f"Data from {file_path} inserted with ObjectId: {inserted_data.inserted_id}")
 
-# # Query all documents in the Data collection
-# cursor = data_collection.find()
+# Query all documents in the Data collection
+cursor = data_collection.find()
 
-# # Print all query results
-# for document in cursor:
-#     print(document)
+# Print all query results
+for document in cursor:
+    print(document)
+
+
+
+# # Clear all data in the Data collection
+# data_collection.delete_many({})
+
+# # Clear all data in the All Data collection
+# all_data_collection.delete_many({})
+
+# print("Both collections have been cleared.")
+
+
+
+# # Get all collection names (equivalent to tables in a SQL database)
+# collections = db.list_collection_names()
+
+# # Print all collection names
+# print("Collections in the database:")
+# for collection in collections:
+#     print(collection)
+
+# # Print the number of collections
+# print(f"\nTotal collections: {len(collections)}")
