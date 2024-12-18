@@ -23,7 +23,7 @@ class FolderExtraction:
         # This way we can easily iterate over all the files of a certain type in binary_extraction.
         for file in os.listdir(directory):
             filename = os.fsdecode(file)                # Decode the filename from bytes to string
-            filename = os.path.join("data", filename)   # Join the filename with the data folder path
+            filename = os.path.join(data_path, filename)   # Join the filename with the data folder path
             if "NumericQuality" in filename or "WaveQuality" in filename:
                 continue
             elif "Char" in filename:

@@ -120,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -161,9 +161,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias",
 							"protocol": "http",
@@ -199,9 +211,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean",
 							"protocol": "http",
@@ -237,9 +261,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
 							"protocol": "http",
@@ -275,47 +311,21 @@
 							}
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"data",
-								"ABP,Syst"
-							]
-						}
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
 					},
-					"response": []
-				},
-				{
-					"name": "Get ABP,na",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,na",
 							"protocol": "http",
@@ -351,9 +361,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na",
 							"protocol": "http",
@@ -389,9 +411,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na",
 							"protocol": "http",
@@ -427,9 +461,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
 							"protocol": "http",
@@ -465,9 +511,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
 							"protocol": "http",
@@ -503,9 +561,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
 							"protocol": "http",
@@ -541,9 +611,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
 							"protocol": "http",
@@ -579,161 +661,21 @@
 							}
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"data",
-								"SpO2,na"
-							]
-						}
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
 					},
-					"response": []
-				},
-				{
-					"name": "Get CO2,na",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"data",
-								"Tvesic,na"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get RESP,na",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
 							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"data",
-								"rSO2,Left"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get PLETH,na",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"patients",
-								"{{SSN}}",
-								"data",
-								"rSO2,Right"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get ECG,II",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ECG,II",
 							"protocol": "http",
@@ -769,9 +711,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/CO2,na",
 							"protocol": "http",
@@ -807,9 +761,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RESP,na",
 							"protocol": "http",
@@ -845,9 +811,21 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/PLETH,na",
 							"protocol": "http",
