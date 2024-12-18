@@ -9,6 +9,7 @@ export interface PatientDocument extends Document {
   },
   SSN: string,
   data: AllDataType,
+  path: string
 }
 
 // Define Mongoose Schema
@@ -32,6 +33,10 @@ const PatientSchema: Schema = new Schema({
   },
   data: {
     type: AllDataTypeSchema,
+  },
+  path: {
+    type: String,
+    required: true
   }
 });
 

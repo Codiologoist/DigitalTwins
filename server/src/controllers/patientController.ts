@@ -112,7 +112,7 @@ export const getAllPatients = async (req: Request, res: Response) => {
 }
 
 export const createPatient = async (req: Request, res: Response) => {
-  const { name: { firstName, lastName }, SSN} = req.body;
+  const { name: { firstName, lastName }, SSN, path} = req.body;
 
   try {
     // Check if the patient already exists
@@ -128,6 +128,7 @@ export const createPatient = async (req: Request, res: Response) => {
       },
       SSN,
       data: new AllData(),
+      path
     });
 
     try {
