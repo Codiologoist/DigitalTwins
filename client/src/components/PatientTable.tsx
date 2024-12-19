@@ -7,9 +7,17 @@ export interface Patient {
   'firstName': string;
   'lastName': string;
   'SSN': string;
+  'path': string;
 }
 
-const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
+// Define props for PatientTable, including onEdit and onDelete
+interface PatinetTableProps {
+  data: Patient[];
+  onEdit: (patient: Patient) => void; // Function to handle editing
+  onDelete: (patient: Patient) => void; // Function to handle deleting
+}
+
+const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) => {
   const navigate = useNavigate();
 
   // Function to handle navigation
@@ -25,27 +33,23 @@ const PatientTable: React.FC<{ data: Patient[] }> = ({ data }) => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>SSN</th>
+            <th>File Path</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {data.map((patient, rowIndex) => (
             <tr key={rowIndex}>
-              <td>{patient.firstName || 'N/A'}</td>
+              <td>{patient.firstName}</td>
+              <td>{patient.lastName}</td>
+              <td>{patient.SSN}</td>
+              <td>{patient.path}</td>
               <td>
-                <span
-                  onClick={() => handleNavigation(patient._id)}
-                  style={{ cursor: 'pointer', color: 'darkblue' }}
-                >
-                  {patient.lastName}
-                </span>
-              </td>
-              <td>
-                <span
-                  onClick={() => handleNavigation(patient._id)}
-                  style={{ cursor: 'pointer', color: 'darkblue' }}
-                >
-                  {patient.SSN}
-                </span>
+                <div className="actions">
+                  <button onClick={() => handleNavigation(patient.SSN)}>Monitor</button>
+                  <button onClick={() => onEdit(patient)}>Edit</button>
+                  <button onClick={() => onDelete(patient)}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}

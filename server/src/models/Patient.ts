@@ -14,15 +14,13 @@ export interface PatientDocument extends Document {
 
 // Define Mongoose Schema
 const PatientSchema: Schema = new Schema({
-  name: {
-    firstName: {
+  firstName: {
       type: String,
       maxlength: 50,
-    },
-    lastName: {
+  },
+  lastName: {
       type: String,
       maxlength: 50,
-    },
   },
   SSN: {
     type: String,

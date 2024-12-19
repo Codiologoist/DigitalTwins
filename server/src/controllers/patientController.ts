@@ -101,7 +101,7 @@ export const getAllPatients = async (req: Request, res: Response) => {
   try {
     const patients = await Patient.find({});
 
-    return res.status(200).json({ success: true, patients: patients });
+    return res.status(200).json({ success: true, data: patients });
   } catch (error: any) {
     console.error(`Error fetching patients: ${error.message || error}`);
 
@@ -112,7 +112,7 @@ export const getAllPatients = async (req: Request, res: Response) => {
 }
 
 export const createPatient = async (req: Request, res: Response) => {
-  const { name: { firstName, lastName }, SSN, path} = req.body;
+  const { firstName, lastName , SSN, path} = req.body;
 
   try {
     // Check if the patient already exists
@@ -122,10 +122,8 @@ export const createPatient = async (req: Request, res: Response) => {
     }
 
     const newPatient = new Patient({
-      name: {
-        firstName,
-        lastName
-      },
+      firstName,
+      lastName,
       SSN,
       data: new AllData(),
       path
@@ -167,6 +165,34 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ success: true, message: "Patient deleted successfully" });
   } catch (error: any) {
     console.error(`Error deleting patient: ${error.message || error}`);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const updatePatient = async (req: Request, res: Response) => {
+  const { SSN } = req.params;
+  const { firstName, lastName , path } = req.body;
+
+  try {
+    const updatedPatient = await Patient.findOneAndUpdate(
+      { SSN },
+      { firstName, lastName, path },
+      { new: true }
+    );
+
+    if (!updatedPatient) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Patient with SSN ${SSN} not found` });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Patient updated successfully", patient: updatedPatient });
+  } catch (error: any) {
+    console.error(`Error updating patient: ${error.message || error}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

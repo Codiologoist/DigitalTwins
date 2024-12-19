@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { sendPatientData, sendPatientCategoryData, 
-    createPatient, getAllPatients, deletePatient} from '../controllers/patientController';
+    createPatient, getAllPatients, deletePatient, updatePatient} from '../controllers/patientController';
 
 const router = Router();
 
@@ -18,5 +18,7 @@ router.get('/', getAllPatients);
 
 // Define a route for deleting a patient
 router.delete('/:SSN', deletePatient);
+
+router.patch('/:SSN', updatePatient);
 
 export default router;
