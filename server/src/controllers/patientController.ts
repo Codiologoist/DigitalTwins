@@ -2,16 +2,18 @@ import { Request, Response } from "express";
 import { getDecryptedData, runPythonScript } from "../services/utils";
 import { PatientData, AllData } from "../models/Data";
 import Patient from "../models/Patient";
+import router from "../routes/api";
 
 // Controller for sending all categories of patient based on the patient id
 export const sendPatientData = async (req: Request, res: Response) => {
   const { SSN } = req.params;
-  const { duration, test, first, path } = req.body;
+  const { duration, test, first, path } = req.query;
 
   try {
     const patient = await Patient.findOne({ SSN: SSN });
 
     if (!patient) {
+      console.error(`Patient with SSN ${SSN} not found`);
       return res.status(404).json({
         success: false,
         message: `Patient with SSN ${SSN} not found`,
@@ -48,7 +50,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
 // Controller for sending specific category of patient data based on the patient id
 export const sendPatientCategoryData = async (req: Request, res: Response) => {
   const { SSN, category } = req.params;
-  const { duration, test, first, path } = req.body;
+  const { duration, test, first, path } = req.query;
 
   try {
     const patient = await Patient.findOne({ SSN: SSN });
@@ -193,6 +195,27 @@ export const updatePatient = async (req: Request, res: Response) => {
       .json({ success: true, message: "Patient updated successfully", patient: updatedPatient });
   } catch (error: any) {
     console.error(`Error updating patient: ${error.message || error}`);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const getOnePatient = async (req: Request, res: Response) => {
+  const { SSN } = req.params;
+
+  try {
+    const patient = await Patient.findOne({ SSN }); // Find patient by SSN
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Patient with SSN ${SSN} not found` });
+    }
+
+    return res.status(200).json({ success: true, data: patient });
+  } catch (error: any) {
+    console.error(`Error fetching patient: ${error.message || error}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

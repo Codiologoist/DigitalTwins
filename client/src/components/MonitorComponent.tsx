@@ -4,7 +4,7 @@ import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "./PatientHeaderComponent.tsx";
 import PatientSignals from "./PatientSignalsComponent.tsx";
-import { Patient } from "../types/types.ts";
+import { AllDataType, Patient } from "../types/types.ts";
 import { useParams } from "react-router-dom";
 import Api from "../api.ts";
 
@@ -14,8 +14,7 @@ interface response {
     message: string
 }
 
-// This function is a mock version,
-// which will later be replaced by an API call (retrieve the selected patient's data based on patient's ID)
+// Fetch patient based on SSN
 const fetchSelectedPatient = async (patientId: number | string) => {
     try  {
         const response = await Api.get<response>(`patients/${patientId}`)
@@ -38,7 +37,11 @@ const fetchSelectedPatient = async (patientId: number | string) => {
 // The main component that renders different rows of data for a patient monitor.
 // More specifically, it fetches data (e.g., ABP, heart rate, etc.) and displays them in separate rows using the RowComponent.
 const Monitor: React.FC = () => {
-    const { visibleData } = usePatientData();
+    let visibleData: AllDataType = {
+        "ECG,II": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0},
+        "ABP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+        "RESP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+    };
     const { patientId } = useParams();
 
     const [patientState, setPatientState] = useState<{
@@ -54,7 +57,7 @@ const Monitor: React.FC = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             try {
-                const response = await fetchSelectedPatient(Number(patientId));
+                const response = await fetchSelectedPatient(String(patientId));
                 setPatientState({
                     selectedPatient: response.selectedPatient,
                     isLoading: response.isLoading,
@@ -72,6 +75,11 @@ const Monitor: React.FC = () => {
 
         fetchPatient();
     }, [patientId]);
+
+    const ssn = patientState.selectedPatient?.SSN || "";
+    const path = patientState.selectedPatient?.path || "";
+
+    visibleData = usePatientData(ssn, true, 5, path).visibleData;
 
     // Destructure state
     const { selectedPatient, isLoading: isPatientLoading, isNotFound } = patientState;
