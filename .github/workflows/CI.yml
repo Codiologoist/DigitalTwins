@@ -34,6 +34,9 @@ jobs:
       - name: Start server and run tests
         run: |
           cd server
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
           npm run ci-test
   build-client:
     runs-on: ubuntu-latest
