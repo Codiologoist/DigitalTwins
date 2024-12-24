@@ -120,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -128,7 +128,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -140,6 +140,24 @@
 								"patients",
 								"{{SSN}}",
 								"data"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -169,7 +187,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,7 +195,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Dias?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -190,6 +208,24 @@
 								"{{SSN}}",
 								"data",
 								"ABP,Dias"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -219,7 +255,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -227,7 +263,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Mean?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -240,6 +276,24 @@
 								"{{SSN}}",
 								"data",
 								"ABP,Mean"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -269,7 +323,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -277,7 +331,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,Syst?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -290,6 +344,24 @@
 								"{{SSN}}",
 								"data",
 								"ABP,Syst"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -319,7 +391,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -327,7 +399,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ABP,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -340,6 +412,24 @@
 								"{{SSN}}",
 								"data",
 								"ABP,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -369,7 +459,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -377,7 +467,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/HR,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -390,6 +480,24 @@
 								"{{SSN}}",
 								"data",
 								"HR,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -419,7 +527,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -427,7 +535,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RR,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -440,6 +548,24 @@
 								"{{SSN}}",
 								"data",
 								"RR,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -469,7 +595,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -477,7 +603,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/SpO2,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -490,6 +616,24 @@
 								"{{SSN}}",
 								"data",
 								"SpO2,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -519,7 +663,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -527,7 +671,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/Tvesic,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -540,6 +684,24 @@
 								"{{SSN}}",
 								"data",
 								"Tvesic,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -569,7 +731,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +739,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Left?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -590,6 +752,24 @@
 								"{{SSN}}",
 								"data",
 								"rSO2,Left"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -619,7 +799,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -627,7 +807,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/rSO2,Right?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -640,6 +820,24 @@
 								"{{SSN}}",
 								"data",
 								"rSO2,Right"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -669,7 +867,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -677,7 +875,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ECG,II",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/ECG,II?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -690,6 +888,24 @@
 								"{{SSN}}",
 								"data",
 								"ECG,II"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -719,7 +935,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -727,7 +943,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/CO2,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/CO2,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -740,6 +956,24 @@
 								"{{SSN}}",
 								"data",
 								"CO2,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -769,7 +1003,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -777,7 +1011,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RESP,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/RESP,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -790,6 +1024,24 @@
 								"{{SSN}}",
 								"data",
 								"RESP,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
@@ -819,7 +1071,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"duration\": 5,\n    \"test\": \"false\",\n    \"first\": \"true\",\n    \"path\": \"CNS\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -827,7 +1079,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/PLETH,na",
+							"raw": "http://localhost:5000/api/v1/patients/{{SSN}}/data/PLETH,na?duration=5&test=false&first=true&path=CNS",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -840,6 +1092,24 @@
 								"{{SSN}}",
 								"data",
 								"PLETH,na"
+							],
+							"query": [
+								{
+									"key": "duration",
+									"value": "5"
+								},
+								{
+									"key": "test",
+									"value": "false"
+								},
+								{
+									"key": "first",
+									"value": "true"
+								},
+								{
+									"key": "path",
+									"value": "CNS"
+								}
 							]
 						}
 					},
