@@ -18,6 +18,7 @@ jobs:
     env:
       PORT: 5000
       MONGO_URI: mongodb://localhost:27017/DigitalTwinsDB
+      CI_SSH_PRIVATE_KEY: ${{ secrets.CI_SSH_PRIVATE_KEY }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - name: Checkout public repo
@@ -30,6 +31,19 @@ jobs:
           sudo apt-get install -y nodejs
           cd server
           npm install
+
+      - name: Set up SSH for cloning the private repo
+        run: |
+          mkdir -p ~/.ssh
+          echo "$CI_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
+      - name: Clone the private repo
+        run: |
+          cd server/decryption/src
+          git clone git@github.com:Codiologoist/Restricted.git
+          cp -r Restricted/* .
 
       - name: Start server and run tests
         run: |
