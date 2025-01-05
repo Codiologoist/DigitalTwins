@@ -33,7 +33,7 @@ connectDB();
 const createAdmin = async () => {
   try {
     // Check if the admin user already exists
-    const adminExists = await Admin.findOne({ username: 'admin' });
+    const adminExists = await Admin.findOne({ username: 'admin123' });
 
     if (!adminExists) {
       // Create a new admin if not found

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { PatientData, Data } from "../models/Data";
+import { spawn } from "child_process";
 
 /**
  * Reads a file from the decrypted_data directory and returns its contents as a JSON object.
@@ -72,4 +73,62 @@ export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: Patient
     console.error("Error retrieving decrypted data from MongoDB:", error);
     throw new Error("Failed to fetch data from MongoDB");
   }
+};
+
+
+/**
+ * Runs the python script responsible for decrypting the patient data.
+ *
+ * @param {number} [duration=5] The duration of data to decrypt.
+ * @param {boolean} [test=false] Whether to run the script in test mode.
+ * @param {boolean} [first=false] Whether to run the script in first run mode.
+ * @param {string} path The path to the patient file on the CNS monitor.
+ *
+ * @returns {Promise<void>} A promise that resolves when the python script has finished running successfully,
+ *                         or rejects with an error if the script fails to run.
+ */
+export const runPythonScript = (duration: number = 5, test: boolean = false, first: boolean = false, path: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const pythonMainPath = "./decryption/src/main.py"
+    let pythonProcess;
+    if (test) {
+      pythonProcess = spawn("python3", [
+        pythonMainPath,
+        "-d", duration.toString(),  
+        "-t",
+        "-p", path
+      ]);
+    }
+    else if (first) {
+      pythonProcess = spawn("python3", [
+        pythonMainPath,
+        "-d", duration.toString(),  
+        "-f",
+        "-p", path
+      ]);
+    }
+    else {
+      pythonProcess = spawn("python3", [
+        pythonMainPath,
+        "-d", duration.toString(),
+        "-p", path 
+      ]);
+    }
+
+    pythonProcess.stdout.on("data", (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    pythonProcess.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Python process exited with code ${code}`));
+      }
+    });
+  });
 };

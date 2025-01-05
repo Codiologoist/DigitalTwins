@@ -27,7 +27,6 @@ const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => 
             <th>Last Name</th>
             <th>SSN</th>
             <th>Username</th>
-            <th>Password</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -38,7 +37,6 @@ const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => 
               <td>{doctor.lastName}</td>
               <td>{doctor.SSN}</td>
               <td>{doctor.username}</td>
-              <td>{'••••••••'}</td>
               <td>
                 <div className="actions">
                   <button onClick={() => onEdit(doctor)}>Edit</button>

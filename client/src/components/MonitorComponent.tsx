@@ -1,49 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../App.css';
 import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "./PatientHeaderComponent.tsx";
 import PatientSignals from "./PatientSignalsComponent.tsx";
-import { Patient } from "../types/types.ts";
+import { AllDataType, Patient } from "../types/types.ts";
 import { useParams } from "react-router-dom";
+import Api from "../api.ts";
 
-// Sample patient data only for testing purpose - to be removed later
-const mockSelectedPatient: Patient = { 
-    id: 123, firstName: "David", lastName: "Svensson" 
-};
+interface response {
+    data: Patient
+    success: boolean
+    message: string
+}
 
-// This function is a mock version,
-// which will later be replaced by an API call (retrieve the selected patient's data based on patient's ID)
-const useSelectedPatient = (patientId: number | string) => {
-    const validPatientId = 123; // Assume only Id 123 is valid in this mock
-    if (patientId !== validPatientId) {
+// Fetch patient based on SSN
+const fetchSelectedPatient = async (patientId: number | string) => {
+    try  {
+        const response = await Api.get<response>(`patients/${patientId}`)
+        const patient = response.data.data;
+        return {
+            selectedPatient: patient,
+            isLoading: false,
+            isNotFound: false
+        }
+    } catch (error) {
+        console.error("Error fetching patient data:", error);
         return {
             selectedPatient: null,
             isLoading: false,
             isNotFound: true
         }
     }
-    // Simulate the selected patient data
-    const selectedPatient = mockSelectedPatient;
-
-    // Simulate a loading state that data(i.e., patient name) is available immediately)
-    const isLoading = false;
-
-    // Return the mock patient data and loading state
-    return {selectedPatient, isLoading, isNotFound: false};
 };
 
 // The main component that renders different rows of data for a patient monitor.
 // More specifically, it fetches data (e.g., ABP, heart rate, etc.) and displays them in separate rows using the RowComponent.
 const Monitor: React.FC = () => {
-    const {visibleData, loading} = usePatientData();
-    console.log("hiiii visibleData in monitor", visibleData);
-    // const [selectedPatient] = useState<Patient>(mockSelectedPatient); // Simulate that a patient is selected and display their data
-    const {patientId} = useParams();
-    const {selectedPatient, isLoading: isPatientLoading, isNotFound} = useSelectedPatient(Number(patientId));
+    let visibleData: AllDataType = {
+        "ECG,II": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0},
+        "ABP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+        "RESP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+    };
+    const { patientId } = useParams();
+
+    const [patientState, setPatientState] = useState<{
+        selectedPatient: Patient | null;
+        isLoading: boolean;
+        isNotFound: boolean;
+    }>({
+        selectedPatient: null,
+        isLoading: true,
+        isNotFound: false,
+    });
+
+    useEffect(() => {
+        const fetchPatient = async () => {
+            try {
+                const response = await fetchSelectedPatient(String(patientId));
+                setPatientState({
+                    selectedPatient: response.selectedPatient,
+                    isLoading: response.isLoading,
+                    isNotFound: response.isNotFound,
+                });
+            } catch (error) {
+                console.error("Error fetching patient data:", error);
+                setPatientState({
+                    selectedPatient: null,
+                    isLoading: false,
+                    isNotFound: true,
+                });
+            }
+        };
+
+        fetchPatient();
+    }, [patientId]);
+
+    const ssn = patientState.selectedPatient?.SSN || "";
+    const path = patientState.selectedPatient?.path || "";
+
+    visibleData = usePatientData(ssn, true, 5, path).visibleData;
+
+    // Destructure state
+    const { selectedPatient, isLoading: isPatientLoading, isNotFound } = patientState;
 
     // Shows a loading message until the data has been populated
-    if (loading || isPatientLoading) {
+    if (isPatientLoading) {
         return <div className="text-blue-700">Loading...</div> 
     }
     // Shows a message when patient id is not valid
