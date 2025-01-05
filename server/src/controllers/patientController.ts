@@ -1,19 +1,32 @@
 import { Request, Response } from "express";
-import { getDecryptedData } from "../services/utils";
-import { PatientData, AllData, Data, DataTypes} from "../models/Data";
+import { getDecryptedData, runPythonScript } from "../services/utils";
+import { PatientData, AllData } from "../models/Data";
 import Patient from "../models/Patient";
+import router from "../routes/api";
 
 // Controller for sending all categories of patient based on the patient id
 export const sendPatientData = async (req: Request, res: Response) => {
   const { SSN } = req.params;
+  const { duration, test, first, path } = req.query;
 
   try {
     const patient = await Patient.findOne({ SSN: SSN });
 
     if (!patient) {
+      console.error(`Patient with SSN ${SSN} not found`);
       return res.status(404).json({
         success: false,
         message: `Patient with SSN ${SSN} not found`,
+      });
+    }
+
+    try {
+      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+    } catch (error: any) {
+      console.error(`Error running python script: ${error.message || error}`);
+      return res.status(500).json({
+        success: false,
+        message: "Internal Server Error while running python script",
       });
     }
     // Fetch patient data (simulated)
@@ -37,6 +50,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
 // Controller for sending specific category of patient data based on the patient id
 export const sendPatientCategoryData = async (req: Request, res: Response) => {
   const { SSN, category } = req.params;
+  const { duration, test, first, path } = req.query;
 
   try {
     const patient = await Patient.findOne({ SSN: SSN });
@@ -47,9 +61,18 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
         message: `Patient with SSN ${SSN} not found`,
       });
     }
+
+    try {
+      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+    } catch (error: any) {
+      console.error(`Error running python script: ${error.message || error}`);
+      return res.status(500).json({
+        success: false,
+        message: "Internal Server Error while running python script",
+      });
+    }
     // Fetch patient data (simulated)
     const patientData: { [key: string]: PatientData } = await getDecryptedData();
-    console.log(patientData);
 
     // Check if the requested category exists in patientData
     if (!patientData.hasOwnProperty(category)) {
@@ -80,7 +103,7 @@ export const getAllPatients = async (req: Request, res: Response) => {
   try {
     const patients = await Patient.find({});
 
-    return res.status(200).json({ success: true, patients: patients });
+    return res.status(200).json({ success: true, data: patients });
   } catch (error: any) {
     console.error(`Error fetching patients: ${error.message || error}`);
 
@@ -91,7 +114,7 @@ export const getAllPatients = async (req: Request, res: Response) => {
 }
 
 export const createPatient = async (req: Request, res: Response) => {
-  const { name: { firstName, lastName }, SSN} = req.body;
+  const { firstName, lastName , SSN, path} = req.body;
 
   try {
     // Check if the patient already exists
@@ -101,12 +124,11 @@ export const createPatient = async (req: Request, res: Response) => {
     }
 
     const newPatient = new Patient({
-      name: {
-        firstName,
-        lastName
-      },
+      firstName,
+      lastName,
       SSN,
       data: new AllData(),
+      path
     });
 
     try {
@@ -145,6 +167,55 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ success: true, message: "Patient deleted successfully" });
   } catch (error: any) {
     console.error(`Error deleting patient: ${error.message || error}`);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const updatePatient = async (req: Request, res: Response) => {
+  const { SSN } = req.params;
+  const { firstName, lastName , path } = req.body;
+
+  try {
+    const updatedPatient = await Patient.findOneAndUpdate(
+      { SSN },
+      { firstName, lastName, path },
+      { new: true }
+    );
+
+    if (!updatedPatient) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Patient with SSN ${SSN} not found` });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Patient updated successfully", patient: updatedPatient });
+  } catch (error: any) {
+    console.error(`Error updating patient: ${error.message || error}`);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const getOnePatient = async (req: Request, res: Response) => {
+  const { SSN } = req.params;
+
+  try {
+    const patient = await Patient.findOne({ SSN }); // Find patient by SSN
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Patient with SSN ${SSN} not found` });
+    }
+
+    return res.status(200).json({ success: true, data: patient });
+  } catch (error: any) {
+    console.error(`Error fetching patient: ${error.message || error}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

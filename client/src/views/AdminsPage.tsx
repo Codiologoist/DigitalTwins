@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DoctorTable, { Doctor } from '../components/DoctorTable';
-import Modal from '../components/Modal';
+import { DoctorModal} from '../components/Modal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -106,7 +106,7 @@ const AdminPage: React.FC = () => {
           </div>
 
           {isModalOpen && selectedDoctor && (
-            <Modal
+            <DoctorModal
               doctor={selectedDoctor}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
