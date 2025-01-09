@@ -72,8 +72,8 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
         message: "Internal Server Error while running python script",
       });
     }
-    // Fetch patient data (simulated)
-    const patientData: { [key: string]: PatientData } = await getDecryptedData();
+    // Fetch patient data
+    const patientData: { [key: string]: PatientData } = await getDecryptedDataFromDB();
 
     // Check if the requested category exists in patientData
     if (!patientData.hasOwnProperty(category)) {
