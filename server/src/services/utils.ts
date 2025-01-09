@@ -50,30 +50,39 @@ export const getDecryptedData = async (): Promise<{ [key: string]: PatientData }
 // Function to retrieve decrypted data from MongoDB using Mongoose
 export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: PatientData }> => {
   try {
+    // Fetch all documents from the Data collection and use lean() to return plain JavaScript objects
+    const documents = await Data.find().lean();
 
-    // Using Mongoose query data
-    const documents = await Data.find();
-
-    console.log("Retrieved documents from MongoDB:", documents);
-
-    // Map the retrieved documents into the desired format
+    // Initialize an empty object to store the processed data grouped by signal_type
     const data: { [key: string]: PatientData } = {};
 
+    // Iterate through each document retrieved from the database
     documents.forEach((doc) => {
-      // For each document, use the signal_type as the key
-      const signalType = doc.signal_type;
+      const signalType = doc.signal_type; // Extract the signal_type from the document
 
-      // Add the document directly to the result object using signal_type as the key
-      // `doc` is already a Mongoose document, so it is automatically typed as `PatientData`
-      data[signalType] = doc;
+      if (!data[signalType]) {
+        // If no entry for the current signal_type exists, create a new one
+        data[signalType] = {
+          ...doc, // Use the plain object directly
+          data: [...doc.data], // Initialize the data array with the current document's data
+        };
+      } else {
+        // If an entry for the signal_type already exists, merge the current data into it
+        data[signalType].data = [...data[signalType].data, ...doc.data];
+      }
     });
 
+    // Return the processed data grouped by signal_type
     return data;
   } catch (error) {
+    // Log any errors encountered during the database operation
     console.error("Error retrieving decrypted data from MongoDB:", error);
+    // Throw an error to indicate the operation failed
     throw new Error("Failed to fetch data from MongoDB");
   }
 };
+
+
 
 
 /**
