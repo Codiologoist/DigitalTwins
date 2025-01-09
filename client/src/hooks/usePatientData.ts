@@ -40,6 +40,7 @@ const usePatientData = (ssn: string, isForTesting: boolean, decryptionTimeout: n
         "ECG,II": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0},
         "ABP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
         "RESP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+        "HR,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
     });
     
     const fetchIntervalTime = 5000; // Fetch data every 5 seconds
@@ -64,6 +65,7 @@ const usePatientData = (ssn: string, isForTesting: boolean, decryptionTimeout: n
                       "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
                       "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
                       "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
+                      "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
                   };
                   setIsFisrtTime(false);
                   // Update the state with processed data
@@ -81,6 +83,7 @@ const usePatientData = (ssn: string, isForTesting: boolean, decryptionTimeout: n
                     "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
                     "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
                     "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
+                    "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
                 };
                 setIsFisrtTime(false);
                 // Update the state with processed data

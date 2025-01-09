@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Chart from "chart.js/auto";
 import streamingPlugin from "chartjs-plugin-streaming";
 import "chartjs-adapter-date-fns";
+import ValueDisplay from "./ValueDisplayComponent";
 
 // import { RowData } from "../types/types";
 Chart.register(streamingPlugin);
@@ -14,30 +15,52 @@ type RowComponentProps = {
   unit: string;
   color: string;
   numberColor: string;
+  // Main data object containing arrays of timestamps, measurements, sample rates, and start time
   data: {
     time_vector: number[];
     measurement_data: number[];
     sample_rates: number[];
     start_time: number;
   };
-  optionPart?: React.ReactNode;
+  // Optional display data for a secondary value to show, such as HR value for ECG row
+  valueDisplayData?: {
+    time_vector: number[];
+    measurement_data: number[];
+    sample_rates: number[];
+    start_time: number;
+  };
+  valueDisplayTitle?: string; // Optional title to display alongside the value (can be different from the main `title`)
+  valueDisplayUnit?: string; // Optional unit to display for the value
+  valueDisplayNumberColor?: string; // Optional color for displaying the value number
+  optionPart?: React.ReactNode; // Optional part of the UI that can be passed as a React component node
 };
 
 const RowComponent: React.FC<RowComponentProps> = ({
-  title,
-  unit,
-  color,
-  numberColor,
-  data,
-  optionPart,
+  title,                // The main title for the data display
+  unit,                 // The unit of the measurement
+  color,                // The color for the chart
+  numberColor,          // The color for the displayed numeric value
+  data,                 // The main data object
+  optionPart,           // Optional UI component to be rendered
+  valueDisplayData,     // Optional secondary display data for a specific value
+  valueDisplayTitle,    // Optional custom title for the displayed value
+  valueDisplayUnit,     // Optional custom unit for the displayed value
+  valueDisplayNumberColor // Optional custom color for the displayed value
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
+  const [currentValue, setCurrentValue] = useState<number>(0);
+
+  // State to track the current HR (Heart Rate)
+  const [currentHR, setCurrentHR] = useState<number>(0); 
+  const animationFrameIdRef = useRef<number | null>(null); // Store requestAnimationFrame ID
+  const startTimeRef = useRef<number | null>(null); // Track the time when HR updates start
+  const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
 
   const [lastPlottedTime, setLastPlottedTime] = useState<number | null>(null);
 
   // State to keep track of the last plotted time
-  const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
+  // const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -140,7 +163,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     let currentIndex = 0;
 
     const plotBatch = () => {
-      console.log(title, "!!!!Adding batch!!!!!", currentIndex);
+      // console.log(title, "!!!!Adding batch!!!!!", currentIndex);
       if (isPaused || currentIndex >= data.time_vector.length) {
         console.log("Paused or all points plotted. Stopping updates.");
         return;
@@ -168,6 +191,12 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
       chart.update("quiet"); // Update the chart without animation
 
+      const latestECGValue = data.measurement_data[currentIndex - 1];
+      if (latestECGValue !== undefined) {
+        setCurrentValue(latestECGValue);
+      }
+
+      
       // Schedule the next batch
       if (currentIndex < data.time_vector.length) {
         setTimeout(plotBatch, batchIntervalMs);
@@ -178,46 +207,76 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
 
     plotBatch();
-  }, [data, isPaused, firstTimestamp]);
+  }, [data, isPaused, lastPlottedTime]);
 
-  const currentValue =
-    data.measurement_data[data.measurement_data.length - 1] || 0;
+  // const currentValue =
+  //   data.measurement_data[data.measurement_data.length - 1] || 0;
+
+  useEffect(() => {
+    // Ensure that valueDisplayData and its measurement_data exist before proceeding
+    if (!valueDisplayData || !valueDisplayData.measurement_data) return;
+
+    // Convert time_vector to absolute timestamps
+    const absoluteTimes = valueDisplayData.time_vector.map(t => valueDisplayData.start_time + t);
+    
+    console.log('🐸 New HR data batch detected. Starting from index 0.');
+    
+    // Store the timestamp of the last HR value in the batch for reference
+    lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
+    // Calculate the average sample rate from the sample_rates array
+    const hrAvgSampleRate = valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) / valueDisplayData.sample_rates.length;
+    const hrIntervalTime = 1000 / hrAvgSampleRate; // Time each HR should be displayed in milliseconds
+    console.log('🐸 hrIntervalTime:', hrIntervalTime);
+
+    startTimeRef.current = performance.now(); // Track when the HR updates started
+
+    // Function to update the heart rate display at each animation frame
+    const updateHR = () => {
+      const elapsedTime = performance.now() - startTimeRef.current!; // Calculate how much time has passed
+      const currentHRIndex = Math.floor(elapsedTime / hrIntervalTime); // Calculate which HR should be displayed
+      
+      // If the current HR index is valid, update the displayed HR value
+      if (currentHRIndex < valueDisplayData.measurement_data.length) {
+        const newHRValue = valueDisplayData.measurement_data[currentHRIndex]; 
+        setCurrentHR(newHRValue); // Update the HR state variable to trigger a re-render
+        console.log('🐸 Updating HR to:', newHRValue, 'at index:', currentHRIndex);
+        animationFrameIdRef.current = requestAnimationFrame(updateHR); // Continue the animation loop by requesting the next frame
+      } else {
+        // Stop once the last HR value is displayed
+        console.log('🐸 HR Update Complete. Displayed all HR values.');
+        cancelAnimationFrame(animationFrameIdRef.current!); 
+      }
+    };
+
+    // Start animation frame loop
+    animationFrameIdRef.current = requestAnimationFrame(updateHR);
+
+    // Cleanup to stop animation when component unmounts
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current); // Cancel any remaining animation frames
+      }
+    };
+  }, [valueDisplayData]); // Re-run this effect whenever valueDisplayData changes
+
+
+   // Logic to display HR only for ECG, otherwise show measurement value**
+   const displayValue = title === 'ECG' ? currentHR : currentValue;
 
   return (
     <div className="grid grid-cols-3 items-start bg-black">
-      {/* Chart Area */}
+      {/* Left section: Chart display */}
       <div className="col-span-2 p-2 h-full">
-        <canvas
-          ref={chartRef}
-          style={{ width: "100%", height: "200px" }}
-        ></canvas>
-      </div>
-
-      {/* Value Display */}
-      <div className="col-span-1 flex flex-col justify-center items-center bg-black p-8 h-full">
-        {/* Option Part */}
-        {optionPart && (
-          <div className="flex items-center pb-4">
-            <div className="text-white lg:text-5xl md:text-4xl sm:text-xl font-bold mr-4">
-              {optionPart}
-            </div>
-          </div>
-        )}
-        {/* Current Value */}
-        <div
-          className="text-white font-bold sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl truncate"
-          style={{ color: numberColor }}
-        >
-          {Math.round(currentValue)}
-        </div>
-        {/* Title and Unit */}
-        <div
-          className="absolute top-4 right-4 text-white text-xs"
-          style={{ color: numberColor }}
-        >
-          {title} {unit}
-        </div>
-      </div>
+        <canvas ref={chartRef} style={{ width: "100%", height: "200px" }}></canvas> {/* Canvas for drawing the chart */}
+      </div>  
+      {/* Right section: Value display component */}
+      <ValueDisplay 
+        optionPart={optionPart}
+        currentValue={displayValue} // Display the heart rate or general value based on title
+        title={valueDisplayTitle ?? title} // Title to be displayed
+        unit={valueDisplayUnit ?? unit} // Unit to be displayed alongside the value
+        numberColor={valueDisplayNumberColor ?? numberColor} // Display color for the number
+      />
     </div>
   );
 };

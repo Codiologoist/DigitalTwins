@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import '../App.css';
-import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
+// import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "./PatientHeaderComponent.tsx";
 import PatientSignals from "./PatientSignalsComponent.tsx";
-import { AllDataType, Patient } from "../types/types.ts";
+import { AllDataType, Patient, RowData } from "../types/types.ts";
 import { useParams } from "react-router-dom";
 import Api from "../api.ts";
 
@@ -41,6 +41,7 @@ const Monitor: React.FC = () => {
         "ECG,II": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0},
         "ABP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
         "RESP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
+        "HR,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
     };
     const { patientId } = useParams();
 
@@ -113,10 +114,24 @@ const Monitor: React.FC = () => {
 
 
     // An array of row objects, each representing a row of data type to be displayed.
-    const rowData = [
-        {title: "ECG", unit: "mV", color: "lightgreen", data: visibleData["ECG,II"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
-        {title: "ABP,na", unit: "mmHg", color: "lightgreen", data: visibleData["ABP,na"], numberColor: "lightgreen"},
-        {title: "RESP,na", unit: "Ohms", color: "lightgreen", data: visibleData["RESP,na"], numberColor: "lightgreen"},
+    const rowData: RowData[] = [
+        // {title: "ECG", unit: "mV", color: "lightgreen", data: visibleData["ECG,II"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
+        {title: "ECG", unit: "mV", color: "lightgreen", 
+            data: {
+                ...visibleData["ECG,II"], start_time: visibleData["ECG,II"]?.start_time ?? 0 // Default to 0 if undefined
+            }, 
+            numberColor: "lightgreen", 
+            valueDisplayData: {
+                ...visibleData["HR,na"],
+                start_time: visibleData["HR,na"]?.start_time ?? 0 // Default to 0 if undefined
+            }, 
+            valueDisplayTitle: "HR", valueDisplayUnit: "bpm"},
+        {title: "ABP,na", unit: "mmHg", color: "lightgreen", data: {
+            ...visibleData["ABP,na"], start_time: visibleData["ABP,na"]?.start_time ?? 0 // Default to 0 if undefined
+        },  numberColor: "lightgreen"},
+        {title: "RESP,na", unit: "Ohms", color: "lightgreen", data: {
+            ...visibleData["RESP,na"], start_time: visibleData["RESP,na"]?.start_time ?? 0 // Default to 0 if undefined
+        }, numberColor: "lightgreen"},
         // {title: "HR", unit: "bpm", color: "lightgreen", data: visibleData["HR,na"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
         // { title: "RR", unit: "%", color: "green", data: visibleData["RR,na"], numberColor: "green" },
         // { title: "ABP", unit: "mmHg", color: "red", data: visibleData["ABP,Dias"], optionPart: "120/80", numberColor: "red" },
