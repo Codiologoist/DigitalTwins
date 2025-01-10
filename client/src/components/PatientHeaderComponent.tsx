@@ -10,6 +10,16 @@ interface PatientHeaderProps {
     patient: Patient; // Patient object to be passed as a prop
 }
 
+interface DataRun {
+    samples: number[];
+    timestamps: number[];
+    num_samples: number;
+    duration: number;
+    sample_rate: number;
+    sample_interval: number;
+    start_time: number;
+}
+
 // The PatientHeader component
 const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     // Define state variables
@@ -18,9 +28,8 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const [loading, setLoading] = useState(false); // Track loading state (true if data is loading)
     const [error, setError] = useState<string | null>(null); // Store any error message
     const SSN = localStorage.getItem('SSN'); // Retrieve SSN from local storage
-    const [timePoint, setTimePoint] = useState(1); // State to store selected time point in minutes
+    const [timePoint] = useState(1); // State to store selected time point in minutes
     const [selectedTimeInterval, setSelectedTimeInterval] = useState(60);
-    const [maxTimePoint, setMaxTimePoint] = useState(60);
 
     // Method to fetch and display data trend for the selected category at the selected time point
     const showDataTrend = async (category: string, timePoint: number) => {
@@ -36,43 +45,45 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             const sampleFrequency = 500;
             
             if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
-                const ecgSignal = dataArray[0]; // For now, use the first signal in the data array
-                let timestamps = ecgSignal.timestamps; // ECG timestamps
-                let samples = ecgSignal.samples; // ECG sample values
-                console.log('Timestamps length:', timestamps.length);
-                console.log('Samples length:', samples.length);
-                console.log('start_time:', ecgSignal.start_time);
-                
-                const startTime = new Date(ecgSignal.start_time / 1000); // Convert start_time to a millisecond timestamp
-                timestamps = timestamps.map((ts: number) => {
-                    const date = new Date(startTime.getTime() + ts * 1000); // Calculate the time according to start_time and ts
-                    return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
+                let allTimestamps: string[] = [];
+                let allSamples: number[] = [];
+
+                // Iterate through the array and combine the timestamps and samples from all signals
+                dataArray.forEach((ecgSignal: DataRun) => {
+                    const startTime = new Date(ecgSignal.start_time / 1000); // Convert start_time to a millisecond timestamp
+                    
+                    const timestamps = ecgSignal.timestamps.map((ts: number) => {
+                        const date = new Date(startTime.getTime() + ts * 1000); // Calculate the time according to start_time and ts
+                        return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
+                    });
+
+                    allTimestamps.push(...timestamps); // Combine timestamps
+                    allSamples.push(...ecgSignal.samples)// Combine samples
                 });
 
                 // Divide data range
                 let dataRange = selectedTimeInterval * sampleFrequency; // Divide data range for one-minute data
-                if (timestamps.length < dataRange) {
-                    dataRange =  timestamps.length;
+                if (allTimestamps.length < dataRange) {
+                    dataRange =  allTimestamps.length;
                 }
-                const startIndex = Math.max(timestamps.length - timePoint * dataRange, 0);
-                const endIndex = timestamps.length - (timePoint - 1) * dataRange;
-                setMaxTimePoint(Math.ceil(timestamps.length / dataRange));
-                console.log("MaxTimePoint", Math.ceil(timestamps.length / dataRange));
-                timestamps = timestamps.slice(startIndex, endIndex);
-                samples = samples.slice(startIndex, endIndex); // Slice range for samples
+                const startIndex = Math.max(allTimestamps.length - timePoint * dataRange, 0);
+                const endIndex = allTimestamps.length - (timePoint - 1) * dataRange;
+                console.log("MaxTimePoint", Math.ceil(allTimestamps.length / dataRange));
+                allTimestamps = allTimestamps.slice(startIndex, endIndex);
+                allSamples = allSamples.slice(startIndex, endIndex); // Slice range for samples
 
                 // Limit the range of the sample values for the Y-axis
                 const minValue = -2.0; 
                 const maxValue = 3.0;
-                samples = samples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
+                allSamples = allSamples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
 
                 // Prepare the chart data object
                 const chartData = {
-                    labels: timestamps, // Timestamps for X-axis labels
+                    labels: allTimestamps, // Timestamps for X-axis labels
                     datasets: [
                         {
                             label: "ECG Signal", // Label for the ECG dataset
-                            data: samples, // ECG signal values for the Y-axis
+                            data: allSamples, // ECG signal values for the Y-axis
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
                             borderWidth: 2,
@@ -149,7 +160,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                             onChange={(e) => {
                                 const newInterval = Number(e.target.value);
                                 setSelectedTimeInterval(newInterval);
-                                setMaxTimePoint(60);
                             }}
                         >I
                             <option value={60}>1min</option>

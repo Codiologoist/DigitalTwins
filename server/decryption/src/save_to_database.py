@@ -54,16 +54,11 @@ for file_path in json_files:
     inserted_data = data_collection.insert_one(patient_data_document)
     print(f"Inserted document ID: {inserted_data.inserted_id}")
 
-    # Assuming each file type (e.g., "ECG,II", "ABP,Dias") corresponds to a field in the AllDataType collection
-    all_data_update = {
-        signal_type: [inserted_data.inserted_id]  # Add the inserted Data document's ObjectId to the corresponding field
-    }
-
-    # Update the AllData collection (if the AllData collection already exists)
+    # Update the AllData collection by appending the inserted ObjectId to the corresponding signal_type
     all_data_collection.update_one(
-        {"_id": inserted_data.inserted_id},  # Replace with the appropriate _id
-        {"$addToSet": all_data_update},  # Use $addToSet to ensure no duplicate ObjectId
-        upsert=True  # If no document is found, insert a new one
+        {"signal_type": signal_type},  # Match documents by signal_type
+        {"$addToSet": {"data_ids": inserted_data.inserted_id}},  # Append new ObjectId to the data_ids array
+        upsert=True  # If no document is found, create a new one
     )
 
     print(f"Data from {file_path} inserted with ObjectId: {inserted_data.inserted_id}")
