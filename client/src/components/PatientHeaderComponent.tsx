@@ -82,7 +82,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     labels: allTimestamps, // Timestamps for X-axis labels
                     datasets: [
                         {
-                            label: "ECG Signal", // Label for the ECG dataset
+                            label: `${category}  Signal`, // Label for the ECG dataset
                             data: allSamples, // ECG signal values for the Y-axis
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
@@ -173,6 +173,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     
                     {/* Buttons to trigger fetching different categories of data */}
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("RESP,na", timePoint)}>RESP</button>
                 </div>
             </div>
 

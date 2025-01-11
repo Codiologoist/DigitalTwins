@@ -64,7 +64,8 @@ def save_json_to_database():
             "data": data_runs,
             "patient_first_name": patient_first_name,
             "patient_last_name": patient_last_name,
-            "admission_time": admission_time
+            "admission_time": admission_time,
+            "file_hash": file_hash
         }
         
         # # Print the patient_data_document
