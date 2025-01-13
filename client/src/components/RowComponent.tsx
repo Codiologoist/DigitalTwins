@@ -54,9 +54,10 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const animationFrameIdRef = useRef<number | null>(null); // Store requestAnimationFrame ID
   const startTimeRef = useRef<number | null>(null); // Track the time when HR updates start
   const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
+  const dataBufferRef = useRef<ChartPoint[]>([]); // Use useRef to persist dataBuffer
 
   // State to keep track of the first plotted time to use for pausing updates
-  const [firstTimestamp, setFirstTimestamp] = useState<number>(0);
+  // const [firstTimestamp, setFirstTimestamp] = useState<number>(0);
 
   // State to keep track of the last plotted time
   // const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
@@ -129,19 +130,13 @@ const RowComponent: React.FC<RowComponentProps> = ({
   useEffect(() => {
     if (!chartInstanceRef.current) return; // Exit if the chart instance is not available
 
-    const dataBuffer: ChartPoint[] = []; // Create number buffer
+    // const dataBuffer: ChartPoint[] = []; // Create number buffer
 
     const chart = chartInstanceRef.current;
     const dataset = chart.data.datasets[0];
     console.log("RowComponentProps.data", data);
 
-    // Check if the new data is stale (timestamps are milliseconds since epoch, therefore unique)
-    if (data.time_vector[0] === firstTimestamp) {
-      console.log("No new data available. Pausing plotting...");
-      return;
-    }
     console.log("Plotting new data batch...");
-    setFirstTimestamp(data.time_vector[0]); // Update the first timestamp for future checks
 
     // Calculate variables needed for plotting in batches
     const batchIntervalMs = 100;
@@ -167,15 +162,15 @@ const RowComponent: React.FC<RowComponentProps> = ({
       for (let i = currentIndex; i < batchEndIndex; i++) {
         const time = data.time_vector[i]; // Assign (UNIX Epoch milliseconds) timestamp to time const for the chart
         const value = data.measurement_data[i]; // Assign data point value to value const for the chart
-        dataBuffer.push({ x: time, y: value }); // Push the new data point (timestamp & value) to the buffer
+        dataBufferRef.current.push({ x: time, y: value }); // Push the new data point (timestamp & value) to the buffer
       }
 
-      while (dataBuffer.length > MAX_BUFFER_SIZE) {
+      while (dataBufferRef.current.length > MAX_BUFFER_SIZE) {
         // Remove old data points when buffer size exceeds the calculated maximum
-        dataBuffer.shift();
+        dataBufferRef.current.shift();
       }
 
-      dataset.data = dataBuffer; // Update the dataset with the new data
+      dataset.data = dataBufferRef.current; // Update the dataset with the new data
 
       currentIndex = batchEndIndex; // Update the current index for next execution
 
@@ -195,7 +190,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
 
     plotBatch();
-  }, [data, firstTimestamp]);
+  }, [data]);
 
   useEffect(() => {
     // Ensure that valueDisplayData and its measurement_data exist before proceeding
