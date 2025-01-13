@@ -61,4 +61,4 @@ if __name__ == "__main__":
     # merge_latest.merge_json_data("../../decrypted_data/ECG,II.json", "../../decrypted_data/ECG,II,Merged.json")
     
     # Save descrypted json data into database
-    # save_to_database.save_json_to_database()
+    save_to_database.save_json_to_database()

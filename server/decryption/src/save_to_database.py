@@ -51,38 +51,39 @@ def save_json_to_database():
         # Extract data from the file
         signal_data = read_file(file_path)
 
-        # Extract relevant fields from the JSON data
-        signal_type = signal_data.get("signal_type")
-        data_runs = signal_data.get("data")
-        patient_first_name = signal_data.get("patient_first_name")
-        patient_last_name = signal_data.get("patient_last_name")
-        admission_time = signal_data.get("admission_time")
-
-        # Format the data as a MongoDB document
-        patient_data_document = {
-            "signal_type": signal_type,
-            "data": data_runs,
-            "patient_first_name": patient_first_name,
-            "patient_last_name": patient_last_name,
-            "admission_time": admission_time,
-            "file_hash": file_hash
-        }
         
-        # # Print the patient_data_document
-        # print(json.dumps(patient_data_document, indent=4, ensure_ascii=False))
+        if isinstance(signal_data, dict):
+            # Extract relevant fields from the JSON data
+            signal_type = signal_data.get("signal_type")
+            data_runs = signal_data.get("data")
+            patient_first_name = signal_data.get("patient_first_name")
+            patient_last_name = signal_data.get("patient_last_name")
+            admission_time = signal_data.get("admission_time")
 
-        # Insert the data into the MongoDB Data collection
-        inserted_data = data_collection.insert_one(patient_data_document)
-        print(f"Inserted document ID: {inserted_data.inserted_id}")
+            # Format the data as a MongoDB document
+            patient_data_document = {
+                "signal_type": signal_type,
+                "data": data_runs,
+                "patient_first_name": patient_first_name,
+                "patient_last_name": patient_last_name,
+                "admission_time": admission_time,
+                "file_hash": file_hash
+            }
+            
+            # # Print the patient_data_document
+            # print(json.dumps(patient_data_document, indent=4, ensure_ascii=False))
 
-        # Update the AllData collection by appending the inserted ObjectId to the corresponding signal_type
-        all_data_collection.update_one(
-            {"signal_type": signal_type},  # Match documents by signal_type
-            {"$addToSet": {"data_ids": inserted_data.inserted_id}},  # Append new ObjectId to the data_ids array
-            upsert=True  # If no document is found, create a new one
-        )
+            # Insert the data into the MongoDB Data collection
+            inserted_data = data_collection.insert_one(patient_data_document)
 
-        print(f"Data from {file_path} inserted with ObjectId: {inserted_data.inserted_id}")
+            # Update the AllData collection by appending the inserted ObjectId to the corresponding signal_type
+            all_data_collection.update_one(
+                {"signal_type": signal_type},  # Match documents by signal_type
+                {"$addToSet": {"data_ids": inserted_data.inserted_id}},  # Append new ObjectId to the data_ids array
+                upsert=True  # If no document is found, create a new one
+            )
+
+    print(f"Data from {data_directory} inserted successfully")
 
     # # Query all documents in the Data collection
     # cursor = data_collection.find()
