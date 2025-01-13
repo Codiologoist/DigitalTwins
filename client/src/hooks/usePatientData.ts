@@ -23,7 +23,7 @@ const processData = (data: DataType[]): ProcessedDataType => {
 
   //TODO: Remove sample_interval from data
   const sample_interval = data[0]?.sample_interval || 1.0; // Default to 1 second if not available
-  const start_time = data[0]?.start_time || 1602850182520965; // Initialize start_time to some random time if not available
+  const start_time = data[0]?.start_time;
 
   return {
     time_vector,
@@ -35,69 +35,127 @@ const processData = (data: DataType[]): ProcessedDataType => {
 };
 
 // Custom hook to manage the patient data
-const usePatientData = (ssn: string, isForTesting: boolean, decryptionTimeout: number, path: string) => {
-    const [visibleData, setVisibleData] = useState<AllDataType>({
-        "ECG,II": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0},
-        "ABP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
-        "RESP,na": { time_vector: [], measurement_data: [], sample_rates: [], sample_interval:0,  start_time: 0 },
-    });
-    
-    const fetchIntervalTime = 5000; // Fetch data every 5 seconds
-    const [isFisrtTime, setIsFisrtTime] = useState(true);
-    
-    useEffect(() => {
-        if (!ssn) {
-          console.warn("No SSN provided; skipping data fetch.");
-          return; // Exit if no SSN
+const usePatientData = (
+  ssn: string,
+  isForTesting: boolean,
+  decryptionTimeout: number,
+  path: string
+) => {
+  const [visibleData, setVisibleData] = useState<AllDataType>({
+    "ECG,II": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+    "ABP,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+    "RESP,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+    "HR,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+  });
+
+  const fetchIntervalTime = 5000; // Fetch data every 5 seconds
+  const [isFisrtTime, setIsFisrtTime] = useState(true);
+
+  useEffect(() => {
+    if (!ssn) {
+      console.warn("No SSN provided; skipping data fetch.");
+      return; // Exit if no SSN
+    }
+    const fetchData = async () => {
+      if (isForTesting) {
+        setIsFisrtTime(false);
+      }
+      if (isFisrtTime) {
+        try {
+          const fetchedDataSet = await fetchPatientData(
+            ssn,
+            "data",
+            isFisrtTime,
+            decryptionTimeout,
+            isForTesting,
+            path
+          );
+          console.log("from backend fetched everything", fetchedDataSet);
+          console.log(
+            "from backend fetched RESK.na",
+            fetchedDataSet["RESP,na"]?.data
+          );
+          console.log(
+            "from backend fetched ECG",
+            fetchedDataSet["ECG,II"]?.data
+          );
+          const processedData: AllDataType = {
+            "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
+            "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
+            "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
+            "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
+          };
+          setIsFisrtTime(false);
+          // Update the state with processed data
+          setVisibleData(() => processedData);
+        } catch (err) {
+          console.error("Error fetching patient data:", err);
         }
-        const fetchData = async () => {
-            if (isForTesting) {
-              setIsFisrtTime(false);
-            }
-            if (isFisrtTime) {
-              try {
-                  const fetchedDataSet = await fetchPatientData(ssn, "data", isFisrtTime, decryptionTimeout, isForTesting, path);
-                  console.log('from backend fetched everything', fetchedDataSet);
-                  console.log('from backend fetched RESK.na', fetchedDataSet["RESP,na"]?.data);
-                  console.log('from backend fetched ECG', fetchedDataSet["ECG,II"]?.data);
-                  const processedData: AllDataType = {
-                      "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
-                      "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
-                      "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
-                  };
-                  setIsFisrtTime(false);
-                  // Update the state with processed data
-                  setVisibleData(() => processedData);
-              } catch (err) {
-                  console.error("Error fetching patient data:", err);
-              }
-            } else {
-              try {
-                const fetchedDataSet = await fetchPatientData(ssn, "data", isFisrtTime, decryptionTimeout, isForTesting, path);
-                console.log('from backend fetched everything', fetchedDataSet);
-                console.log('from backend fetched RESK.na', fetchedDataSet["RESP,na"]?.data);
-                console.log('from backend fetched ECG', fetchedDataSet["ECG,II"]?.data);
-                const processedData: AllDataType = {
-                    "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
-                    "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
-                    "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
-                };
-                setIsFisrtTime(false);
-                // Update the state with processed data
-                setVisibleData(() => processedData);
-              } catch (err) {
-                  console.error("Error fetching patient data:", err);
-              }
-            }
-        };
+      } else {
+        try {
+          const fetchedDataSet = await fetchPatientData(
+            ssn,
+            "data",
+            isFisrtTime,
+            decryptionTimeout,
+            isForTesting,
+            path
+          );
+          console.log("from backend fetched everything", fetchedDataSet);
+          console.log(
+            "from backend fetched RESK.na",
+            fetchedDataSet["RESP,na"]?.data
+          );
+          console.log(
+            "from backend fetched ECG",
+            fetchedDataSet["ECG,II"]?.data
+          );
+          const processedData: AllDataType = {
+            "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
+            "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
+            "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
+            "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
+          };
+          setIsFisrtTime(false);
+          // Update the state with processed data
+          setVisibleData(() => processedData);
+        } catch (err) {
+          console.error("Error fetching patient data:", err);
+        }
+      }
+    };
 
-        fetchData(); // Initial fetch
+    fetchData(); // Initial fetch
 
-        const intervalId = setInterval(fetchData, fetchIntervalTime);
+    const intervalId = setInterval(fetchData, fetchIntervalTime);
 
-        return () => clearInterval(intervalId);
-    }, [ssn, isForTesting, decryptionTimeout, isFisrtTime, path]);
-    return { visibleData };
+    return () => clearInterval(intervalId);
+  }, [ssn, isForTesting, decryptionTimeout, isFisrtTime, path]);
+  return { visibleData };
 };
 
 export default usePatientData;

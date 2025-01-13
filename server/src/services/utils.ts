@@ -23,7 +23,7 @@ async function readFile(fileName: string): Promise<PatientData> {
 
 /**
  * Retrieves all decrypted patient data from the decrypted_data directory.
- * 
+ *
  * Reads each file in the directory, parses it into a JSON object,
  * and stores it in a key-value pair format, where the key is a combination
  * of the first two parts of the file name, separated by a comma, and the value
@@ -33,14 +33,16 @@ async function readFile(fileName: string): Promise<PatientData> {
  *          to an object containing the decrypted patient data indexed by
  *          their respective keys.
  */
-export const getDecryptedData = async (): Promise<{ [key: string]: PatientData }> => {
+export const getDecryptedData = async (): Promise<{
+  [key: string]: PatientData;
+}> => {
   const directory: string = path.join(__dirname, "../../decrypted_data");
   const files: string[] = fs.readdirSync(directory);
 
   const data: { [key: string]: PatientData } = {};
   for (const file of files) {
-    if (file !== '.DS_Store') {
-      let splitedFile = file.split(".");    
+    if (file !== ".DS_Store") {
+      let splitedFile = file.split(".");
       data[`${splitedFile[0]}`] = await readFile(file);
     }
   }
@@ -58,31 +60,40 @@ export const getDecryptedData = async (): Promise<{ [key: string]: PatientData }
  * @returns {Promise<void>} A promise that resolves when the python script has finished running successfully,
  *                         or rejects with an error if the script fails to run.
  */
-export const runPythonScript = (duration: number = 5, test: boolean = false, first: boolean = false, path: string): Promise<void> => {
+export const runPythonScript = (
+  duration: number = 5,
+  test: boolean = false,
+  first: boolean = false,
+  path: string
+): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const pythonMainPath = "./decryption/src/main.py"
+    const pythonMainPath = "./decryption/src/main.py";
     let pythonProcess;
     if (test) {
-      pythonProcess = spawn("python3", [
+      pythonProcess = spawn("python", [
         pythonMainPath,
-        "-d", duration.toString(),  
+        "-d",
+        duration.toString(),
         "-t",
-        "-p", path
+        "-p",
+        path,
       ]);
-    }
-    else if (first) {
-      pythonProcess = spawn("python3", [
+    } else if (first) {
+      pythonProcess = spawn("python", [
         pythonMainPath,
-        "-d", duration.toString(),  
+        "-d",
+        duration.toString(),
         "-f",
-        "-p", path
+        "-p",
+        path,
       ]);
-    }
-    else {
-      pythonProcess = spawn("python3", [
+    } else {
+      pythonProcess = spawn("python", [
         pythonMainPath,
-        "-d", duration.toString(),
-        "-p", path 
+        "-d",
+        duration.toString(),
+        "-p",
+        path,
       ]);
     }
 

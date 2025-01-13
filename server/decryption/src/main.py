@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import binary_extraction
 import folder_extraction
 import json_creation
@@ -35,6 +36,12 @@ if __name__ == "__main__":
     decrypted_data_folder = os.path.abspath(os.path.join(script_dir, '../../decrypted_data'))
     os.makedirs(decrypted_data_folder, exist_ok=True)
 
+    # Delete index_info if this is the first time main runs
+    if args.first:
+        index_info_folder = os.path.abspath(os.path.join(script_dir, 'index_info'))
+        if os.path.exists(index_info_folder):
+            shutil.rmtree(index_info_folder)
+        
     # Extract all the data, index, settings and patient files into associated lists
     folder = folder_extraction.FolderExtraction('data/')
 

@@ -28,7 +28,7 @@ export interface AllDataType {
   // ["ABP,Dias"]: ProcessedDataType,
   // ["ABP,Mean"]: ProcessedDataType,
   // ["ABP,Syst"]: ProcessedDataType,
-  // ["HR,na"]: ProcessedDataType,
+  ["HR,na"]: ProcessedDataType,
   // ["RR,na"]: ProcessedDataType,
   // ["SpO2,na"]: ProcessedDataType,
   // ["Tvesic,na"]: ProcessedDataType,
@@ -46,8 +46,13 @@ export interface RowData {
     // Structure of the data being passed
     time_vector: number[]; // Array of time points
     measurement_data: number[]; // Array of measurement values
+    sample_rates: number[]; 
+    start_time: number;
   };
   optionPart?: React.ReactNode; // Optional additional content (can be string or JSX)
+  valueDisplayData?: { time_vector: number[]; measurement_data: number[]; sample_rates: number[]; start_time: number; };
+  valueDisplayTitle?: string;
+  valueDisplayUnit?: string;
 }
 
 export interface Patient {

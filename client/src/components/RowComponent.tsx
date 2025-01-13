@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Chart from "chart.js/auto";
 import streamingPlugin from "chartjs-plugin-streaming";
 import "chartjs-adapter-date-fns";
+import ValueDisplay from "./ValueDisplayComponent";
 
 // import { RowData } from "../types/types";
 Chart.register(streamingPlugin);
@@ -14,31 +15,46 @@ type RowComponentProps = {
   unit: string;
   color: string;
   numberColor: string;
+  // Main data object containing arrays of timestamps, measurements, sample rates, and start time
   data: {
     time_vector: number[];
     measurement_data: number[];
     sample_rates: number[];
     start_time: number;
   };
-  optionPart?: React.ReactNode;
+  // Optional display data for a secondary value to show, such as HR value for ECG row
+  valueDisplayData?: {
+    time_vector: number[];
+    measurement_data: number[];
+    sample_rates: number[];
+    start_time: number;
+  };
+  valueDisplayTitle?: string; // Optional title to display alongside the value (can be different from the main `title`)
+  valueDisplayUnit?: string; // Optional unit to display for the value
+  valueDisplayNumberColor?: string; // Optional color for displaying the value number
+  optionPart?: React.ReactNode; // Optional part of the UI that can be passed as a React component node
 };
 
 const RowComponent: React.FC<RowComponentProps> = ({
-  title,
-  unit,
-  color,
-  numberColor,
-  data,
-  optionPart,
+  title, // The main title for the data display
+  unit, // The unit of the measurement
+  color, // The color for the chart
+  numberColor, // The color for the displayed numeric value
+  data, // The main data object
+  optionPart, // Optional UI component to be rendered
+  valueDisplayData, // Optional secondary display data for a specific value
+  valueDisplayTitle, // Optional custom title for the displayed value
+  valueDisplayUnit, // Optional custom unit for the displayed value
+  valueDisplayNumberColor, // Optional custom color for the displayed value
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-
-  const [lastPlottedTime, setLastPlottedTime] = useState<number | null>(null);
-
-  // State to keep track of the last plotted time
-  const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const [currentValue, setCurrentValue] = useState<number>(0);
+  const [currentHR, setCurrentHR] = useState<number>(0);
+  const animationFrameIdRef = useRef<number | null>(null); // Store requestAnimationFrame ID
+  const startTimeRef = useRef<number | null>(null); // Track the time when HR updates start
+  const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
+  const dataBufferRef = useRef<ChartPoint[]>([]); // Use useRef to persist dataBuffer
 
   useEffect(() => {
     // Check if the chartRef (canvas element) is available
@@ -86,6 +102,11 @@ const RowComponent: React.FC<RowComponentProps> = ({
               display: true, // Display a title for the X-axis
               text: "Time (s)", // Set the title text for the X-axis
             },
+            ticks: {
+              autoSkip: true, // Automatically skip ticks to avoid overlap
+              maxRotation: 0, // Prevent rotation of labels
+              minRotation: 0, // Prevent rotation of labels
+            },
           },
           y: {
             beginAtZero: false, // Ensure the Y-axis starts at zero
@@ -105,119 +126,152 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
   // Update the chart when data changes
   useEffect(() => {
-    // Create number buffer
-    const dataBuffer: ChartPoint[] = [];
-    if (!chartInstanceRef.current) return;
+    if (!chartInstanceRef.current) return; // Exit if the chart instance is not available
 
     const chart = chartInstanceRef.current;
     const dataset = chart.data.datasets[0];
     console.log("RowComponentProps.data", data);
 
-    // Convert `time_vector` to UNIX timestamps
-    let startTimestamp = data.start_time;
-    startTimestamp = startTimestamp / 1000; // Convert it to milliseconds
+    console.log("Plotting new data batch...");
 
-    //TODO: Change pausing to work based off first timestamp in data.time_vector instead
-    // Check if the new data is stale and the last dataset hash
-    if (lastPlottedTime !== null && startTimestamp <= lastPlottedTime) {
-      console.log("No new data available. Pausing plotting...");
-      setIsPaused(true);
-      return; // No new data, so stop processing this batch
-    } else {
-      console.log("New data available. Resuming plotting...");
-      setIsPaused(false);
-      setLastPlottedTime(startTimestamp); // Update the last plotted time
-    }
-
-    // Calculate the batch size for updates
-    const batchIntervalMs = 100; // Update every 100ms
-    const avgSampleRate =
+    // Calculate variables needed for plotting in batches
+    const batchIntervalMs = 100; // How often to plot a new batch in milliseconds (don't recommend reducing this due to DOM limitations)
+    let avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
-    const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Calculate the number of samples per batch
 
-    const MAX_BUFFER_SIZE = 10 * avgSampleRate; // Buffer size is modifiable and currently set to approx. 10s of data
+    /* Due to backend latency (~470Ms), we need to draw faster than the actual sample rate to avoid
+    building shadow latency between our system and the Moberg monitor.
+    As long as the chart draws faster and then waits for the next fetch, problem is solved.
+    Con to this approach is that the chart doesn't look as smooth.*/
+    avgSampleRate += avgSampleRate * 0.475;
+
+    const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Round up to avoid missing data (better to have more than less)
+    const MAX_BUFFER_SIZE = 10 * avgSampleRate; // Buffer size is currently set to approx. 10s of data
 
     let currentIndex = 0;
 
     const plotBatch = () => {
-      console.log(title, "!!!!Adding batch!!!!!", currentIndex);
-      if (isPaused || currentIndex >= data.time_vector.length) {
-        console.log("Paused or all points plotted. Stopping updates.");
+      if (currentIndex >= data.time_vector.length) {
+        // Exit if all points have been plotted
+        console.log("All points plotted. Stopping updates.");
         return;
       }
 
-      // Update batchEndIndex to increment by samplesPerBatch, assign length of data.time_vector to batchEndIndex
-      // when currentIndex + samplesPerBatch is greater than data.time_vector.length (avoid out of bounds error)
+      /* Update batchEndIndex to increment by samplesPerBatch, assign length of data.time_vector to batchEndIndex
+      when currentIndex + samplesPerBatch is greater than data.time_vector.length (avoids out of bounds) */
       const batchEndIndex = Math.min(
         currentIndex + samplesPerBatch,
         data.time_vector.length
       );
       for (let i = currentIndex; i < batchEndIndex; i++) {
-        const time = startTimestamp + data.time_vector[i];
-        const value = data.measurement_data[i];
-        dataBuffer.push({ x: time, y: value });
+        const time = data.time_vector[i]; // Assign (UNIX Epoch milliseconds) timestamp to time const for the chart
+        const value = data.measurement_data[i]; // Assign data point value to value const for the chart
+        dataBufferRef.current.push({ x: time, y: value }); // Push the new data point (timestamp & value) to the buffer
       }
 
-      while (dataBuffer.length > MAX_BUFFER_SIZE) {
-        dataBuffer.shift();
+      while (dataBufferRef.current.length > MAX_BUFFER_SIZE) {
+        dataBufferRef.current.shift(); // Remove old data points when buffer size exceeds the calculated maximum
       }
 
-      dataset.data = dataBuffer; // Update the dataset with the new data
+      dataset.data = dataBufferRef.current; // Update the dataset with the new data
 
       currentIndex = batchEndIndex; // Update the current index for next execution
 
       chart.update("quiet"); // Update the chart without animation
 
-      // Schedule the next batch
+      const latestECGValue = data.measurement_data[currentIndex - 1];
+      if (latestECGValue !== undefined) {
+        setCurrentValue(latestECGValue);
+      }
+
+      // Schedule the next batch based on the interval
       if (currentIndex < data.time_vector.length) {
         setTimeout(plotBatch, batchIntervalMs);
       } else {
         console.log("All points for the current data run have been plotted.");
-        setIsPaused(true); // Pause if all points are plotted
       }
     };
 
     plotBatch();
-  }, [data, isPaused, firstTimestamp]);
+  }, [data]);
 
-  const currentValue =
-    data.measurement_data[data.measurement_data.length - 1] || 0;
+  useEffect(() => {
+    // Ensure that valueDisplayData and its measurement_data exist before proceeding
+    if (!valueDisplayData || !valueDisplayData.measurement_data) return;
+
+    // Convert time_vector to absolute timestamps
+    const absoluteTimes = valueDisplayData.time_vector.map(
+      (t) => valueDisplayData.start_time + t
+    );
+
+    console.log("🐸 New HR data batch detected. Starting from index 0.");
+
+    // Store the timestamp of the last HR value in the batch for reference
+    lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
+    // Calculate the average sample rate from the sample_rates array
+    const hrAvgSampleRate =
+      valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) /
+      valueDisplayData.sample_rates.length;
+    const hrIntervalTime = 1000 / hrAvgSampleRate; // Time each HR should be displayed in milliseconds
+    console.log("🐸 hrIntervalTime:", hrIntervalTime);
+
+    startTimeRef.current = performance.now(); // Track when the HR updates started
+
+    // Function to update the heart rate display at each animation frame
+    const updateHR = () => {
+      const elapsedTime = performance.now() - startTimeRef.current!; // Calculate how much time has passed
+      const currentHRIndex = Math.floor(elapsedTime / hrIntervalTime); // Calculate which HR should be displayed
+
+      // If the current HR index is valid, update the displayed HR value
+      if (currentHRIndex < valueDisplayData.measurement_data.length) {
+        const newHRValue = valueDisplayData.measurement_data[currentHRIndex];
+        setCurrentHR(newHRValue); // Update the HR state variable to trigger a re-render
+        console.log(
+          "🐸 Updating HR to:",
+          newHRValue,
+          "at index:",
+          currentHRIndex
+        );
+        animationFrameIdRef.current = requestAnimationFrame(updateHR); // Continue the animation loop by requesting the next frame
+      } else {
+        // Stop once the last HR value is displayed
+        console.log("🐸 HR Update Complete. Displayed all HR values.");
+        cancelAnimationFrame(animationFrameIdRef.current!);
+      }
+    };
+
+    // Start animation frame loop
+    animationFrameIdRef.current = requestAnimationFrame(updateHR);
+
+    // Cleanup to stop animation when component unmounts
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current); // Cancel any remaining animation frames
+      }
+    };
+  }, [valueDisplayData]); // Re-run this effect whenever valueDisplayData changes
+
+  // Logic to display HR only for ECG, otherwise show measurement value**
+  const displayValue = title === "ECG" ? currentHR : currentValue;
 
   return (
     <div className="grid grid-cols-3 items-start bg-black">
-      {/* Chart Area */}
+      {/* Left section: Chart display */}
       <div className="col-span-2 p-2 h-full">
         <canvas
           ref={chartRef}
           style={{ width: "100%", height: "200px" }}
-        ></canvas>
+        ></canvas>{" "}
+        {/* Canvas for drawing the chart */}
       </div>
-
-      {/* Value Display */}
-      <div className="col-span-1 flex flex-col justify-center items-center bg-black p-8 h-full">
-        {/* Option Part */}
-        {optionPart && (
-          <div className="flex items-center pb-4">
-            <div className="text-white lg:text-5xl md:text-4xl sm:text-xl font-bold mr-4">
-              {optionPart}
-            </div>
-          </div>
-        )}
-        {/* Current Value */}
-        <div
-          className="text-white font-bold sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl truncate"
-          style={{ color: numberColor }}
-        >
-          {Math.round(currentValue)}
-        </div>
-        {/* Title and Unit */}
-        <div
-          className="absolute top-4 right-4 text-white text-xs"
-          style={{ color: numberColor }}
-        >
-          {title} {unit}
-        </div>
-      </div>
+      {/* Right section: Value display component */}
+      <ValueDisplay
+        optionPart={optionPart}
+        currentValue={displayValue} // Display the heart rate or general value based on title
+        title={valueDisplayTitle ?? title} // Title to be displayed
+        unit={valueDisplayUnit ?? unit} // Unit to be displayed alongside the value
+        numberColor={valueDisplayNumberColor ?? numberColor} // Display color for the number
+      />
     </div>
   );
 };

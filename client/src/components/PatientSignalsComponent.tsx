@@ -12,12 +12,7 @@ const PatientSignals: React.FC<PatientSignalsProps> = ({rowData}) => {
             {rowData.map((row, index) => (
                 <RowComponent
                 key={index}
-                title={row.title}
-                unit={row.unit}
-                color={row.color}
-                data={row.data}
-                optionPart={row.optionPart}
-                numberColor={row.numberColor}
+                {...row}
                 />
             ))}
         </div>
