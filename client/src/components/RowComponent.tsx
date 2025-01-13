@@ -109,6 +109,11 @@ const RowComponent: React.FC<RowComponentProps> = ({
               display: true, // Display a title for the X-axis
               text: "Time (s)", // Set the title text for the X-axis
             },
+            ticks: {
+              autoSkip: true, // Automatically skip ticks to avoid overlap
+              maxRotation: 0, // Prevent rotation of labels
+              minRotation: 0, // Prevent rotation of labels
+            },
           },
           y: {
             beginAtZero: false, // Ensure the Y-axis starts at zero
@@ -140,8 +145,15 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
     // Calculate variables needed for plotting in batches
     const batchIntervalMs = 100;
-    const avgSampleRate =
+    let avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
+
+    // Due to backend latency (~470Ms), draw faster than the actual sample rate to avoid
+    // building shadow latency between our system and the Moberg monitor.
+    // As long as the chart draws faster and then waits for the next fetch, problem is solved.
+    // Con to this approach is that the chart doesn't look smooth.
+    avgSampleRate = +avgSampleRate * 0.475;
+
     const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Round up to avoid missing data (better to have more than less)
     const MAX_BUFFER_SIZE = 10 * avgSampleRate; // Buffer size is currently set to approx. 10s of data
 
