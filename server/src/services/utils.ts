@@ -49,7 +49,6 @@ export const getDecryptedData = async (): Promise<{
   return data;
 };
 
-
 // Function to retrieve decrypted data from MongoDB using Mongoose
 export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: PatientData }> => {
   try {
@@ -86,7 +85,6 @@ export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: Patient
     throw new Error("Failed to fetch data from MongoDB");
   }
 };
-
 
 /**
  * Runs the python script responsible for decrypting the patient data.
