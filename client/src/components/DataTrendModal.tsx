@@ -21,8 +21,6 @@ interface DataTrendModalProps {
   data: ChartData<'line'> | string | null; // The data to be displayed in the chart (could be Chart.js data, an error message, or null)
   error: string | null;   // Error message, if any
   timeRange: number;      // The time range value (used to adjust chart width)
-  //lookUp: () => void;     // Function to move to the previous time point (look up)
-  //lookDown: () => void;   // Function to move to the next time point (look down)
 }
 
 // DataTrendModal component for displaying the data trend in a modal
@@ -33,8 +31,6 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
   data,        // The data to be displayed in the chart
   error,       // Error message, if any
   timeRange,   // Time range (used for chart styling)
-  //lookUp,      // Look up (move to previous minute)
-  //lookDown     // Look down (move to next minute)
 }) => {
   if (!isOpen) return null; // If the modal is not open, do not render anything
 
@@ -51,8 +47,17 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
 
         <h2 className="modal-heading">Data Trend View</h2> {/* Modal title */}
 
-        {loading && <p>Loading...</p>}  {/* Show loading message if data is being fetched */}
-        {error && <p className="text-red-500">Oops! Something went wrong while loading the data. Please try again.</p>} {/* Show error message if there's an error */}
+        {/* If it is loading, the loading prompt is displayed */}
+        {loading && (
+          <div className="text-center text-gray-700 text-2xl">
+            Loading data...
+          </div>
+        )}
+
+        {/* If there is no data, show the no data message */}
+        {!loading && !error && data === "No data available." && (
+          <div className="text-center text-yellow-500 text-2xl">No data available.</div>
+        )}
 
         {/* Render the chart only if data is available and not a string (i.e., not an error message) */}
         {!loading && !error && data && typeof data !== 'string' && (
@@ -84,24 +89,7 @@ const DataTrendModal: React.FC<DataTrendModalProps> = ({
           </div>
         )}
 
-        {/* Show a message when there's no data */}
-        {!loading && !error && !data && <p>No data available.</p>}
-      {/*
-        <div className="flex justify-between">
-          <button
-            onClick={lookUp} 
-            className="bg-purple-800 text-white py-2 px-4 rounded-md hover:bg-purple-600"
-          >
-            Look up
-          </button>
-          <button
-            onClick={lookDown} 
-            className="bg-purple-800 text-white py-2 px-4 rounded-md hover:bg-purple-600"
-          >
-            Look down
-          </button>
-        </div>        
-      */}
+
       </div>
     </div>
   );
