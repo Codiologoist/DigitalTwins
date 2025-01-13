@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { getDecryptedData, runPythonScript, getDecryptedDataFromDB} from "../services/utils";
 import { PatientData, AllData } from "../models/Data";
 import Patient from "../models/Patient";
-import router from "../routes/api";
 
 // Controller for sending all categories of patient based on the patient id
 export const sendPatientData = async (req: Request, res: Response) => {
@@ -21,7 +20,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
     }
 
     try {
-      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+      // await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
     } catch (error: any) {
       console.error(`Error running python script: ${error.message || error}`);
       return res.status(500).json({
@@ -63,7 +62,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
     }
 
     try {
-      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+      // await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
     } catch (error: any) {
       console.error(`Error running python script: ${error.message || error}`);
       return res.status(500).json({

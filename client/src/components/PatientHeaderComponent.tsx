@@ -165,8 +165,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 data={data} // Pass data (chart data or error message)
                 error={error} // Pass error message
                 timeRange={60} // Pass timePoint for chart configuration
-                //lookUp={lookUp} // Pass LookUp function
-                //lookDown={lookDown} // Pass LookDown function
             />
         </div>
     );
