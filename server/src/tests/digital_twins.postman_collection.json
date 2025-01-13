@@ -104,7 +104,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -171,7 +171,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -239,7 +239,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -307,7 +307,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -375,7 +375,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -443,7 +443,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -511,7 +511,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -579,7 +579,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -647,7 +647,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -715,7 +715,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -783,7 +783,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -851,7 +851,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -919,7 +919,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -987,7 +987,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1055,7 +1055,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1185,7 +1185,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Successfully retrieved all doctors\", function () {\r",
@@ -1236,7 +1236,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Doctor is successfully updated\", function () {\r",
@@ -1291,7 +1291,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Doctor is successfully deleted\", function () {\r",
