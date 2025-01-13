@@ -93,6 +93,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 };
 
                 setData(chartData); // Set the prepared chart data
+
             } else {
                 setData("No data available."); // No data case
             }
@@ -102,6 +103,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             } else {
                 console.error("Unexpected error:", error); // Log any other errors
             }
+            setData("No data available.");
         } finally {
             setLoading(false); // Set loading state to false once data is fetched
         }
