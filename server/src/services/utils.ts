@@ -49,6 +49,43 @@ export const getDecryptedData = async (): Promise<{
   return data;
 };
 
+
+// Function to retrieve decrypted data from MongoDB using Mongoose
+export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: PatientData }> => {
+  try {
+    // Fetch all documents from the Data collection and use lean() to return plain JavaScript objects
+    const documents = await Data.find().lean();
+
+    // Initialize an empty object to store the processed data grouped by signal_type
+    const data: { [key: string]: PatientData } = {};
+
+    // Iterate through each document retrieved from the database
+    documents.forEach((doc) => {
+      const signalType = doc.signal_type; // Extract the signal_type from the document
+
+      if (!data[signalType]) {
+        // If no entry for the current signal_type exists, create a new one
+        data[signalType] = {
+          ...doc, // Use the plain object directly
+          data: [...doc.data], // Initialize the data array with the current document's data
+        };
+      } else {
+        // If an entry for the signal_type already exists, merge the current data into it
+        data[signalType].data = [...data[signalType].data, ...doc.data];
+      }
+    });
+
+    // Return the processed data grouped by signal_type
+    return data;
+  } catch (error) {
+    // Log any errors encountered during the database operation
+    console.error("Error retrieving decrypted data from MongoDB:", error);
+    // Throw an error to indicate the operation failed
+    throw new Error("Failed to fetch data from MongoDB");
+  }
+};
+
+
 /**
  * Runs the python script responsible for decrypting the patient data.
  *
@@ -60,40 +97,31 @@ export const getDecryptedData = async (): Promise<{
  * @returns {Promise<void>} A promise that resolves when the python script has finished running successfully,
  *                         or rejects with an error if the script fails to run.
  */
-export const runPythonScript = (
-  duration: number = 5,
-  test: boolean = false,
-  first: boolean = false,
-  path: string
-): Promise<void> => {
+export const runPythonScript = (duration: number = 5, test: boolean = false, first: boolean = false, path: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const pythonMainPath = "./decryption/src/main.py";
+    const pythonMainPath = "./decryption/src/main.py"
     let pythonProcess;
     if (test) {
-      pythonProcess = spawn("python", [
+      pythonProcess = spawn("python3", [
         pythonMainPath,
-        "-d",
-        duration.toString(),
+        "-d", duration.toString(),  
         "-t",
-        "-p",
-        path,
+        "-p", path
       ]);
-    } else if (first) {
-      pythonProcess = spawn("python", [
+    }
+    else if (first) {
+      pythonProcess = spawn("python3", [
         pythonMainPath,
-        "-d",
-        duration.toString(),
+        "-d", duration.toString(),  
         "-f",
-        "-p",
-        path,
+        "-p", path
       ]);
-    } else {
-      pythonProcess = spawn("python", [
+    }
+    else {
+      pythonProcess = spawn("python3", [
         pythonMainPath,
-        "-d",
-        duration.toString(),
-        "-p",
-        path,
+        "-d", duration.toString(),
+        "-p", path 
       ]);
     }
 
@@ -113,31 +141,4 @@ export const runPythonScript = (
       }
     });
   });
-};
-// Function to retrieve decrypted data from MongoDB using Mongoose
-export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: PatientData }> => {
-  try {
-
-    // Using Mongoose query data
-    const documents = await Data.find();
-
-    console.log("Retrieved documents from MongoDB:", documents);
-
-    // Map the retrieved documents into the desired format
-    const data: { [key: string]: PatientData } = {};
-
-    documents.forEach((doc) => {
-      // For each document, use the signal_type as the key
-      const signalType = doc.signal_type;
-
-      // Add the document directly to the result object using signal_type as the key
-      // `doc` is already a Mongoose document, so it is automatically typed as `PatientData`
-      data[signalType] = doc;
-    });
-
-    return data;
-  } catch (error) {
-    console.error("Error retrieving decrypted data from MongoDB:", error);
-    throw new Error("Failed to fetch data from MongoDB");
-  }
 };
