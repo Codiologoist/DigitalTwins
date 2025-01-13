@@ -14,8 +14,8 @@ MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/DigitalTwinsDB')
 # Connect to MongoDB
 client = MongoClient(MONGO_URI)
 db = client.get_database()  # Get the current database
-data_collection = db["Data"]  # Collection for storing data
-all_data_collection = db["AllData"]  # Collection for storing AllDataType
+data_collection = db["datas"]  # Collection for storing data
+all_data_collection = db["alldatas"]  # Collection for storing AllDataType
 
 # Function to read a file and parse it into JSON
 def read_file(file_path):
@@ -33,10 +33,10 @@ for file_path in json_files:
 
     # Extract relevant fields from the JSON data
     signal_type = signal_data.get("signal_type")
+    data_runs = signal_data.get("data")
     patient_first_name = signal_data.get("patient_first_name")
     patient_last_name = signal_data.get("patient_last_name")
     admission_time = signal_data.get("admission_time")
-    data_runs = signal_data.get("data")
 
     # Format the data as a MongoDB document
     patient_data_document = {
@@ -46,9 +46,13 @@ for file_path in json_files:
         "patient_last_name": patient_last_name,
         "admission_time": admission_time
     }
+    
+    # # Print the patient_data_document
+    # print(json.dumps(patient_data_document, indent=4, ensure_ascii=False))
 
     # Insert the data into the MongoDB Data collection
     inserted_data = data_collection.insert_one(patient_data_document)
+    print(f"Inserted document ID: {inserted_data.inserted_id}")
 
     # Assuming each file type (e.g., "ECG,II", "ABP,Dias") corresponds to a field in the AllDataType collection
     all_data_update = {
@@ -64,12 +68,12 @@ for file_path in json_files:
 
     print(f"Data from {file_path} inserted with ObjectId: {inserted_data.inserted_id}")
 
-# Query all documents in the Data collection
-cursor = data_collection.find()
+# # Query all documents in the Data collection
+# cursor = data_collection.find()
 
-# Print all query results
-for document in cursor:
-    print(document)
+# # Print all query results
+# for document in cursor:
+#     print(document)
 
 
 
