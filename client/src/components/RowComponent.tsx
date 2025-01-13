@@ -56,13 +56,6 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
   const dataBufferRef = useRef<ChartPoint[]>([]); // Use useRef to persist dataBuffer
 
-  // State to keep track of the first plotted time to use for pausing updates
-  // const [firstTimestamp, setFirstTimestamp] = useState<number>(0);
-
-  // State to keep track of the last plotted time
-  // const [firstTimestamp, setFirstTimestamp] = useState<number | null>(null);
-  // const [isPaused, setIsPaused] = useState(false);
-
   useEffect(() => {
     // Check if the chartRef (canvas element) is available
     if (!chartRef.current) {
@@ -135,8 +128,6 @@ const RowComponent: React.FC<RowComponentProps> = ({
   useEffect(() => {
     if (!chartInstanceRef.current) return; // Exit if the chart instance is not available
 
-    // const dataBuffer: ChartPoint[] = []; // Create number buffer
-
     const chart = chartInstanceRef.current;
     const dataset = chart.data.datasets[0];
     console.log("RowComponentProps.data", data);
@@ -144,15 +135,15 @@ const RowComponent: React.FC<RowComponentProps> = ({
     console.log("Plotting new data batch...");
 
     // Calculate variables needed for plotting in batches
-    const batchIntervalMs = 100;
+    const batchIntervalMs = 100; // How often to plot a new batch in milliseconds (don't recommend reducing this due to DOM limitations)
     let avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
 
-    // Due to backend latency (~470Ms), draw faster than the actual sample rate to avoid
-    // building shadow latency between our system and the Moberg monitor.
-    // As long as the chart draws faster and then waits for the next fetch, problem is solved.
-    // Con to this approach is that the chart doesn't look smooth.
-    avgSampleRate = +avgSampleRate * 0.475;
+    /* Due to backend latency (~470Ms), we need to draw faster than the actual sample rate to avoid
+    building shadow latency between our system and the Moberg monitor.
+    As long as the chart draws faster and then waits for the next fetch, problem is solved.
+    Con to this approach is that the chart doesn't look as smooth.*/
+    avgSampleRate += avgSampleRate * 0.475;
 
     const samplesPerBatch = Math.ceil((batchIntervalMs * avgSampleRate) / 1000); // Round up to avoid missing data (better to have more than less)
     const MAX_BUFFER_SIZE = 10 * avgSampleRate; // Buffer size is currently set to approx. 10s of data
@@ -161,6 +152,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
     const plotBatch = () => {
       if (currentIndex >= data.time_vector.length) {
+        // Exit if all points have been plotted
         console.log("All points plotted. Stopping updates.");
         return;
       }
@@ -178,8 +170,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
       }
 
       while (dataBufferRef.current.length > MAX_BUFFER_SIZE) {
-        // Remove old data points when buffer size exceeds the calculated maximum
-        dataBufferRef.current.shift();
+        dataBufferRef.current.shift(); // Remove old data points when buffer size exceeds the calculated maximum
       }
 
       dataset.data = dataBufferRef.current; // Update the dataset with the new data
@@ -193,7 +184,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
         setCurrentValue(latestECGValue);
       }
 
-      // Schedule the next batch
+      // Schedule the next batch based on the interval
       if (currentIndex < data.time_vector.length) {
         setTimeout(plotBatch, batchIntervalMs);
       } else {
