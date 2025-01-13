@@ -162,7 +162,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     </div>
                     
                     {/* Buttons to trigger fetching different categories of data */}
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II,Merged", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
                 </div>
             </div>
 

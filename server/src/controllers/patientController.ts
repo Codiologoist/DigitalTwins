@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getDecryptedData, runPythonScript } from "../services/utils";
+import { getDecryptedData, runPythonScript, getDecryptedDataFromDB} from "../services/utils";
 import { PatientData, AllData } from "../models/Data";
 import Patient from "../models/Patient";
 import router from "../routes/api";
@@ -72,7 +72,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
       });
     }
     // Fetch patient data (simulated)
-    const patientData: { [key: string]: PatientData } = await getDecryptedData();
+    const patientData: { [key: string]: PatientData } = await getDecryptedDataFromDB();
 
     // Check if the requested category exists in patientData
     if (!patientData.hasOwnProperty(category)) {
