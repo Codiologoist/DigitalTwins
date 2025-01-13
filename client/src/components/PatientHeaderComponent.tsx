@@ -114,29 +114,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         setError(null); // Clear any existing errors
     };
 
-    {/* 
-    // Method to handle Look Up (go forward 1 minute)
-    const lookUp = async () => {
-        setTimePoint((prevTimePoint) => {
-            let newTimePoint = prevTimePoint + 1; // Increment timePoint
-            if(newTimePoint > maxTimePoint){
-                newTimePoint = maxTimePoint;
-            }
-            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
-            return newTimePoint;
-        });
-    };
-
-    // Method to handle Look Down (go back 1 minute)
-    const lookDown = async () => {
-        setTimePoint((prevTimePoint) => {
-            const newTimePoint = Math.max(prevTimePoint - 1, 1); // Ensure the timePoint doesn't go below 1 minute
-            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
-            return newTimePoint;
-        });
-    };
-    */}
-
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
             <FaUser/> {/* Display user icon */}
@@ -155,17 +132,17 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     <div className="flex items-center space-x-1 mr-10">
                     
                         <select
-                            className="bg-black text-white border border-lightgray rounded-md px-2 w-24 focus:outline-none focus:ring-2 ml-4"
+                            className="bg-black text-white border border-lightgray rounded-md px-2 focus:outline-none focus:ring-2 ml-4"
                             aria-label="Select time interval"
                             onChange={(e) => {
                                 const newInterval = Number(e.target.value);
                                 setSelectedTimeInterval(newInterval);
                             }}
                         >I
-                            <option value={60}>1min</option>
-                            <option value={600}>10mins</option>
-                            <option value={1800}>30mins</option>
-                            <option value={3600}>1hr</option>
+                            <option value={60}>1 min</option>
+                            <option value={600}>10 mins</option>
+                            <option value={1800}>30 mins</option>
+                            <option value={3600}>1 hour</option>
                 
                         </select>
                         <span className="text-white"> ago </span>
@@ -173,6 +150,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     
                     {/* Buttons to trigger fetching different categories of data */}
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ABP,na", timePoint)}>ABP</button>
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("RESP,na", timePoint)}>RESP</button>
                 </div>
             </div>
