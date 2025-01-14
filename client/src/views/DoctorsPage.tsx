@@ -51,7 +51,7 @@ const PatientListPage: React.FC = () => {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${patient.firstName} ${patient.lastName}?`);
 
     if (confirmDelete) {
-      Api.delete(`patients/${patient._id}`, {
+      Api.delete(`patients/${patient.SSN}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -68,8 +68,8 @@ const PatientListPage: React.FC = () => {
 
   const handleSaveChanges = (newPatient: Patient) => {
     const token = localStorage.getItem('token');
-    if (newPatient._id) {
-      Api.patch(`patients/${newPatient._id}`, newPatient, {
+    if (newPatient.SSN) {
+      Api.patch(`patients/${newPatient.SSN}`, newPatient, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -84,7 +84,7 @@ const PatientListPage: React.FC = () => {
         });
     } else {
       console.log(newPatient);
-      Api.post(`patients/${newPatient._id}`, newPatient, {
+      Api.post(`patients/${newPatient.SSN}`, newPatient, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -131,7 +131,7 @@ const PatientListPage: React.FC = () => {
               patient={selectedPatient}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
-              title={selectedPatient._id ? "Edit Patinet" : "Add Patient"}
+              title={selectedPatient.SSN ? "Edit Patinet" : "Add Patient"}
             />
           )}
         </>
