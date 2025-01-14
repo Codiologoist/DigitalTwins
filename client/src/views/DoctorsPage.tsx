@@ -68,7 +68,7 @@ const PatientListPage: React.FC = () => {
 
   const handleSaveChanges = (newPatient: Patient) => {
     const token = localStorage.getItem('token');
-    if (newPatient.SSN) {
+    if (newPatient._id) {
       Api.patch(`patients/${newPatient.SSN}`, newPatient, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -84,7 +84,7 @@ const PatientListPage: React.FC = () => {
         });
     } else {
       console.log(newPatient);
-      Api.post(`patients/${newPatient.SSN}`, newPatient, {
+      Api.post(`patients`, newPatient, {
         headers: {
           Authorization: `Bearer ${token}`
         }

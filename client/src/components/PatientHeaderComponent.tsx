@@ -33,13 +33,18 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
 
     // Method to fetch and display data trend for the selected category at the selected time point
     const showDataTrend = async (category: string, timePoint: number) => {
+        const token = localStorage.getItem('token');
         setIsModalOpen(true); // Open the modal
         setLoading(true); // Set loading state to true
         setError(null); // Clear any existing errors
 
         try {
             // Fetch data from the API
-            const response = await api.get(`/patients/${SSN}/data/${category}`);
+            const response = await api.get(`/patients/${SSN}/data/${category}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+            })
             const fetchedData = response.data.data; // Get the data part of the response
             const dataArray = fetchedData?.data; // Extract the data array
             const sampleFrequency = 500;

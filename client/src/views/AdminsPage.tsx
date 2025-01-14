@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DoctorTable, { Doctor } from '../components/DoctorTable';
 import { DoctorModal} from '../components/Modal';
-import axios from 'axios';
+import Api from '../api';
 import { useNavigate } from 'react-router-dom';
 
 const AdminPage: React.FC = () => {
@@ -21,7 +21,11 @@ const AdminPage: React.FC = () => {
       return;
     }
 
-    axios.get('http://localhost:5000/api/v1/admin/doctors')
+    Api.get('/admin//doctors', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then(response => {
         console.log('Doctors fetched:', response.data);
         setDoctorData(response.data.data);
@@ -40,10 +44,15 @@ const AdminPage: React.FC = () => {
   };
 
   const handleDelete = (doctor: Doctor) => {
+    const token = localStorage.getItem('token');
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
 
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/api/v1/admin/doctors/${doctor._id}`)
+      Api.delete(`admin/doctors/${doctor.SSN}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
         })
@@ -55,8 +64,13 @@ const AdminPage: React.FC = () => {
   };
 
   const handleSaveChanges = (newDoctor: Doctor) => {
+    const token = localStorage.getItem('token');
     if (newDoctor._id) {
-      axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor._id}`, newDoctor)
+      Api.patch(`admin/doctors/${newDoctor.SSN}`, newDoctor, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -66,7 +80,11 @@ const AdminPage: React.FC = () => {
           alert(error.response?.data.message || 'An error occurred while updating the doctor');
         });
     } else {
-      axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
+      Api.post('admin/doctors', newDoctor, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -110,7 +128,7 @@ const AdminPage: React.FC = () => {
               doctor={selectedDoctor}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
-              title={selectedDoctor._id ? "Edit Doctor" : "Add Doctor"}
+              title={selectedDoctor.SSN ? "Edit Doctor" : "Add Doctor"}
             />
           )}
         </>
