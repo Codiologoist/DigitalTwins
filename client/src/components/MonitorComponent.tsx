@@ -16,8 +16,22 @@ interface response {
 
 // Fetch patient based on SSN
 const fetchSelectedPatient = async (patientId: number | string) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.error("No token found. User needs to log in.");
+        return {
+          selectedPatient: null,
+          isLoading: false,
+          isNotFound: true,
+        };
+    }
+
     try  {
-        const response = await Api.get<response>(`patients/${patientId}`)
+        const response = await Api.get<response>(`patients/${patientId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
         const patient = response.data.data;
         return {
             selectedPatient: patient,
