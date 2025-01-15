@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:5000/api/v1/login",
+			"name": "Authentication",
 			"request": {
 				"method": "POST",
 				"header": [],
