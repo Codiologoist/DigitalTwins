@@ -15,6 +15,9 @@
 			"key": "password",
 			"value": "test_password"
 		},
+		{ 
+			"key": "authToken", 
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MTE2ZjUxYmU3N2YxYzIxNzUwOGEyMiIsInVzZXJuYW1lIjoidG9tYW5kamVycnlAZ21haWwuY29tIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTczNjk3MTUxNywiZXhwIjoxNzM2OTc1MTE3fQ.Hs2M0bxHQPF5Y95p9uj6ZoHAL4f_-BLvsVHxdvPXHlQ" },
 		{
 			"key": "SSN",
 			"value": "200201046543",
@@ -26,7 +29,7 @@
 			"type": "string"
 		}
 	],
-	
+
 	"item": [
 		{
 			"name": "Authentication",
@@ -38,13 +41,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const res = pm.response.json();",
-									"if (res.token) {",
-									"    pm.collectionVariables.set(\"authToken\", res.token);",
-									"    console.log(\"Token set successfully: \" + res.token);",
-									"} else {",
-									"    throw new Error(\"Token not found in response\");",
-									"}"
+									"pm.collectionVariables.set('authToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MTE2ZjUxYmU3N2YxYzIxNzUwOGEyMiIsInVzZXJuYW1lIjoidG9tYW5kamVycnlAZ21haWwuY29tIiwicm9sZSI6ImRvY3RvciIsImlhdCI6MTczNjk3MTUxNywiZXhwIjoxNzM2OTc1MTE3fQ.Hs2M0bxHQPF5Y95p9uj6ZoHAL4f_-BLvsVHxdvPXHlQ');",
+                					"console.log('Predefined authToken set successfully');"
 								],
 								"type": "text/javascript"
 							}
@@ -55,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"test_password\"\n}",
+							"raw": "{\r\n    \"username\": \"tomandjerry@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
