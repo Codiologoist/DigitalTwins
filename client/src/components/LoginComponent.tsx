@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Api from '../api';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -42,7 +42,7 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
     if (hasError) return; // Stop submission if validation fails
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/login", {
+      const response = await Api.post("/login", {
         username,
         password,
       });
