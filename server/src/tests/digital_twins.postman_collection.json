@@ -7,6 +7,59 @@
 	},
 	"item": [
 		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.token) {",
+									"    pm.collectionVariables.set(\"authToken\", res.token);",
+									"    console.log(\"Token set successfully: \" + res.token);",
+									"} else {",
+									"    throw new Error(\"Token not found in response\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"test_password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Patients",
 			"item": [
 				{
@@ -30,7 +83,12 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"Mr\",\n        \"lastName\" : \"Something\"\n    },\n    \"SSN\" : \"200203046643\",\n    \"path\" : \"CNS\"\n}",
@@ -117,7 +175,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
