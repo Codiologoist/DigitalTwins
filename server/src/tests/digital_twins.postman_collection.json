@@ -5,53 +5,23 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28868794"
 	},
-	"item": [
+	"variable": [
 		{
-			"name": "Authentication",
-			"item": [
-			  {
-				"name": "Set Predefined Token",
-				"event": [
-				  {
-					"listen": "test",
-					"script": {
-					  "exec": [
-						"pm.environment.set('authToken', 'Bearer predefined_token_value');",
-						"console.log('Predefined token set successfully');"
-					  ],
-					  "type": "text/javascript"
-					}
-				  }
-				],
-				"request": {
-				  "method": "POST",
-				  "header": [],
-				  "body": {
-					"mode": "raw",
-					"raw": "{}",
-					"options": {
-					  "raw": {
-						"language": "json"
-					  }
-					}
-				  },
-				  "url": {
-					"raw": "http://localhost:5000/api/v1/login",
-					"protocol": "http",
-					"host": [
-					  "localhost"
-					],
-					"port": "5000",
-					"path": [
-					  "api",
-					  "v1",
-					  "login"
-					]
-				  }
-				}
-			  }
-			]
+			"key": "authToken",
+			"value": "predefined_token_value"
 		},
+		{
+			"key": "SSN",
+			"value": "200201046543",
+			"type": "string"
+		},
+		{
+			"key": "DOCID",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
 		{
 			"name": "Patients",
 			"item": [
@@ -245,7 +215,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -313,7 +288,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -381,7 +361,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -449,7 +434,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -517,7 +507,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -585,7 +580,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -653,7 +653,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -721,7 +726,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -789,7 +799,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -857,7 +872,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -925,7 +945,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -993,7 +1018,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1061,7 +1091,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1129,7 +1164,12 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1211,7 +1251,12 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
@@ -1271,7 +1316,12 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:5000/api/v1/admin/doctors",
 							"protocol": "http",
@@ -1316,7 +1366,12 @@
 					],
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n \"firstName\": \"Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
@@ -1369,7 +1424,12 @@
 					],
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1406,7 +1466,12 @@
 					"name": "Post Admin",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
@@ -1476,17 +1541,6 @@
 				]
 			}
 		}
-	],
-	"variable": [
-		{
-			"key": "SSN",
-			"value": "200201046543",
-			"type": "string"
-		},
-		{
-			"key": "DOCID",
-			"value": "",
-			"type": "string"
-		}
 	]
+	
 }
