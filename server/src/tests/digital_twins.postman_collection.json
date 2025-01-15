@@ -41,7 +41,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:5000/api/v1/auth/login",
+							"raw": "http://localhost:5000/api/v1/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -132,7 +132,12 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:5000/api/v1/patients",
 							"protocol": "http",
