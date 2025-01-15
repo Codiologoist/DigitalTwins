@@ -9,54 +9,47 @@
 		{
 			"name": "Authentication",
 			"item": [
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const res = pm.response.json();",
-									"if (res.token || res.accessToken) {",
-									"    const token = res.token || res.accessToken;",
-									"    pm.collectionVariables.set(\"authToken\", token);",
-									"    console.log(\"Token set successfully: \" + token);",
-									"} else {",
-									"    throw new Error(\"Token not found in response\");",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
+			  {
+				"name": "Set Predefined Token",
+				"event": [
+				  {
+					"listen": "test",
+					"script": {
+					  "exec": [
+						"pm.environment.set('authToken', 'Bearer predefined_token_value');",
+						"console.log('Predefined token set successfully');"
+					  ],
+					  "type": "text/javascript"
+					}
+				  }
+				],
+				"request": {
+				  "method": "POST",
+				  "header": [],
+				  "body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+					  "raw": {
+						"language": "json"
+					  }
+					}
+				  },
+				  "url": {
+					"raw": "http://localhost:5000/api/v1/login",
+					"protocol": "http",
+					"host": [
+					  "localhost"
 					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"test_password\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"login"
-							]
-						}
-					},
-					"response": []
+					"port": "5000",
+					"path": [
+					  "api",
+					  "v1",
+					  "login"
+					]
+				  }
 				}
+			  }
 			]
 		},
 		{
@@ -70,12 +63,7 @@
 							"script": {
 								"exec": [
 									"const res = pm.response.json()",
-									"if (res.patient && res.patient.SSN) {",
-									"    pm.collectionVariables.set(\"SSN\", res.patient.SSN);",
-									"    console.log(\"SSN set successfully: \" + res.patient.SSN);",
-									"} else {",
-									"    console.warn(\"SSN not found in response\");",
-									"}",
+									"pm.collectionVariables.set(\"SSN\", res.patient.SSN);",
 									"",
 									"pm.test(\"Status code is 201\", function() {",
 									"    pm.response.to.have.status(201)",
