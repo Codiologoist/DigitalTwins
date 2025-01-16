@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 import glob
 import hashlib 
+from pathlib import Path
 
 def save_json_to_database():
     
@@ -34,7 +35,7 @@ def save_json_to_database():
         return hasher.hexdigest()
 
     # Get all JSON files from the ../../decrypted_data/ directory
-    data_directory = "../../decrypted_data/"
+    data_directory = Path(__file__).parent.parent.parent / "decrypted_data"
     json_files = glob.glob(os.path.join(data_directory, "*.json"))
 
     # Iterate over all files in the directory
@@ -50,7 +51,6 @@ def save_json_to_database():
         
         # Extract data from the file
         signal_data = read_file(file_path)
-
         
         if isinstance(signal_data, dict):
             # Extract relevant fields from the JSON data

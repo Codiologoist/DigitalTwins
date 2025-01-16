@@ -56,8 +56,6 @@ export const getDecryptedDataFromDB = async (): Promise<{ [key: string]: Patient
     // Fetch all documents from the Data collection and use lean() to return plain JavaScript objects
     const documents = await Data.find().lean();
 
-    //console.log("Retrieved documents from MongoDB:", documents);
-
     // Initialize an empty object to store the processed data grouped by signal_type
     const data: { [key: string]: PatientData } = {};
 
