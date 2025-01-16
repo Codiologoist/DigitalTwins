@@ -41,7 +41,7 @@ const AdminPage: React.FC = () => {
     setSelectedDoctor(doctor);
     setIsModalOpen(true);
   };
-  //handleDelete function handles deletion on doctors after admin confirms deletion
+  //handleDelete function handles deletion of doctors after admin confirms deletion
   //delete function uses doctor id
   const handleDelete = (doctor: Doctor) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
