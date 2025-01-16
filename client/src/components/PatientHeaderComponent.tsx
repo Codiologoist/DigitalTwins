@@ -55,10 +55,9 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
 
                 // Iterate through the array and combine the timestamps and samples from all signals
                 dataArray.forEach((ecgSignal: DataRun) => {
-                    const startTime = new Date(ecgSignal.start_time / 1000); // Convert start_time to a millisecond timestamp
                     
                     const timestamps = ecgSignal.timestamps.map((ts: number) => {
-                        const date = new Date(startTime.getTime() + ts * 1000); // Calculate the time according to start_time and ts
+                        const date = new Date(ts); // Calculate the time according to start_time and ts
                         return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
                     });
 

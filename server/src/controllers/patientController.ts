@@ -49,7 +49,6 @@ export const sendPatientData = async (req: Request, res: Response) => {
 // Controller for sending specific category of patient data based on the patient id
 export const sendPatientCategoryData = async (req: Request, res: Response) => {
   const { SSN, category } = req.params;
-  const { duration, test, first, path } = req.query;
 
   try {
     const patient = await Patient.findOne({ SSN: SSN });
@@ -61,15 +60,6 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
       });
     }
 
-    try {
-      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
-    } catch (error: any) {
-      console.error(`Error running python script: ${error.message || error}`);
-      return res.status(500).json({
-        success: false,
-        message: "Internal Server Error while running python script",
-      });
-    }
     // Fetch patient data
     const patientData: { [key: string]: PatientData } = await getDecryptedDataFromDB();
 
