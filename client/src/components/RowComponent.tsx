@@ -4,7 +4,6 @@ import streamingPlugin from "chartjs-plugin-streaming";
 import "chartjs-adapter-date-fns";
 import ValueDisplay from "./ValueDisplayComponent";
 
-// import { RowData } from "../types/types";
 Chart.register(streamingPlugin);
 
 // Define the data point type
@@ -117,21 +116,20 @@ const RowComponent: React.FC<RowComponentProps> = ({
         },
       },
     });
-    //  Destroy the chart instance when the component is unmounted
     return () => {
       chartInstanceRef.current?.destroy(); // Destroy the chart to free up resources
       chartInstanceRef.current = null; // Reset the chart reference
     };
   }, [title, color]); // Dependencies array: run this effect when title or color change
 
-  // Update the chart when data changes
+  // Update the chart when new data is fetched
   useEffect(() => {
     if (!chartInstanceRef.current) return; // Exit if the chart instance is not available
 
-    const chart = chartInstanceRef.current;
-    const dataset = chart.data.datasets[0];
-    console.log("RowComponentProps.data", data);
+    const chart = chartInstanceRef.current; // Get the chart instance
+    const dataset = chart.data.datasets[0]; // Get the first dataset (assuming only one dataset)
 
+    console.log("RowComponentProps.data", data);
     console.log("Plotting new data batch...");
 
     // Calculate variables needed for plotting in batches
@@ -139,7 +137,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     let avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
 
-    /* Due to backend latency (~470Ms), we need to draw faster than the actual sample rate to avoid
+    /* Due to backend latency (~450-600Ms), we need to draw faster than the actual sample rate to avoid
     building shadow latency between our system and the Moberg monitor.
     As long as the chart draws faster and then waits for the next fetch, problem is solved.
     Con to this approach is that the chart doesn't look as smooth.*/
@@ -177,7 +175,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
       currentIndex = batchEndIndex; // Update the current index for next execution
 
-      chart.update("quiet"); // Update the chart without animation
+      chart.update("quiet"); // Update the chart without animation (faster)
 
       const latestECGValue = data.measurement_data[currentIndex - 1];
       if (latestECGValue !== undefined) {
@@ -195,6 +193,8 @@ const RowComponent: React.FC<RowComponentProps> = ({
     plotBatch();
   }, [data]);
 
+  /* When a signals value display (to the right of the waveform) isn't the same as the waveform's value,
+  this code is executed/used to ensure correct information display on the UI. */
   useEffect(() => {
     // Ensure that valueDisplayData and its measurement_data exist before proceeding
     if (!valueDisplayData || !valueDisplayData.measurement_data) return;
@@ -204,7 +204,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
       (t) => valueDisplayData.start_time + t
     );
 
-    console.log("New data batch detected. Starting from index 0.");
+    console.log("New data batch detected.");
 
     // Store the timestamp of the last value in the batch for reference
     lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
@@ -212,8 +212,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     const valueAvgSampleRate =
       valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) /
       valueDisplayData.sample_rates.length;
-    const valueIntervalTime = 1000 / valueAvgSampleRate; // Time each HR should be displayed in milliseconds
-    console.log("valueIntervalTime:", valueIntervalTime);
+    const valueIntervalTime = 1000 / valueAvgSampleRate; // Time each value should be displayed in milliseconds
 
     startTimeRef.current = performance.now(); // Track when the value updates started
 
@@ -226,16 +225,10 @@ const RowComponent: React.FC<RowComponentProps> = ({
       if (currentValueIndex < valueDisplayData.measurement_data.length) {
         const newValue = valueDisplayData.measurement_data[currentValueIndex];
         setAlternateValue(newValue); // Update the alternate value state variable to trigger a re-render
-        console.log(
-          "🐸 Updating HR to:",
-          newValue,
-          "at index:",
-          currentValueIndex
-        );
         animationFrameIdRef.current = requestAnimationFrame(updateValue); // Continue the animation loop by requesting the next frame
       } else {
-        // Stop once the last HR value is displayed
-        console.log("🐸 HR Update Complete. Displayed all HR values.");
+        // Stop once the last value is displayed
+        console.log("Value Update Complete. Displayed all new values.");
         cancelAnimationFrame(animationFrameIdRef.current!);
       }
     };
@@ -253,22 +246,22 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
   // Logic to display the custom (alternate value) only for ECG, RESP or PLETH,
   // otherwise show default measurement value**
-  let displayValue = 0;
+  let displayValue: number;
   if (title === "ECG" || title === "RESP,na" || title === "PLETH,na") {
-    displayValue = alternateValue;
+    displayValue = alternateValue; // Display the alternate value for ECG, RESP, or PLETH
   } else {
-    displayValue = currentValue;
+    displayValue = currentValue; // Display the regular value for other measurements
   }
 
   return (
     <div className="grid grid-cols-3 items-start bg-black">
       {/* Left section: Chart display */}
       <div className="col-span-2 p-2 h-full">
+        {/* Canvas for drawing the chart */}
         <canvas
           ref={chartRef}
           style={{ width: "100%", height: "200px" }}
         ></canvas>{" "}
-        {/* Canvas for drawing the chart */}
       </div>
       {/* Right section: Value display component */}
       <ValueDisplay
