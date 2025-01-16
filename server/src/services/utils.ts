@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { PatientData, Data } from "../models/Data";
 import { spawn } from "child_process";
+import os from 'os';
 
 /**
  * Reads a file from the decrypted_data directory and returns its contents as a JSON object.
@@ -101,8 +102,9 @@ export const runPythonScript = (duration: number = 5, test: boolean = false, fir
   return new Promise((resolve, reject) => {
     const pythonMainPath = "./decryption/src/main.py"
     let pythonProcess;
+    const python = os.platform() === "win32" ? "python" : "python3";
     if (test) {
-      pythonProcess = spawn("python3", [
+      pythonProcess = spawn(python, [
         pythonMainPath,
         "-d", duration.toString(),  
         "-t",
@@ -110,7 +112,7 @@ export const runPythonScript = (duration: number = 5, test: boolean = false, fir
       ]);
     }
     else if (first) {
-      pythonProcess = spawn("python3", [
+      pythonProcess = spawn(python, [
         pythonMainPath,
         "-d", duration.toString(),  
         "-f",
@@ -118,7 +120,7 @@ export const runPythonScript = (duration: number = 5, test: boolean = false, fir
       ]);
     }
     else {
-      pythonProcess = spawn("python3", [
+      pythonProcess = spawn(python, [
         pythonMainPath,
         "-d", duration.toString(),
         "-p", path 

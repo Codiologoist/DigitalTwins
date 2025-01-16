@@ -28,7 +28,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
         message: "Internal Server Error while running python script",
       });
     }
-    // Fetch patient data (simulated)
+    // Fetch patient data
     const patientData: { [key: string]: PatientData } = await getDecryptedData();
 
     return res.status(200).json({

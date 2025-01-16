@@ -14,8 +14,7 @@ if (!JWT_SECRET) {
 
 // Middleware function to authenticate users
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  // Retrieve the token from the "Authorization" header. The token is expected to be in the format "Bearer <token>"
-  const token = req.headers.authorization?.split(" ")[1]; // .split(" ")[1] to avoid errors that occur when the authorization is empty when the user is not logged in
+  const token = req.headers.authorization;
 
   // If no token is provided, return a 401 Unauthorized response
   if (!token) {
