@@ -47,11 +47,11 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             })
             const fetchedData = response.data.data; // Get the data part of the response
             const dataArray = fetchedData?.data; // Extract the data array
-            const sampleFrequency = 500;
+            const sampleFrequency = 500; // Sampling frequency (500 Hz for 1-second intervals)
             
             if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
-                let allTimestamps: string[] = [];
-                let allSamples: number[] = [];
+                let allTimestamps: string[] = []; // Combined timestamps
+                let allSamples: number[] = []; // Combined signal samples
 
                 // Iterate through the array and combine the timestamps and samples from all signals
                 dataArray.forEach((ecgSignal: DataRun) => {
@@ -69,12 +69,13 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 // Divide data range
                 let dataRange = selectedTimeInterval * sampleFrequency; // Divide data range for one-minute data
                 if (allTimestamps.length < dataRange) {
-                    dataRange =  allTimestamps.length;
+                    dataRange =  allTimestamps.length; // Ensure data range does not exceed available data
                 }
+
+                // Slice timestamps and samples to display data for the selected range
                 const startIndex = Math.max(allTimestamps.length - timePoint * dataRange, 0);
                 const endIndex = allTimestamps.length - (timePoint - 1) * dataRange;
-                console.log("MaxTimePoint", Math.ceil(allTimestamps.length / dataRange));
-                allTimestamps = allTimestamps.slice(startIndex, endIndex);
+                allTimestamps = allTimestamps.slice(startIndex, endIndex); // Slice range for samples
                 allSamples = allSamples.slice(startIndex, endIndex); // Slice range for samples
 
                 // Limit the range of the sample values for the Y-axis
@@ -91,7 +92,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                             data: allSamples, // ECG signal values for the Y-axis
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
-                            borderWidth: 2,
+                            borderWidth: 2, // Line width
                             pointRadius: 0,
                         },
                     ],
