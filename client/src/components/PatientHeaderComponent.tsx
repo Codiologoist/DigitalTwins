@@ -10,14 +10,15 @@ interface PatientHeaderProps {
     patient: Patient; // Patient object to be passed as a prop
 }
 
+// Define the structure for the DataRun object
 interface DataRun {
-    samples: number[];
-    timestamps: number[];
-    num_samples: number;
-    duration: number;
-    sample_rate: number;
-    sample_interval: number;
-    start_time: number;
+    samples: number[]; // Array of signal samples
+    timestamps: number[]; // Array of timestamps for the samples
+    num_samples: number; // Number of samples in the run
+    duration: number; // Duration of the run in seconds
+    sample_rate: number; // Sampling rate in Hz
+    sample_interval: number; // Interval between samples in seconds
+    start_time: number; // Start time of the run as a timestamp
 }
 
 // The PatientHeader component
@@ -92,7 +93,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
                             borderWidth: 2, // Line width
-                            pointRadius: 0,
+                            pointRadius: 0, // Disable point markers
                         },
                     ],
                 };

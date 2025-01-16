@@ -5,12 +5,13 @@ import Patient from "../models/Patient";
 
 // Controller for sending all categories of patient based on the patient id
 export const sendPatientData = async (req: Request, res: Response) => {
-  const { SSN } = req.params;
-  const { duration, test, first, path } = req.query;
+  const { SSN } = req.params; // Extract SSN from the request parameters
+  const { duration, test, first, path } = req.query; // Extract query parameters
 
   try {
-    const patient = await Patient.findOne({ SSN: SSN });
+    const patient = await Patient.findOne({ SSN: SSN }); // Find the patient in the database by SSN
 
+    // If the patient doesn't exist, return a 404 error
     if (!patient) {
       console.error(`Patient with SSN ${SSN} not found`);
       return res.status(404).json({
@@ -20,17 +21,20 @@ export const sendPatientData = async (req: Request, res: Response) => {
     }
 
     try {
+      // Run a Python script with the provided parameters
       await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
     } catch (error: any) {
+      // Handle errors during the execution of the Python script
       console.error(`Error running python script: ${error.message || error}`);
       return res.status(500).json({
         success: false,
         message: "Internal Server Error while running python script",
       });
     }
-    // Fetch patient data
+    // Fetch patient data from decrypted JSON file
     const patientData: { [key: string]: PatientData } = await getDecryptedData();
 
+    // Return the patient data in the response
     return res.status(200).json({
       success: true,
       data: patientData,
@@ -46,13 +50,14 @@ export const sendPatientData = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for sending specific category of patient data based on the patient id
+// Controller for sending specific category of patient data based on the patient SSN
 export const sendPatientCategoryData = async (req: Request, res: Response) => {
-  const { SSN, category } = req.params;
+  const { SSN, category } = req.params; // Extract SSN and category from request parameters
 
   try {
-    const patient = await Patient.findOne({ SSN: SSN });
+    const patient = await Patient.findOne({ SSN: SSN }); // Find the patient in the database by SSN
 
+    // If the patient doesn't exist, return a 404 error
     if (!patient) {
       return res.status(404).json({
         success: false,
@@ -60,7 +65,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
       });
     }
 
-    // Fetch patient data
+    // Fetch decrypted patient data from MongoDB
     const patientData: { [key: string]: PatientData } = await getDecryptedDataFromDB();
 
     // Check if the requested category exists in patientData
@@ -71,6 +76,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
       });
     }
 
+    // Return the specific category data
     return res.status(200).json({
       success: true,
       data: patientData[category as keyof typeof patientData], // Explicitly tell TypeScript that 'category' is a key of 'patientData'
@@ -87,7 +93,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
   }
 };
 
-
+// Controller for fetching all patients
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
     const patients = await Patient.find({});
