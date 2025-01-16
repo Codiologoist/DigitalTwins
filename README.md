@@ -89,6 +89,7 @@ React for frontend visualization and dynamic plotting.
       ```bash
       npm start
 5. Run tests (Server only):
+   - Before running tests, make sure you have set your `.env` file correctly according to the instructions in the `.env.example` file.
    - To run tests on the server, use the following command:
      ```bash
      npm run test
