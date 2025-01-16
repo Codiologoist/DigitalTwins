@@ -4,7 +4,6 @@ import streamingPlugin from "chartjs-plugin-streaming";
 import "chartjs-adapter-date-fns";
 import ValueDisplay from "./ValueDisplayComponent";
 
-// import { RowData } from "../types/types";
 Chart.register(streamingPlugin);
 
 // Define the data point type
@@ -50,7 +49,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const [currentValue, setCurrentValue] = useState<number>(0);
-  const [currentHR, setCurrentHR] = useState<number>(0);
+  const [alternateValue, setAlternateValue] = useState<number>(0);
   const animationFrameIdRef = useRef<number | null>(null); // Store requestAnimationFrame ID
   const startTimeRef = useRef<number | null>(null); // Track the time when HR updates start
   const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
@@ -117,21 +116,20 @@ const RowComponent: React.FC<RowComponentProps> = ({
         },
       },
     });
-    //  Destroy the chart instance when the component is unmounted
     return () => {
       chartInstanceRef.current?.destroy(); // Destroy the chart to free up resources
       chartInstanceRef.current = null; // Reset the chart reference
     };
   }, [title, color]); // Dependencies array: run this effect when title or color change
 
-  // Update the chart when data changes
+  // Update the chart when new data is fetched
   useEffect(() => {
     if (!chartInstanceRef.current) return; // Exit if the chart instance is not available
 
-    const chart = chartInstanceRef.current;
-    const dataset = chart.data.datasets[0];
-    console.log("RowComponentProps.data", data);
+    const chart = chartInstanceRef.current; // Get the chart instance
+    const dataset = chart.data.datasets[0]; // Get the first dataset (assuming only one dataset)
 
+    console.log("RowComponentProps.data", data);
     console.log("Plotting new data batch...");
 
     // Calculate variables needed for plotting in batches
@@ -139,7 +137,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     let avgSampleRate =
       data.sample_rates.reduce((a, b) => a + b, 0) / data.sample_rates.length;
 
-    /* Due to backend latency (~470Ms), we need to draw faster than the actual sample rate to avoid
+    /* Due to backend latency (~450-600Ms), we need to draw faster than the actual sample rate to avoid
     building shadow latency between our system and the Moberg monitor.
     As long as the chart draws faster and then waits for the next fetch, problem is solved.
     Con to this approach is that the chart doesn't look as smooth.*/
@@ -177,7 +175,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
       currentIndex = batchEndIndex; // Update the current index for next execution
 
-      chart.update("quiet"); // Update the chart without animation
+      chart.update("quiet"); // Update the chart without animation (faster)
 
       const latestECGValue = data.measurement_data[currentIndex - 1];
       if (latestECGValue !== undefined) {
@@ -195,53 +193,47 @@ const RowComponent: React.FC<RowComponentProps> = ({
     plotBatch();
   }, [data]);
 
+  /* When a signals value display (to the right of the waveform) isn't the same as the waveform's value,
+  this code is executed/used to ensure correct information display on the UI. */
   useEffect(() => {
     // Ensure that valueDisplayData and its measurement_data exist before proceeding
     if (!valueDisplayData || !valueDisplayData.measurement_data) return;
 
-    // Convert time_vector to absolute timestamps
-    const absoluteTimes = valueDisplayData.time_vector.map(
-      (t) => valueDisplayData.start_time + t
-    );
+    const absoluteTimes = valueDisplayData.time_vector;
 
-    console.log("🐸 New HR data batch detected. Starting from index 0.");
+    console.log("New data batch detected.");
 
-    // Store the timestamp of the last HR value in the batch for reference
+    // Store the timestamp of the last value in the batch for reference
     lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
+
     // Calculate the average sample rate from the sample_rates array
-    const hrAvgSampleRate =
+    let valueAvgSampleRate =
       valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) /
       valueDisplayData.sample_rates.length;
-    const hrIntervalTime = 1000 / hrAvgSampleRate; // Time each HR should be displayed in milliseconds
-    console.log("🐸 hrIntervalTime:", hrIntervalTime);
+    valueAvgSampleRate += valueAvgSampleRate * 0.475; // Adjust for backend latency
+    const valueIntervalTime = 1000 / valueAvgSampleRate; // Time each value should be displayed in milliseconds
 
-    startTimeRef.current = performance.now(); // Track when the HR updates started
+    startTimeRef.current = performance.now(); // Track when the value updates started
 
-    // Function to update the heart rate display at each animation frame
-    const updateHR = () => {
+    // Function to update the value display at each animation frame
+    const updateValue = () => {
       const elapsedTime = performance.now() - startTimeRef.current!; // Calculate how much time has passed
-      const currentHRIndex = Math.floor(elapsedTime / hrIntervalTime); // Calculate which HR should be displayed
+      const currentValueIndex = Math.floor(elapsedTime / valueIntervalTime); // Calculate which value should be displayed
 
-      // If the current HR index is valid, update the displayed HR value
-      if (currentHRIndex < valueDisplayData.measurement_data.length) {
-        const newHRValue = valueDisplayData.measurement_data[currentHRIndex];
-        setCurrentHR(newHRValue); // Update the HR state variable to trigger a re-render
-        console.log(
-          "🐸 Updating HR to:",
-          newHRValue,
-          "at index:",
-          currentHRIndex
-        );
-        animationFrameIdRef.current = requestAnimationFrame(updateHR); // Continue the animation loop by requesting the next frame
+      // If the current value index is valid, update the displayed value
+      if (currentValueIndex < valueDisplayData.measurement_data.length) {
+        const newValue = valueDisplayData.measurement_data[currentValueIndex];
+        setAlternateValue(newValue); // Update the alternate value state variable to trigger a re-render
+        animationFrameIdRef.current = requestAnimationFrame(updateValue); // Continue the animation loop by requesting the next frame
       } else {
-        // Stop once the last HR value is displayed
-        console.log("🐸 HR Update Complete. Displayed all HR values.");
+        // Stop once the last value is displayed
+        console.log("Value Update Complete. Displayed all new values.");
         cancelAnimationFrame(animationFrameIdRef.current!);
       }
     };
 
     // Start animation frame loop
-    animationFrameIdRef.current = requestAnimationFrame(updateHR);
+    animationFrameIdRef.current = requestAnimationFrame(updateValue);
 
     // Cleanup to stop animation when component unmounts
     return () => {
@@ -251,18 +243,24 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
   }, [valueDisplayData]); // Re-run this effect whenever valueDisplayData changes
 
-  // Logic to display HR only for ECG, otherwise show measurement value**
-  const displayValue = title === "ECG" ? currentHR : currentValue;
+  // Logic to display the custom (alternate value) only for ECG, RESP or PLETH,
+  // otherwise show default measurement value**
+  let displayValue: number;
+  if (title === "ECG" || title === "RESP,na" || title === "PLETH,na") {
+    displayValue = alternateValue; // Display the alternate value for ECG, RESP, or PLETH
+  } else {
+    displayValue = currentValue; // Display the regular value for other measurements
+  }
 
   return (
     <div className="grid grid-cols-3 items-start bg-black">
       {/* Left section: Chart display */}
       <div className="col-span-2 p-2 h-full">
+        {/* Canvas for drawing the chart */}
         <canvas
           ref={chartRef}
           style={{ width: "100%", height: "200px" }}
         ></canvas>{" "}
-        {/* Canvas for drawing the chart */}
       </div>
       {/* Right section: Value display component */}
       <ValueDisplay
