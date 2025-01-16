@@ -70,6 +70,13 @@ const usePatientData = (
       sample_interval: 0,
       start_time: 0,
     },
+    "SpO2,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
   });
 
   const fetchIntervalTime = 5000; // Fetch data every 5 seconds
@@ -108,6 +115,7 @@ const usePatientData = (
             "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
             "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
             "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
+            "SpO2,na": processData(fetchedDataSet["SpO2,na"]?.data ?? []),
           };
           setIsFisrtTime(false);
           // Update the state with processed data
@@ -139,6 +147,7 @@ const usePatientData = (
             "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
             "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
             "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
+            "SpO2,na": processData(fetchedDataSet["SpO2,na"]?.data ?? []),
           };
           setIsFisrtTime(false);
           // Update the state with processed data
