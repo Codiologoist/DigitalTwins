@@ -20,22 +20,36 @@ interface response {
 
 // Fetch patient based on SSN
 const fetchSelectedPatient = async (patientId: number | string) => {
-  try {
-    const response = await Api.get<response>(`patients/${patientId}`);
-    const patient = response.data.data;
-    return {
-      selectedPatient: patient,
-      isLoading: false,
-      isNotFound: false,
-    };
-  } catch (error) {
-    console.error("Error fetching patient data:", error);
-    return {
-      selectedPatient: null,
-      isLoading: false,
-      isNotFound: true,
-    };
-  }
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.error("No token found. User needs to log in.");
+        return {
+          selectedPatient: null,
+          isLoading: false,
+          isNotFound: true,
+        };
+    }
+
+    try  {
+        const response = await Api.get<response>(`patients/${patientId}`, {
+            headers: {
+              Authorization: `${token}`,
+            },
+          });
+        const patient = response.data.data;
+        return {
+            selectedPatient: patient,
+            isLoading: false,
+            isNotFound: false
+        }
+    } catch (error) {
+        console.error("Error fetching patient data:", error);
+        return {
+            selectedPatient: null,
+            isLoading: false,
+            isNotFound: true
+        }
+    }
 };
 
 // The main component that renders different rows of data for a patient monitor.

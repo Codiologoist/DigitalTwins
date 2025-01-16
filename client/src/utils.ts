@@ -10,9 +10,20 @@ const fetchPatientData = async (
   isForTesting: boolean,
   path: string
 ): Promise<AllDataType> => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error("No token found. User needs to log in.");
+    throw new Error("Unauthorized: No token found.");
+  }
   try {
+
     console.log(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`);
-    const response = await api.get(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`);
+    const response = await api.get(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
     return response.data.data; // Return the data received from the server
   } catch (error) {
     // Log an error message if the request fails

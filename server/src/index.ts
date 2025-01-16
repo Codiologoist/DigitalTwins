@@ -69,8 +69,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Apply routes
 app.use("/api/v1", apiRoutes);
-app.use("/api/v1/patients", patientRoutes);
-app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/patients", authenticate, patientRoutes);
+app.use("/api/v1/admin", authenticate, adminRoutes);
 app.use("/api/v1", loginRoutes);
 
 // Apply error handler

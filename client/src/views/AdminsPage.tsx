@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import DoctorTable, { Doctor } from '../components/DoctorTable';
 import { DoctorModal} from '../components/Modal';
-import axios from 'axios';
+import Api from '../api';
 import { useNavigate } from 'react-router-dom';
+
+//Admin page where the admin can view all the doctors and handle their data
 
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,13 +17,17 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const userRole = localStorage.getItem('userRole');
     const token = localStorage.getItem('token');
-
+    //checks if it's admin or not-checking for authorisation
     if (!token || userRole !== 'admin') {
       navigate('/login');
       return;
     }
 
-    axios.get('http://localhost:5000/api/v1/admin/doctors')
+    Api.get('/admin//doctors', {
+      headers: {
+        Authorization: `${token}`
+      }
+    })
       .then(response => {
         console.log('Doctors fetched:', response.data);
         setDoctorData(response.data.data);
@@ -34,16 +40,23 @@ const AdminPage: React.FC = () => {
       });
   }, [refreshData]);
 
+  //Edit function opens up the modal when user asks to edit data
   const handleEdit = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setIsModalOpen(true);
   };
-
+  //handleDelete function handles deletion of doctors after admin confirms deletion
+  //delete function uses doctor id
   const handleDelete = (doctor: Doctor) => {
+    const token = localStorage.getItem('token');
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
 
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/api/v1/admin/doctors/${doctor._id}`)
+      Api.delete(`admin/doctors/${doctor._id}`, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
         })
@@ -53,10 +66,16 @@ const AdminPage: React.FC = () => {
         });
     }
   };
-
+  //this function saves the changes made to doctor's data, refreshes the page and closes the modal(form) for both editing and addition of doctor
   const handleSaveChanges = (newDoctor: Doctor) => {
+    const token = localStorage.getItem('token');
     if (newDoctor._id) {
-      axios.patch(`http://localhost:5000/api/v1/admin/doctors/${newDoctor._id}`, newDoctor)
+      console.log(newDoctor);
+      Api.patch(`admin/doctors/${newDoctor._id}`, newDoctor, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -66,7 +85,11 @@ const AdminPage: React.FC = () => {
           alert(error.response?.data.message || 'An error occurred while updating the doctor');
         });
     } else {
-      axios.post('http://localhost:5000/api/v1/admin/doctors', newDoctor)
+      Api.post('admin/doctors', newDoctor, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -78,6 +101,7 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  //function to add a new doctor and opening the form to fill in the information
   const handleAddDoctor = () => {
     setSelectedDoctor({
       _id: '',
@@ -99,18 +123,19 @@ const AdminPage: React.FC = () => {
           <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
           <div className="add-doctor-button-container">
             <div className="add-doctor-button">
+              {/*Interactive button to add doctors */}
               <button onClick={handleAddDoctor}>
                 <span className="plus-sign">➕</span> Add Doctor
               </button>
             </div>
           </div>
-
+          {/*calls necessary functions and shows the title of the form as per the function called (e.g. edit or add)*/}
           {isModalOpen && selectedDoctor && (
             <DoctorModal
               doctor={selectedDoctor}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
-              title={selectedDoctor._id ? "Edit Doctor" : "Add Doctor"}
+              title={selectedDoctor.SSN ? "Edit Doctor" : "Add Doctor"}
             />
           )}
         </>
