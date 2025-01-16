@@ -1,6 +1,9 @@
 import { RowData } from "../types/types";
 import RowComponent from "./RowComponent"; // Choose to use different drawing methods
 
+/* Component which "instantiates" RowComponents based on the data in rowData.
+Essentially, for each element in rowData -> create RowComponent for that data. */
+
 interface PatientSignalsProps {
   rowData: RowData[];
 }
