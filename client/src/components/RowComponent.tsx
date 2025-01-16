@@ -199,19 +199,18 @@ const RowComponent: React.FC<RowComponentProps> = ({
     // Ensure that valueDisplayData and its measurement_data exist before proceeding
     if (!valueDisplayData || !valueDisplayData.measurement_data) return;
 
-    // Convert time_vector to absolute timestamps
-    const absoluteTimes = valueDisplayData.time_vector.map(
-      (t) => valueDisplayData.start_time + t
-    );
+    const absoluteTimes = valueDisplayData.time_vector;
 
     console.log("New data batch detected.");
 
     // Store the timestamp of the last value in the batch for reference
     lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
+
     // Calculate the average sample rate from the sample_rates array
-    const valueAvgSampleRate =
+    let valueAvgSampleRate =
       valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) /
       valueDisplayData.sample_rates.length;
+    valueAvgSampleRate += valueAvgSampleRate * 0.475; // Adjust for backend latency
     const valueIntervalTime = 1000 / valueAvgSampleRate; // Time each value should be displayed in milliseconds
 
     startTimeRef.current = performance.now(); // Track when the value updates started
