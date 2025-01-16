@@ -29,7 +29,7 @@ const fetchSelectedPatient = async (patientId: number | string) => {
     try  {
         const response = await Api.get<response>(`patients/${patientId}`, {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `${token}`,
             },
           });
         const patient = response.data.data;

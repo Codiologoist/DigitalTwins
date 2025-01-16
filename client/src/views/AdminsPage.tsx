@@ -23,7 +23,7 @@ const AdminPage: React.FC = () => {
 
     Api.get('/admin//doctors', {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `${token}`
       }
     })
       .then(response => {
@@ -50,7 +50,7 @@ const AdminPage: React.FC = () => {
     if (confirmDelete) {
       Api.delete(`admin/doctors/${doctor.SSN}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {
@@ -68,7 +68,7 @@ const AdminPage: React.FC = () => {
     if (newDoctor._id) {
       Api.patch(`admin/doctors/${newDoctor.SSN}`, newDoctor, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {
@@ -82,7 +82,7 @@ const AdminPage: React.FC = () => {
     } else {
       Api.post('admin/doctors', newDoctor, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {

@@ -42,7 +42,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             // Fetch data from the API
             const response = await api.get(`/patients/${SSN}/data/${category}`, {
                 headers: {
-                  Authorization: `Bearer ${token}`
+                  Authorization: `${token}`
                 }
             })
             const fetchedData = response.data.data; // Get the data part of the response

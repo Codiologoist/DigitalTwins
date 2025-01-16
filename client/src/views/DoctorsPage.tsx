@@ -23,7 +23,7 @@ const PatientListPage: React.FC = () => {
 
     Api.get('/patients', {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `${token}`
       }
     }).then(response => {
         setPatientData(response.data.data);
@@ -53,7 +53,7 @@ const PatientListPage: React.FC = () => {
     if (confirmDelete) {
       Api.delete(`patients/${patient.SSN}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {
@@ -71,7 +71,7 @@ const PatientListPage: React.FC = () => {
     if (newPatient._id) {
       Api.patch(`patients/${newPatient.SSN}`, newPatient, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {
@@ -86,7 +86,7 @@ const PatientListPage: React.FC = () => {
       console.log(newPatient);
       Api.post(`patients`, newPatient, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `${token}`
         }
       })
         .then(() => {
