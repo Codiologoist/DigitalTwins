@@ -2,7 +2,6 @@
 export interface DataType {
   duration: number;
   num_samples: number;
-  sample_interval: number;
   sample_rate: number;
   samples: number[]; // Array of sample values
   start_time: number;
