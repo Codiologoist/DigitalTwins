@@ -4,7 +4,7 @@ import HomeView from "./views/HomeView.tsx";
 import AdminsPage from './views/AdminsPage.tsx';
 import DoctorsPage from './views/DoctorsPage.tsx';
 import Monitor from './components/MonitorComponent.tsx';
-import LoginComponent from './components/LoginComponent.tsx'; // Import LoginComponent
+import LoginComponent from './components/LoginComponent.tsx';
 import NavBar from './components/NavbarComponent.tsx';
 import {useEffect, useState} from 'react';
 import NotFound from './components/NotFoundComponent.tsx';
@@ -29,6 +29,19 @@ const App = () => {
       setIsLoggedIn(true); // Assume user is logged in if token exists
       setUserRole(storedUserRole as 'doctor' | 'admin'); // Set the role from localStorage
     }
+
+    // Add onbeforeunload event to clear token when the browser/tab is closed
+    window.onbeforeunload = () => {
+      setIsLoggedIn(false);
+      setUserRole(null);
+      localStorage.removeItem('token');
+    };
+
+    // Cleanup function to remove event listener when the component unmounts
+    return () => {
+      window.onbeforeunload = null;
+    };
+
   }, []); // Empty dependency array to run once on mount
 
   const handleLogin = (role: 'doctor' | 'admin') => {

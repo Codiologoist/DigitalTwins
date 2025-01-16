@@ -22,6 +22,7 @@ const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) =
 
   // Function to handle navigation
   const handleNavigation = (patientId: string) => {
+    localStorage.setItem("patientSSN", patientId);
     navigate(`/${patientId}/monitor`);
   };
 

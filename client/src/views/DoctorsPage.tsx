@@ -20,15 +20,23 @@ const PatientListPage: React.FC = () => {
       navigate('/login');
       return;
     }
-    //all patients are fetched
-    Api.get('/patients')
-      .then(response => {
+
+    Api.get('/patients', {
+      headers: {
+        Authorization: `${token}`
+      }
+    }).then(response => {
         setPatientData(response.data.data);
         setLoading(false);
-      })
-      .catch(error => {
+      }).catch(error => {
         console.error('Error fetching patients:', error);
-        alert('An error occurred while fetching patients');
+        if (error.response?.status === 401) {
+          localStorage.removeItem('token');
+          alert('Session expired. Please log in again.');
+          navigate('/login');
+        } else {
+          alert('An error occurred while fetching patients.');
+        }
         setLoading(false);
       });
   }, [refreshData]);
@@ -39,11 +47,16 @@ const PatientListPage: React.FC = () => {
   };
 
   const handleDelete = (patient: Patient) => {
+    const token = localStorage.getItem('token');
     const confirmDelete = window.confirm(`Are you sure you want to delete ${patient.firstName} ${patient.lastName}?`);
     //handleDelete function handles deletion of patients after doctor confirms deletion
     //delete function uses patient id  
     if (confirmDelete) {
-      Api.delete(`patients/${patient._id}`)
+      Api.delete(`patients/${patient.SSN}`, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
         })
@@ -55,8 +68,13 @@ const PatientListPage: React.FC = () => {
   };
   //this function saves the changes made to patient's data, refreshes the page and closes the modal(form) for both editing and addition of patient
   const handleSaveChanges = (newPatient: Patient) => {
+    const token = localStorage.getItem('token');
     if (newPatient._id) {
-      Api.patch(`patients/${newPatient._id}`, newPatient)
+      Api.patch(`patients/${newPatient.SSN}`, newPatient, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -67,7 +85,11 @@ const PatientListPage: React.FC = () => {
         });
     } else {
       console.log(newPatient);
-      Api.post(`patients/${newPatient._id}`, newPatient)
+      Api.post(`patients`, newPatient, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
         .then(() => {
           setRefreshData(!refreshData);
           setIsModalOpen(false);
@@ -111,7 +133,7 @@ const PatientListPage: React.FC = () => {
               patient={selectedPatient}
               onSave={handleSaveChanges}
               onClose={() => setIsModalOpen(false)}
-              title={selectedPatient._id ? "Edit Patinet" : "Add Patient"}
+              title={selectedPatient.SSN ? "Edit Patinet" : "Add Patient"}
             />
           )}
         </>

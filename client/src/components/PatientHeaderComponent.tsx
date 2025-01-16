@@ -10,6 +10,16 @@ interface PatientHeaderProps {
     patient: Patient; // Patient object to be passed as a prop
 }
 
+interface DataRun {
+    samples: number[];
+    timestamps: number[];
+    num_samples: number;
+    duration: number;
+    sample_rate: number;
+    sample_interval: number;
+    start_time: number;
+}
+
 // The PatientHeader component
 const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     // Define state variables
@@ -17,69 +27,78 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const [data, setData] = useState<ChartData<'line'> | string | null>(null); // Store chart data or error message
     const [loading, setLoading] = useState(false); // Track loading state (true if data is loading)
     const [error, setError] = useState<string | null>(null); // Store any error message
-    const SSN = localStorage.getItem('SSN'); // Retrieve SSN from local storage
-    const [timePoint, setTimePoint] = useState(1); // State to store selected time point in minutes
+    const SSN = localStorage.getItem('patientSSN'); // Retrieve SSN from local storage
+    const [timePoint] = useState(1); // State to store selected time point in minutes
     const [selectedTimeInterval, setSelectedTimeInterval] = useState(60);
-    const [maxTimePoint, setMaxTimePoint] = useState(60);
 
     // Method to fetch and display data trend for the selected category at the selected time point
     const showDataTrend = async (category: string, timePoint: number) => {
+        const token = localStorage.getItem('token');
         setIsModalOpen(true); // Open the modal
         setLoading(true); // Set loading state to true
         setError(null); // Clear any existing errors
 
         try {
             // Fetch data from the API
-            const response = await api.get(`/patients/${SSN}/data/${category}`);
+            const response = await api.get(`/patients/${SSN}/data/${category}`, {
+                headers: {
+                  Authorization: `${token}`
+                }
+            })
             const fetchedData = response.data.data; // Get the data part of the response
             const dataArray = fetchedData?.data; // Extract the data array
-            const sampleFrequency = 500;
+            const sampleFrequency = 500; // Sampling frequency (500 Hz for 1-second intervals)
             
             if (dataArray && Array.isArray(dataArray) && dataArray.length > 0) {
-                const ecgSignal = dataArray[0]; // For now, use the first signal in the data array
-                let timestamps = ecgSignal.timestamps; // ECG timestamps
-                let samples = ecgSignal.samples; // ECG sample values
-                console.log('Timestamps length:', timestamps.length);
-                console.log('Samples length:', samples.length);
-                console.log('start_time:', ecgSignal.start_time);
-                
-                const startTime = new Date(ecgSignal.start_time / 1000); // Convert start_time to a millisecond timestamp
-                timestamps = timestamps.map((ts: number) => {
-                    const date = new Date(startTime.getTime() + ts * 1000); // Calculate the time according to start_time and ts
-                    return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
+                let allTimestamps: string[] = []; // Combined timestamps
+                let allSamples: number[] = []; // Combined signal samples
+
+                // Iterate through the array and combine the timestamps and samples from all signals
+                dataArray.forEach((ecgSignal: DataRun) => {
+                    
+                    const timestamps = ecgSignal.timestamps.map((ts: number) => {
+                        const date = new Date(ts); // Calculate the time according to start_time and ts
+                        return date.toLocaleTimeString("en-US", { hour12: false }); // Format timestamp to HH:MM:SS
+                    });
+
+                    allTimestamps.push(...timestamps); // Combine timestamps
+                    allSamples.push(...ecgSignal.samples)// Combine samples
                 });
 
                 // Divide data range
                 let dataRange = selectedTimeInterval * sampleFrequency; // Divide data range for one-minute data
-                if (timestamps.length < dataRange) {
-                    dataRange =  timestamps.length;
+                if (allTimestamps.length < dataRange) {
+                    dataRange =  allTimestamps.length; // Ensure data range does not exceed available data
                 }
-                const startIndex = Math.max(timestamps.length - timePoint * dataRange, 0);
-                const endIndex = timestamps.length - (timePoint - 1) * dataRange;
-                setMaxTimePoint(Math.ceil(timestamps.length / dataRange));
-                console.log("MaxTimePoint", Math.ceil(timestamps.length / dataRange));
-                timestamps = timestamps.slice(startIndex, endIndex);
-                samples = samples.slice(startIndex, endIndex); // Slice range for samples
+
+                // Slice timestamps and samples to display data for the selected range
+                const startIndex = Math.max(allTimestamps.length - timePoint * dataRange, 0);
+                const endIndex = allTimestamps.length - (timePoint - 1) * dataRange;
+                allTimestamps = allTimestamps.slice(startIndex, endIndex); // Slice range for samples
+                allSamples = allSamples.slice(startIndex, endIndex); // Slice range for samples
 
                 // Limit the range of the sample values for the Y-axis
-                const minValue = -1.5; 
-                const maxValue = 1.5;
-                samples = samples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
+                const minValue = -2.0; 
+                const maxValue = 3.0;
+                allSamples = allSamples.map((sample: number) => Math.min(Math.max(sample, minValue), maxValue)); // Clamp values
 
                 // Prepare the chart data object
                 const chartData = {
-                    labels: timestamps, // Timestamps for X-axis labels
+                    labels: allTimestamps, // Timestamps for X-axis labels
                     datasets: [
                         {
-                            label: "ECG Signal", // Label for the ECG dataset
-                            data: samples, // ECG signal values for the Y-axis
+                            label: `${category}  Signal`, // Label for the ECG dataset
+                            data: allSamples, // ECG signal values for the Y-axis
                             borderColor: "rgb(75, 192, 192)", // Color of the line
                             tension: 0.1, // Line smoothing
+                            borderWidth: 2, // Line width
+                            pointRadius: 0,
                         },
                     ],
                 };
 
                 setData(chartData); // Set the prepared chart data
+
             } else {
                 setData("No data available."); // No data case
             }
@@ -89,6 +108,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             } else {
                 console.error("Unexpected error:", error); // Log any other errors
             }
+            setData("No data available.");
         } finally {
             setLoading(false); // Set loading state to false once data is fetched
         }
@@ -101,29 +121,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
         setError(null); // Clear any existing errors
     };
 
-
-    // Method to handle Look Up (go forward 1 minute)
-    const lookUp = async () => {
-        setTimePoint((prevTimePoint) => {
-            let newTimePoint = prevTimePoint + 1; // Increment timePoint
-            if(newTimePoint > maxTimePoint){
-                newTimePoint = maxTimePoint;
-            }
-            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
-            return newTimePoint;
-        });
-    };
-
-    // Method to handle Look Down (go back 1 minute)
-    const lookDown = async () => {
-        setTimePoint((prevTimePoint) => {
-            const newTimePoint = Math.max(prevTimePoint - 1, 1); // Ensure the timePoint doesn't go below 1 minute
-            showDataTrend("ECG,II,Merged", newTimePoint); // Trigger data reload for new timePoint
-            return newTimePoint;
-        });
-    };
-
-
     return (
         <div className="text-lg p-4 pt-20 flex items-center space-x-2 text-white shadow-lg rounded-lg border-2 border-gray-900">
             <FaUser/> {/* Display user icon */}
@@ -134,49 +131,34 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             <h1 className="hidden lg:block px-20">|</h1>
             
             <div className="flex items-center space-x-2 w-full lg:w-auto">
-                <h1 className="font-bold pr-5">Previous Data View:</h1> {/* Label for Data Trend section */}
+                <h1 className="font-bold pr-5">Trend Data View:</h1> {/* Label for Data Trend section */}
                 
                 <div className="flex space-x-5 flex-wrap">
 
                     {/* Input field to enter the time point in minutes */}
                     <div className="flex items-center space-x-1 mr-10">
-                        <input
-                            type="number"
-                            className="bg-black text-white border border-lightgray rounded-md px-2 w-20 focus:outline-none focus:ring-2"
-                            aria-label="Enter time point in minutes"
-                            placeholder="Minutes"
-                            value={timePoint} // Display time point in minutes
-                            min="1" // Prevent values less than 1
-                            onChange={(e) => {
-                                const inputValue = Number(e.target.value);
-                                if (inputValue > 0) {
-                                    if(inputValue > maxTimePoint){
-                                        setTimePoint(maxTimePoint);
-                                    }else{
-                                        setTimePoint(inputValue); // Set the timePoint in minutes
-                                    }
-                                } else {
-                                    setTimePoint(1); // Default to 1 minute if invalid
-                                }
-                            }}
-                        />
+                    
                         <select
-                            className="bg-black text-white border border-lightgray rounded-md px-2 w-24 focus:outline-none focus:ring-2 ml-4"
+                            className="bg-black text-white border border-lightgray rounded-md px-2 focus:outline-none focus:ring-2 ml-4"
                             aria-label="Select time interval"
                             onChange={(e) => {
                                 const newInterval = Number(e.target.value);
                                 setSelectedTimeInterval(newInterval);
-                                setMaxTimePoint(60);
                             }}
                         >I
-                            <option value={60}>min</option>
-                            <option value={10}>10s</option>
+                            <option value={60}>1 min</option>
+                            <option value={600}>10 mins</option>
+                            <option value={1800}>30 mins</option>
+                            <option value={3600}>1 hour</option>
+                
                         </select>
                         <span className="text-white"> ago </span>
                     </div>
                     
                     {/* Buttons to trigger fetching different categories of data */}
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II,Merged", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ABP,na", timePoint)}>ABP</button>
+                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("RESP,na", timePoint)}>RESP</button>
                 </div>
             </div>
 
@@ -188,8 +170,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                 data={data} // Pass data (chart data or error message)
                 error={error} // Pass error message
                 timeRange={60} // Pass timePoint for chart configuration
-                lookUp={lookUp} // Pass LookUp function
-                lookDown={lookDown} // Pass LookDown function
             />
         </div>
     );
