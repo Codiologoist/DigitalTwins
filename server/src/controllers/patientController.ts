@@ -20,7 +20,7 @@ export const sendPatientData = async (req: Request, res: Response) => {
     }
 
     try {
-      //await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
     } catch (error: any) {
       console.error(`Error running python script: ${error.message || error}`);
       return res.status(500).json({
@@ -62,7 +62,7 @@ export const sendPatientCategoryData = async (req: Request, res: Response) => {
     }
 
     try {
-      //await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
+      await runPythonScript(parseInt(duration as string), test as string === "true", first as string === "true", path as string);
     } catch (error: any) {
       console.error(`Error running python script: ${error.message || error}`);
       return res.status(500).json({
