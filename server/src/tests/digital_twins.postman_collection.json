@@ -7,41 +7,457 @@
 	},
 	"item": [
 		{
-			"name": "Authentication",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"tomandjerry@gmail.com\",\r\n    \"password\": \"123456\"\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:5000/api/v1/login",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "5000",
-					"path": ["api", "v1", "login"]
-				}
-			},
-			"event": [
+			"name": "Doctors",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Login successful\", function() {",
-							"    const token = pm.response.json().token;",
-							"    pm.collectionVariables.set(\"authToken\", token);",
-							"});"
+					"name": "Log In As Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", res.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin123\",\n    \"password\": \"iamtheadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Doctor is successfully created\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Sophia\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Lee\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"580923456789\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"sophia.lee\");\r",
+									"});\r",
+									"let res = pm.response.json()\r",
+									"pm.collectionVariables.set(\"DOCID\", res.data._id)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript"
-					}
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Doctors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successfully retrieved all doctors\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if the doctor exists in the list with username and password\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    const doctor = jsonData.data.find(doc => doc.SSN === \"580923456789\");\r",
+									"    pm.expect(doctor).to.not.be.undefined;\r",
+									"    pm.expect(doctor).to.have.property(\"username\", \"sophia.lee\");\r",
+									"    pm.expect(doctor).to.have.property(\"password\"); // Ensure password is present, though unhashed\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Doctor is successfully updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Emma\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Muller\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"emma.muller\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"firstName\": \"Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors",
+								"{{DOCID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Doctor is successfully deleted\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.message).to.eql(\"Doctor deleted successfully\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors",
+								"{{DOCID}}"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"response": []
+			]
 		},
 		{
 			"name": "Patients",
 			"item": [
+				{
+					"name": "Log In As Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", res.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin123\",\n    \"password\": \"iamtheadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Doctor is successfully created\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Sophia\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Lee\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"580923456789\");\r",
+									"    pm.expect(jsonData.data).to.have.property(\"username\", \"sophia.lee\");\r",
+									"});\r",
+									"let res = pm.response.json()\r",
+									"pm.collectionVariables.set(\"DOCID\", res.data._id)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/admin/doctors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log In As Doctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", res.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"sophia.lee\",\n    \"password\": \"sophiaPassword654\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Create Patient",
 					"event": [
@@ -65,13 +481,14 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Bearer {{authToken}}"
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : {\n        \"firstName\" : \"Mr\",\n        \"lastName\" : \"Something\"\n    },\n    \"SSN\" : \"200203046643\",\n    \"path\" : \"CNS\"\n}",
+							"raw": "{\n    \"firstName\" : \"Mr\",\n    \"lastName\" : \"Something\",\n    \"SSN\" : \"200203046643\",\n    \"path\" : \"CNS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -114,8 +531,9 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Bearer {{authToken}}"
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -147,7 +565,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -162,8 +580,9 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Bearer {{authToken}}"
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -219,7 +638,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -232,7 +651,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -287,7 +712,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -300,7 +725,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -355,7 +786,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -368,7 +799,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -423,7 +860,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -436,7 +873,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -491,7 +934,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -504,7 +947,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -559,7 +1008,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -572,7 +1021,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -627,7 +1082,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -640,7 +1095,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -695,7 +1156,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -708,7 +1169,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -763,7 +1230,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -776,7 +1243,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -831,7 +1304,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -844,7 +1317,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -899,7 +1378,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -912,7 +1391,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -967,7 +1452,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -980,7 +1465,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1035,7 +1526,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1048,7 +1539,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1103,7 +1600,7 @@
 							"script": {
 								"exec": [
 									"pm.test(`Status code: ${pm.response.code}`, function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1116,7 +1613,13 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1158,262 +1661,6 @@
 									"key": "path",
 									"value": "CNS"
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Doctors",
-			"item": [
-				{
-					"name": "Post Doctor",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Doctor is successfully created\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Sophia\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Lee\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"SSN\", \"580923456789\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"sophia.lee\");\r",
-									"});\r",
-									"let res = pm.response.json()\r",
-									"pm.collectionVariables.set(\"DOCID\", res.data._id)\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Sophia\",\r\n  \"lastName\": \"Lee\",\r\n  \"SSN\": \"580923456789\",\r\n  \"username\": \"sophia.lee\",\r\n  \"password\": \"sophiaPassword654\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Doctors",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Successfully retrieved all doctors\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.be.an(\"array\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Check if the doctor exists in the list with username and password\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    const doctor = jsonData.data.find(doc => doc.SSN === \"580923456789\");\r",
-									"    pm.expect(doctor).to.not.be.undefined;\r",
-									"    pm.expect(doctor).to.have.property(\"username\", \"sophia.lee\");\r",
-									"    pm.expect(doctor).to.have.property(\"password\"); // Ensure password is present, though unhashed\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Doctor",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Doctor is successfully updated\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.data).to.have.property(\"firstName\", \"Emma\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"lastName\", \"Muller\");\r",
-									"    pm.expect(jsonData.data).to.have.property(\"username\", \"emma.muller\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n \"firstName\": \"Emma\",\r\n \"lastName\": \"Muller\",\r\n \"SSN\": \"460712345678\",\r\n \"username\": \"emma.muller\",\r\n \"password\": \"haha\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors",
-								"{{DOCID}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Doctor",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Doctor is successfully deleted\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(true);\r",
-									"    pm.expect(jsonData.message).to.eql(\"Doctor deleted successfully\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin/doctors/{{DOCID}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"doctors",
-								"{{DOCID}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Admins",
-			"item": [
-				{
-					"name": "Post Admin",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Nikita\",\r\n  \"lastName\": \"Verma\",\r\n  \"SSN\": \"200107208970\",\r\n  \"username\": \"nikita.verma\",\r\n  \"password\": \"nikitaPassword1901\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:5000/api/v1/admin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"v1",
-								"admin"
 							]
 						}
 					},
@@ -1474,6 +1721,10 @@
 			"key": "DOCID",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
 		}
 	]
 }
