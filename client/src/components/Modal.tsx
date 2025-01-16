@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Doctor } from '../components/DoctorTable';
 import { Patient } from '../components/PatientTable';
 
+//Modal is the form which needs to be filled to add a doctor or patient to the system
 interface DoctorModalProps {
   doctor: Doctor;
   onSave: (updatedDoctor: Doctor) => void;
   onClose: () => void;
-  title: string;  // Add title prop to accept dynamic title
+  title: string;  // Add title prop to accept dynamic title for reusability
 }
 
 interface PatientModalProps {
@@ -22,8 +23,10 @@ export const DoctorModal: React.FC<DoctorModalProps> = ({ doctor, onSave, onClos
   const handleChange = (field: keyof Doctor, value: string) => {
     setLocalPatient({ ...localPatient, [field]: value });
   };
-
+  
+  //function to handle saving new data
   const handleSave = () => {
+    //error handling-prompts the user if they haven't entered the correct information
     if (!localPatient.firstName) {
       alert('First Name is required.');
       return;
@@ -51,11 +54,12 @@ export const DoctorModal: React.FC<DoctorModalProps> = ({ doctor, onSave, onClos
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <button className="close-button" onClick={onClose}>
+        <button className="close-button" onClick={onClose}>  {/* To close the form */}
           &times;
         </button>
         <h2 className="modal-heading">{title}</h2> {/* Use title prop here */}
         <form>
+          {/* Required Labels (fields) to fill the form */}
           <label>
             First Name:
             <input
@@ -113,10 +117,13 @@ export const DoctorModal: React.FC<DoctorModalProps> = ({ doctor, onSave, onClos
 export const PatientModal: React.FC<PatientModalProps> = ({ patient, onSave, onClose, title }) => {
   const [localPatient, setLocalPatient] = useState<Patient>(patient);
 
+  //function to handle any changes to the user's data
   const handleChange = (field: keyof Patient, value: string) => {
     setLocalPatient({ ...localPatient, [field]: value });
   };
 
+  //function to handle saving data fields which have been changed
+  //error handling
   const handleSave = () => {
     if (!localPatient.firstName) {
       alert('First Name is required.');
@@ -183,6 +190,7 @@ export const PatientModal: React.FC<PatientModalProps> = ({ patient, onSave, onC
             />
           </label>
         </form>
+        {/* Button for saving the updated data */}
         <div className="modal-buttons">
           <button className="save-button" onClick={handleSave}>Save</button>
         </div>
