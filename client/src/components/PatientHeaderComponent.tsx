@@ -27,7 +27,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
     const [data, setData] = useState<ChartData<'line'> | string | null>(null); // Store chart data or error message
     const [loading, setLoading] = useState(false); // Track loading state (true if data is loading)
     const [error, setError] = useState<string | null>(null); // Store any error message
-    const SSN = localStorage.getItem('SSN'); // Retrieve SSN from local storage
+    const SSN = localStorage.getItem('patientSSN'); // Retrieve SSN from local storage
     const [timePoint] = useState(1); // State to store selected time point in minutes
     const [selectedTimeInterval, setSelectedTimeInterval] = useState(60);
 

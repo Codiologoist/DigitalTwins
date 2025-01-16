@@ -70,9 +70,6 @@ def save_json_to_database():
                 "file_hash": file_hash
             }
             
-            # # Print the patient_data_document
-            # print(json.dumps(patient_data_document, indent=4, ensure_ascii=False))
-
             # Insert the data into the MongoDB Data collection
             inserted_data = data_collection.insert_one(patient_data_document)
 
