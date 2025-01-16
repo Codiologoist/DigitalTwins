@@ -4,6 +4,8 @@ import { DoctorModal} from '../components/Modal';
 import Api from '../api';
 import { useNavigate } from 'react-router-dom';
 
+//Admin page where the admin can view all the doctors and handle their data
+
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
   const [doctorData, setDoctorData] = useState<Doctor[]>([]);
@@ -15,7 +17,7 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const userRole = localStorage.getItem('userRole');
     const token = localStorage.getItem('token');
-
+    //checks if it's admin or not-checking for authorisation
     if (!token || userRole !== 'admin') {
       navigate('/login');
       return;
@@ -38,11 +40,13 @@ const AdminPage: React.FC = () => {
       });
   }, [refreshData]);
 
+  //Edit function opens up the modal when user asks to edit data
   const handleEdit = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setIsModalOpen(true);
   };
-
+  //handleDelete function handles deletion of doctors after admin confirms deletion
+  //delete function uses doctor id
   const handleDelete = (doctor: Doctor) => {
     const token = localStorage.getItem('token');
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
@@ -62,7 +66,7 @@ const AdminPage: React.FC = () => {
         });
     }
   };
-
+  //this function saves the changes made to doctor's data, refreshes the page and closes the modal(form) for both editing and addition of doctor
   const handleSaveChanges = (newDoctor: Doctor) => {
     const token = localStorage.getItem('token');
     if (newDoctor._id) {
@@ -97,6 +101,7 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  //function to add a new doctor and opening the form to fill in the information
   const handleAddDoctor = () => {
     setSelectedDoctor({
       _id: '',
@@ -118,12 +123,13 @@ const AdminPage: React.FC = () => {
           <DoctorTable data={doctorData} onEdit={handleEdit} onDelete={handleDelete} />
           <div className="add-doctor-button-container">
             <div className="add-doctor-button">
+              {/*Interactive button to add doctors */}
               <button onClick={handleAddDoctor}>
                 <span className="plus-sign">➕</span> Add Doctor
               </button>
             </div>
           </div>
-
+          {/*calls necessary functions and shows the title of the form as per the function called (e.g. edit or add)*/}
           {isModalOpen && selectedDoctor && (
             <DoctorModal
               doctor={selectedDoctor}

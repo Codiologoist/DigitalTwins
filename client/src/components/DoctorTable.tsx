@@ -10,13 +10,15 @@ export interface Doctor {
   'password': string;
 }
 
-// Define props for DoctorTable, including onEdit and onDelete
+// Define props for DoctorTable, including onEdit and onDelete Functions
 interface DoctorTableProps {
   data: Doctor[];
   onEdit: (doctor: Doctor) => void; // Function to handle editing
   onDelete: (doctor: Doctor) => void; // Function to handle deleting
 }
 
+//Structuring the doctor table with Fname, Lname, SSN, username and actions
+//Passwords are not displayed to ensure privacy
 const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => {
   return (
     <div className="table-wrapper">
@@ -31,6 +33,7 @@ const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => 
           </tr>
         </thead>
         <tbody>
+          {/* Mapping ensures that column headings are more readable but camel cases can be used for referencing */}
           {data.map((doctor, rowIndex) => (
             <tr key={rowIndex}>
               <td>{doctor.firstName}</td>
@@ -38,6 +41,7 @@ const DoctorTable: React.FC<DoctorTableProps> = ({ data, onEdit, onDelete }) => 
               <td>{doctor.SSN}</td>
               <td>{doctor.username}</td>
               <td>
+                {/*Buttons to edit and delete doctors*/}
                 <div className="actions">
                   <button onClick={() => onEdit(doctor)}>Edit</button>
                   <button onClick={() => onDelete(doctor)}>Delete</button>

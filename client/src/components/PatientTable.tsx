@@ -26,6 +26,7 @@ const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) =
     navigate(`/${patientId}/monitor`);
   };
 
+  //Patient table includes the columns Fname, Lname, SSN, File path and actions
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -34,11 +35,12 @@ const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) =
             <th>First Name</th>
             <th>Last Name</th>
             <th>SSN</th>
-            <th>File Path</th>
-            <th>Actions</th>
+            <th>File Path</th> {/*This is where patient's data is stored e.g. D */}
+            <th>Actions</th>   {/* Includes the buttons for deleting and editing data */}
           </tr>
         </thead>
         <tbody>
+          {/* Mapping allows for good readability on the page (First Name) and accurate camelCase referencing in the backend (patient.firstName)*/}
           {data.map((patient, rowIndex) => (
             <tr key={rowIndex}>
               <td>{patient.firstName}</td>

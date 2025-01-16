@@ -1,4 +1,5 @@
 import React from 'react';
+//simple not found page with text
 
 const NotFound: React.FC = () => {
   return (
