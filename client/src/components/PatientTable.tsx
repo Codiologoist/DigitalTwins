@@ -1,13 +1,15 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+/* This component is responsible for displaying a table of patients. */
 
 // Define types for patient data
 export interface Patient {
-  '_id': string;
-  'firstName': string;
-  'lastName': string;
-  'SSN': string;
-  'path': string;
+  _id: string;
+  firstName: string;
+  lastName: string;
+  SSN: string;
+  path: string;
 }
 
 // Define props for PatientTable, including onEdit and onDelete
@@ -17,7 +19,11 @@ interface PatinetTableProps {
   onDelete: (patient: Patient) => void; // Function to handle deleting
 }
 
-const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) => {
+const PatientTable: React.FC<PatinetTableProps> = ({
+  data,
+  onEdit,
+  onDelete,
+}) => {
   const navigate = useNavigate();
 
   // Function to handle navigation
@@ -46,7 +52,9 @@ const PatientTable: React.FC<PatinetTableProps> = ({ data, onEdit, onDelete }) =
               <td>{patient.path}</td>
               <td>
                 <div className="actions">
-                  <button onClick={() => handleNavigation(patient.SSN)}>Monitor</button>
+                  <button onClick={() => handleNavigation(patient.SSN)}>
+                    Monitor
+                  </button>
                   <button onClick={() => onEdit(patient)}>Edit</button>
                   <button onClick={() => onDelete(patient)}>Delete</button>
                 </div>
