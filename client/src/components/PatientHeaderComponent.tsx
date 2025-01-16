@@ -131,7 +131,7 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
             <h1 className="hidden lg:block px-20">|</h1>
             
             <div className="flex items-center space-x-2 w-full lg:w-auto">
-                <h1 className="font-bold pr-5">Trend Data View:</h1> {/* Label for Data Trend section */}
+                <h1 className="font-bold pr-5">Data Trend View:</h1> {/* Label for Data Trend section */}
                 
                 <div className="flex space-x-5 flex-wrap">
 
@@ -157,7 +157,6 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ patient }) => {
                     
                     {/* Buttons to trigger fetching different categories of data */}
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("ECG,II", timePoint)}>ECG</button>
-                    <button type="button" className="data_trend-button" onClick={() => showDataTrend("ABP,na", timePoint)}>ABP</button>
                     <button type="button" className="data_trend-button" onClick={() => showDataTrend("RESP,na", timePoint)}>RESP</button>
                 </div>
             </div>

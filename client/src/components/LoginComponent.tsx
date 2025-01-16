@@ -10,19 +10,19 @@ interface LoginComponentProps {
 
 export default function LoginComponent({ onLogin }: LoginComponentProps) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [, setIsLoggedIn] = useState(false);
-  // const [userRole, setUserRole] = useState<'doctor' | 'admin' | null>(null);
+  const [username, setUsername] = useState(""); // State to hold the username input
+  const [password, setPassword] = useState(""); // State to hold the password input
+  const [usernameError, setUsernameError] = useState<string | null>(null); // State to handle username validation errors
+  const [passwordError, setPasswordError] = useState<string | null>(null); // State to handle password validation errors
+  const [error, setError] = useState<string | null>(null); // State to handle server-side errors
+  const [, setIsLoggedIn] = useState(false); // State to track if the user is logged in
 
+  // Function to handle the form submission for login
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission
 
-    let hasError = false;
-    setError(null);
+    let hasError = false; // Flag to track if there are any validation errors
+    setError(null); // Reset the general error message
 
     // Check if username is empty
     if (!username.trim()) {
@@ -43,35 +43,34 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
     if (hasError) return; // Stop submission if validation fails
 
     try {
+      // Make an API request to authenticate the user
       const response = await Api.post("/login", {
         username,
         password,
       });
       
-      const data = response.data;
+      const data = response.data; // Get the data from the API response
 
+      // If login is successful, proceed with storing the token and user data
       if (data.success) {
-        // Store Token and navigate
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userRole", data.role);
-        // Update the App state with onLogin
-        // Call onLogin function passed from App component
-        onLogin(data.role);
-        //setUserRole(data.role);
-        setIsLoggedIn(true);
+        localStorage.setItem("token", data.token); // Store the authentication token in localStorage
+        localStorage.setItem("userRole", data.role); // Store the user role in localStorage
+        onLogin(data.role); // Call the onLogin function to update the role in the parent component
+        setIsLoggedIn(true); // Update the login state
         // Navigate based on user role
         if (data.role === 'admin') {
           navigate('/doctors'); // Redirect admin to /doctors page
         } else if (data.role === 'doctor') {
-          navigate(`/doctors/${data.user.id}`); // Redirect doctor to their page (use dynamic ID later)
+          navigate(`/doctors/${data.user.id}`); // Redirect doctor to their page
         }
       } 
     } catch (error) {
+      // Handle errors from the API request
       if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message;
-          setError(errorMessage);
+          const errorMessage = error.response?.data?.message; // Get the error message from the response
+          setError(errorMessage); // Set the error message to display it in the UI
       } else {
-          console.error("Login request failed:", error);
+          console.error("Login request failed:", error); // Log any unexpected errors on console
       }
     }
     
@@ -79,12 +78,8 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
 
   return (
     <>
-      {/* <Navbar userRole={userRole} isLoggedIn={isLoggedIn} onLogout={() => {
-        setIsLoggedIn(false);
-        setUserRole(null);
-        localStorage.removeItem('token');
-      }} /> */}
       
+      {/* Login form */}
       <div className="relative isolate min-h-screen">
         {/* Content container */}
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-40 lg:px-8">

@@ -5,17 +5,19 @@ import dotenv from 'dotenv';
 import Admin from "../models/Admin";
 import Doctor from "../models/Doctor";
 
-dotenv.config();
+dotenv.config(); // Load environment variables from the .env file
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET; // Retrieve the JWT secret key from environment variables
 
+// Check if the JWT_SECRET is defined; if not, log an error and exit the process
 if (!JWT_SECRET) {
   console.error("JWT_SECRET is not defined. Please set it in your environment variables in .env file.");
   process.exit(1);
 }
 
+// login handler function
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body; // Extract username and password from the request body
 
   try {
     let user = null;
@@ -40,26 +42,28 @@ export const login = async (req: Request, res: Response) => {
 
     // Check if the password matches
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!isMatch) { // If the password does not match, return a 401 Unauthorized error
       return res.status(401).json({ success: false, message: "Incorrect password" });
     }
 
     // Generate JWT with user ID and role
     const token = jwt.sign({ id: user._id, username: user.username, role: userType }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1h", // Token expiration time (1 hour)
     });
 
+    // Send a success response with the token, user role, and user details
     return res.status(200).json({
-      success: true,
-      token,
-      role: userType,
-      user: {
+      success: true, // Include the generated JWT token
+      token, // Include the generated JWT token
+      role: userType, // Include the userType
+      user: {  // Include the user information
         id: user._id,
         username: user.username,
       },
       message: `Login successful for ${userType}`,
     });
   } catch (error: any) {
+    // Handle any unexpected errors during login
     console.error(`Error during login: ${error.message}`);
     return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
