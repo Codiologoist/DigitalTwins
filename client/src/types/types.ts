@@ -15,7 +15,6 @@ export interface ProcessedDataType {
   time_vector: number[]; // Flattened timestamps (processed)
   measurement_data: number[]; // Flattened samples (processed)
   sample_rates: number[];
-  sample_interval: number;
   start_time?: number;
   data?: DataType[];
 }
