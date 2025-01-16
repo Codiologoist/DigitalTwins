@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
-// import {FaHeart} from 'react-icons/fa' // Import a heart icon from react-icons
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "./PatientHeaderComponent.tsx";
 import PatientSignals from "./PatientSignalsComponent.tsx";
 import { AllDataType, Patient, RowData } from "../types/types.ts";
 import { useParams } from "react-router-dom";
 import Api from "../api.ts";
+
+/* 
+This compont represents the patient monitoring "page".
+It fetches the patient data and displays it in a grid layout.
+*/
 
 interface response {
   data: Patient;
@@ -230,16 +234,6 @@ const Monitor: React.FC = () => {
       },
       numberColor: "lightgreen",
     },
-
-    // {title: "HR", unit: "bpm", color: "lightgreen", data: visibleData["HR,na"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},
-    // { title: "RR", unit: "%", color: "green", data: visibleData["RR,na"], numberColor: "green" },
-    // { title: "ABP", unit: "mmHg", color: "red", data: visibleData["ABP,Dias"], optionPart: "120/80", numberColor: "red" },
-    // { title: "ABP Mean", unit: "BPM", color: "darkyellow", data: visibleData["ABP,Mean"], numberColor: "darkyellow" },
-    // { title: "ABP Syst", unit: "Celsius", color: "green", data: visibleData["ABP,Syst"], numberColor: "green" },
-    // { title: "Tvesic", unit: "bpm", color: "purple", data: visibleData["Tvesic,na"], numberColor: "green" },
-    // { title: "rSO2 Left", unit: "", color: "yellow", data: visibleData["rSO2,Left"], numberColor: "yellow" },
-    // { title: "rSO2 Right", unit: "", color: "yellow", data: visibleData["rSO2,Right"], numberColor: "yellow" },
-    // Add more rows if needed
   ];
 
   return (
