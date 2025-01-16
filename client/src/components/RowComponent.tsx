@@ -50,7 +50,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const [currentValue, setCurrentValue] = useState<number>(0);
-  const [currentHR, setCurrentHR] = useState<number>(0);
+  const [alternateValue, setAlternateValue] = useState<number>(0);
   const animationFrameIdRef = useRef<number | null>(null); // Store requestAnimationFrame ID
   const startTimeRef = useRef<number | null>(null); // Track the time when HR updates start
   const lastBatchEndTimeRef = useRef<number | null>(null); // Track the end time of the previous HR batch
@@ -204,35 +204,35 @@ const RowComponent: React.FC<RowComponentProps> = ({
       (t) => valueDisplayData.start_time + t
     );
 
-    console.log("🐸 New HR data batch detected. Starting from index 0.");
+    console.log("New data batch detected. Starting from index 0.");
 
-    // Store the timestamp of the last HR value in the batch for reference
+    // Store the timestamp of the last value in the batch for reference
     lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
     // Calculate the average sample rate from the sample_rates array
-    const hrAvgSampleRate =
+    const valueAvgSampleRate =
       valueDisplayData.sample_rates.reduce((a, b) => a + b, 0) /
       valueDisplayData.sample_rates.length;
-    const hrIntervalTime = 1000 / hrAvgSampleRate; // Time each HR should be displayed in milliseconds
-    console.log("🐸 hrIntervalTime:", hrIntervalTime);
+    const valueIntervalTime = 1000 / valueAvgSampleRate; // Time each HR should be displayed in milliseconds
+    console.log("valueIntervalTime:", valueIntervalTime);
 
-    startTimeRef.current = performance.now(); // Track when the HR updates started
+    startTimeRef.current = performance.now(); // Track when the value updates started
 
-    // Function to update the heart rate display at each animation frame
-    const updateHR = () => {
+    // Function to update the value display at each animation frame
+    const updateValue = () => {
       const elapsedTime = performance.now() - startTimeRef.current!; // Calculate how much time has passed
-      const currentHRIndex = Math.floor(elapsedTime / hrIntervalTime); // Calculate which HR should be displayed
+      const currentValueIndex = Math.floor(elapsedTime / valueIntervalTime); // Calculate which value should be displayed
 
-      // If the current HR index is valid, update the displayed HR value
-      if (currentHRIndex < valueDisplayData.measurement_data.length) {
-        const newHRValue = valueDisplayData.measurement_data[currentHRIndex];
-        setCurrentHR(newHRValue); // Update the HR state variable to trigger a re-render
+      // If the current value index is valid, update the displayed value
+      if (currentValueIndex < valueDisplayData.measurement_data.length) {
+        const newValue = valueDisplayData.measurement_data[currentValueIndex];
+        setAlternateValue(newValue); // Update the alternate value state variable to trigger a re-render
         console.log(
           "🐸 Updating HR to:",
-          newHRValue,
+          newValue,
           "at index:",
-          currentHRIndex
+          currentValueIndex
         );
-        animationFrameIdRef.current = requestAnimationFrame(updateHR); // Continue the animation loop by requesting the next frame
+        animationFrameIdRef.current = requestAnimationFrame(updateValue); // Continue the animation loop by requesting the next frame
       } else {
         // Stop once the last HR value is displayed
         console.log("🐸 HR Update Complete. Displayed all HR values.");
@@ -241,7 +241,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
 
     // Start animation frame loop
-    animationFrameIdRef.current = requestAnimationFrame(updateHR);
+    animationFrameIdRef.current = requestAnimationFrame(updateValue);
 
     // Cleanup to stop animation when component unmounts
     return () => {
@@ -251,11 +251,11 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
   }, [valueDisplayData]); // Re-run this effect whenever valueDisplayData changes
 
-  // Logic to display HR only for ECG, RESP or PLETH , otherwise show measurement value**
-  // const displayValue = title === "ECG" ? currentHR : currentValue;
+  // Logic to display the custom (alternate value) only for ECG, RESP or PLETH,
+  // otherwise show default measurement value**
   let displayValue = 0;
   if (title === "ECG" || title === "RESP,na" || title === "PLETH,na") {
-    displayValue = currentHR;
+    displayValue = alternateValue;
   } else {
     displayValue = currentValue;
   }
