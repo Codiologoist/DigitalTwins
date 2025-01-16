@@ -48,7 +48,7 @@ const AdminPage: React.FC = () => {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}?`);
 
     if (confirmDelete) {
-      Api.delete(`admin/doctors/${doctor.SSN}`, {
+      Api.delete(`admin/doctors/${doctor._id}`, {
         headers: {
           Authorization: `${token}`
         }
@@ -66,7 +66,8 @@ const AdminPage: React.FC = () => {
   const handleSaveChanges = (newDoctor: Doctor) => {
     const token = localStorage.getItem('token');
     if (newDoctor._id) {
-      Api.patch(`admin/doctors/${newDoctor.SSN}`, newDoctor, {
+      console.log(newDoctor);
+      Api.patch(`admin/doctors/${newDoctor._id}`, newDoctor, {
         headers: {
           Authorization: `${token}`
         }

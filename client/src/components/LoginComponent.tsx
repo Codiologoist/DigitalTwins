@@ -63,7 +63,7 @@ export default function LoginComponent({ onLogin }: LoginComponentProps) {
         if (data.role === 'admin') {
           navigate('/doctors'); // Redirect admin to /doctors page
         } else if (data.role === 'doctor') {
-          navigate('/doctors/12'); // Redirect doctor to their page (use dynamic ID later)
+          navigate(`/doctors/${data.user.id}`); // Redirect doctor to their page (use dynamic ID later)
         }
       } 
     } catch (error) {
