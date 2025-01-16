@@ -251,8 +251,14 @@ const RowComponent: React.FC<RowComponentProps> = ({
     };
   }, [valueDisplayData]); // Re-run this effect whenever valueDisplayData changes
 
-  // Logic to display HR only for ECG, otherwise show measurement value**
-  const displayValue = title === "ECG" ? currentHR : currentValue;
+  // Logic to display HR only for ECG, RESP or PLETH , otherwise show measurement value**
+  // const displayValue = title === "ECG" ? currentHR : currentValue;
+  let displayValue = 0;
+  if (title === "ECG" || title === "RESP,na" || title === "PLETH,na") {
+    displayValue = currentHR;
+  } else {
+    displayValue = currentValue;
+  }
 
   return (
     <div className="grid grid-cols-3 items-start bg-black">

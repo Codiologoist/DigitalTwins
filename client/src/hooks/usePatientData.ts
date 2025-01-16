@@ -77,6 +77,20 @@ const usePatientData = (
       sample_interval: 0,
       start_time: 0,
     },
+    "RR,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+    "PLETH,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
   });
 
   const fetchIntervalTime = 5000; // Fetch data every 5 seconds
@@ -101,21 +115,14 @@ const usePatientData = (
             isForTesting,
             path
           );
-          console.log("from backend fetched everything", fetchedDataSet);
-          console.log(
-            "from backend fetched RESK.na",
-            fetchedDataSet["RESP,na"]?.data
-          );
-          console.log(
-            "from backend fetched ECG",
-            fetchedDataSet["ECG,II"]?.data
-          );
           const processedData: AllDataType = {
             "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
             "ABP,na": processData(fetchedDataSet["ABP,na"]?.data ?? []),
             "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
             "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
             "SpO2,na": processData(fetchedDataSet["SpO2,na"]?.data ?? []),
+            "RR,na": processData(fetchedDataSet["RR,na"]?.data ?? []),
+            "PLETH,na": processData(fetchedDataSet["PLETH,na"]?.data ?? []),
           };
           setIsFisrtTime(false);
           // Update the state with processed data
@@ -148,6 +155,8 @@ const usePatientData = (
             "RESP,na": processData(fetchedDataSet["RESP,na"]?.data ?? []),
             "HR,na": processData(fetchedDataSet["HR,na"]?.data ?? []),
             "SpO2,na": processData(fetchedDataSet["SpO2,na"]?.data ?? []),
+            "RR,na": processData(fetchedDataSet["RR,na"]?.data ?? []),
+            "PLETH,na": processData(fetchedDataSet["PLETH,na"]?.data ?? []),
           };
           setIsFisrtTime(false);
           // Update the state with processed data

@@ -73,6 +73,20 @@ const Monitor: React.FC = () => {
       sample_interval: 0,
       start_time: 0,
     },
+    "RR,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
+    "PLETH,na": {
+      time_vector: [],
+      measurement_data: [],
+      sample_rates: [],
+      sample_interval: 0,
+      start_time: 0,
+    },
   };
   const { patientId } = useParams();
 
@@ -175,6 +189,38 @@ const Monitor: React.FC = () => {
       valueDisplayUnit: "bpm",
     },
     {
+      title: "PLETH,na",
+      unit: "",
+      color: "yellow",
+      data: {
+        ...visibleData["PLETH,na"],
+        start_time: visibleData["PLETH,na"]?.start_time ?? 0,
+      },
+      numberColor: "yellow",
+      valueDisplayData: {
+        ...visibleData["SpO2,na"],
+        start_time: visibleData["SpO2,na"]?.start_time ?? 0, // Default to 0 if undefined
+      },
+      valueDisplayTitle: "SpO2",
+      valueDisplayUnit: "%",
+    },
+    {
+      title: "RESP,na",
+      unit: "Ohms",
+      color: "orange",
+      data: {
+        ...visibleData["RESP,na"],
+        start_time: visibleData["RESP,na"]?.start_time ?? 0, // Default to 0 if undefined
+      },
+      numberColor: "orange",
+      valueDisplayData: {
+        ...visibleData["RR,na"],
+        start_time: visibleData["RR,na"]?.start_time ?? 0, // Default to 0 if undefined
+      },
+      valueDisplayTitle: "RR",
+      valueDisplayUnit: "",
+    },
+    {
       title: "ABP,na",
       unit: "mmHg",
       color: "lightgreen",
@@ -183,26 +229,6 @@ const Monitor: React.FC = () => {
         start_time: visibleData["ABP,na"]?.start_time ?? 0, // Default to 0 if undefined
       },
       numberColor: "lightgreen",
-    },
-    {
-      title: "RESP,na",
-      unit: "Ohms",
-      color: "lightgreen",
-      data: {
-        ...visibleData["RESP,na"],
-        start_time: visibleData["RESP,na"]?.start_time ?? 0, // Default to 0 if undefined
-      },
-      numberColor: "lightgreen",
-    },
-    {
-      title: "SpO2",
-      unit: "mmHg",
-      color: "lightblue",
-      data: {
-        ...visibleData["SpO2,na"],
-        start_time: visibleData["SpO2,na"]?.start_time ?? 0,
-      },
-      numberColor: "lightblue",
     },
 
     // {title: "HR", unit: "bpm", color: "lightgreen", data: visibleData["HR,na"], optionPart: <FaHeart color="red" />, numberColor: "lightgreen"},

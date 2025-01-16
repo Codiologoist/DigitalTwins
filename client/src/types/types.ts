@@ -29,8 +29,9 @@ export interface AllDataType {
   // ["ABP,Mean"]: ProcessedDataType,
   // ["ABP,Syst"]: ProcessedDataType,
   ["HR,na"]: ProcessedDataType;
-  // ["RR,na"]: ProcessedDataType,
+  ["RR,na"]: ProcessedDataType;
   ["SpO2,na"]: ProcessedDataType;
+  ["PLETH,na"]: ProcessedDataType;
   // ["Tvesic,na"]: ProcessedDataType,
   // ["rSO2,Left"]: ProcessedDataType,
   // ["rSO2,Right"]: ProcessedDataType,
