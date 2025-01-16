@@ -6,6 +6,7 @@ import folder_extraction
 import json_creation
 import copy_latest
 import merge_latest
+import save_to_database
 
 if __name__ == "__main__":
     # Create an argument parser
@@ -56,5 +57,6 @@ if __name__ == "__main__":
     
     # Save the decrypted data to json files (which get sent to frontend)
     json_creation.save_to_json(decrypted_data_files, "../../decrypted_data")
-
-    # merge_latest.merge_json_data("../../decrypted_data/ECG,II.json", "../../decrypted_data/ECG,II,Merged.json")
+    
+    # Save descrypted json data into database
+    save_to_database.save_json_to_database()
