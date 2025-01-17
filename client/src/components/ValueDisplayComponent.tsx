@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-//** 
-// This component responsible for displaying the measurement value on the right side of the graph. 
-// It dynamically updates the displayed value (e.g., heart rate, ECG, or other measurement) 
+//**
+// This component responsible for displaying the measurement value on the right side of the graph.
+// It dynamically updates the displayed value (e.g., heart rate, ECG, or other measurement)
 // with appropriate formatting, color, and units.
-//*/ 
+//*/
 
 interface ValueDisplayProps {
   optionPart?: React.ReactNode;
@@ -14,12 +14,12 @@ interface ValueDisplayProps {
   numberColor?: string;
 }
 
-const ValueDisplay: React.FC<ValueDisplayProps> = ({ 
-  optionPart, 
-  currentValue, 
-  title, 
-  unit, 
-  numberColor 
+const ValueDisplay: React.FC<ValueDisplayProps> = ({
+  optionPart,
+  currentValue,
+  title,
+  unit,
+  numberColor,
 }) => {
   return (
     <div className="col-span-1 flex flex-col justify-center items-center bg-black p-8 h-full">
