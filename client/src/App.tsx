@@ -30,18 +30,6 @@ const App = () => {
       setUserRole(storedUserRole as "doctor" | "admin"); // Set the role from localStorage
     }
 
-    // Add onbeforeunload event to clear token when the browser/tab is closed
-    window.onbeforeunload = () => {
-      setIsLoggedIn(false);
-      setUserRole(null);
-      localStorage.removeItem('token');
-    };
-
-    // Cleanup function to remove event listener when the component unmounts
-    return () => {
-      window.onbeforeunload = null;
-    };
-
   }, []); // Empty dependency array to run once on mount
 
   const handleLogin = (role: "doctor" | "admin") => {

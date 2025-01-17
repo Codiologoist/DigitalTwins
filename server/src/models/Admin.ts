@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Define the Admin interface. Each admin document has a username, password and type
 interface AdminDocument extends Document {
   username: string;
   password: string;
@@ -9,6 +10,7 @@ interface AdminDocument extends Document {
 
 }
 
+// Define Mongoose Schema for Admin
 const AdminSchema: Schema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -34,5 +36,6 @@ AdminSchema.methods.comparePassword = function (candidatePassword: string): Prom
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+// Create the Admin model and export it for use
 const Admin = mongoose.model<AdminDocument>("Admin", AdminSchema);
 export default Admin;

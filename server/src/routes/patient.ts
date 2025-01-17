@@ -21,6 +21,7 @@ router.get('/', getAllPatients);
 // Define a route for deleting a patient
 router.delete('/:SSN', deletePatient);
 
+// Define a route for updating a patient
 router.patch('/:SSN', updatePatient);
 
 export default router;

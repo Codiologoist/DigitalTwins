@@ -30,6 +30,7 @@ const connectDB = async () => {
 // Connect to MongoDB
 connectDB();
 
+// Function to create default admin user
 const createAdmin = async () => {
   try {
     // Check if the admin user already exists
