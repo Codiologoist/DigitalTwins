@@ -118,6 +118,7 @@ export const createPatient = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: "Patient already exists with this SSN" });
     }
 
+    // Create a new patient
     const newPatient = new Patient({
       firstName,
       lastName,
@@ -126,6 +127,7 @@ export const createPatient = async (req: Request, res: Response) => {
       path
     });
 
+    // Validate the patient
     try {
       await newPatient.validate();
     } catch (error: any) {
@@ -135,6 +137,7 @@ export const createPatient = async (req: Request, res: Response) => {
         .json({ success: false, message: `${error.message || "Patient validation failed"}` });
     }
 
+    // Save the patient and send a success response containing the patient
     await newPatient.save();
     return res.status(201).json({ success: true, patient: newPatient });
   } catch (error: any) {
@@ -146,17 +149,20 @@ export const createPatient = async (req: Request, res: Response) => {
 }
 
 export const deletePatient = async (req: Request, res: Response) => {
-  const { SSN } = req.params;
+  const { SSN } = req.params; // SSN of the patient we want to delet passed as param
 
   try {
+    // Find the patient by SSN and delete it. the deleted patient is returned
     const deletedPatient = await Patient.findOneAndDelete({ SSN });
 
+    // If the patient doesn't exist, return a 404 error
     if (!deletedPatient) {
       return res
         .status(404)
         .json({ success: false, message: `Patient with SSN ${SSN} not found` });
     }
 
+    // Return a success response
     return res
       .status(200)
       .json({ success: true, message: "Patient deleted successfully" });
@@ -168,6 +174,12 @@ export const deletePatient = async (req: Request, res: Response) => {
   }
 }
 
+/**
+ * Update a patient by SSN
+ * @param {Request} req - Request object with params SSN and body with fields firstName, lastName, path
+ * @param {Response} res - Response object
+ * @return {Promise<Response>} - Response with status 200 and the updated patient if successful, status 404 and error message if patient not found, or status 500 and error message if internal server error
+ */
 export const updatePatient = async (req: Request, res: Response) => {
   const { SSN } = req.params;
   const { firstName, lastName , path } = req.body;
@@ -196,6 +208,12 @@ export const updatePatient = async (req: Request, res: Response) => {
   }
 }
 
+/**
+ * Fetch a patient by SSN
+ * @param {Request} req - Request object with param SSN
+ * @param {Response} res - Response object
+ * @return {Promise<Response>} - Response with status 200 and the patient if successful, status 404 and error message if patient not found, or status 500 and error message if internal server error
+ */
 export const getOnePatient = async (req: Request, res: Response) => {
   const { SSN } = req.params;
 

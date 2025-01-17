@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// Define the data type interface PatientData
-
+// Define the DataRun that describes the properties of a data run
 export interface DataRun {
   samples: number[];
   timestamps: number[];
@@ -12,6 +11,7 @@ export interface DataRun {
   start_time: number;
 }
 
+// Define the schema for the DataRun
 const DataRunSchema: Schema = new Schema({
   samples: { type: [Number], required: true },
   timestamps: { type: [Number], required: true },
@@ -36,6 +36,7 @@ const DataSchema: Schema = new Schema({
   admission_time: { type: Number, required: true }
 });
 
+// Define the schema for the AllDataType which comprises of the different signals that we have
 export interface AllDataType extends Document{
     ["ABP,Dias"]: mongoose.Types.ObjectId[],
     ["ABP,Mean"]: mongoose.Types.ObjectId[],
@@ -54,6 +55,8 @@ export interface AllDataType extends Document{
     // Add more data types if needed 
 }
 
+// Define the schema for the AllDataType
+// Please note that we use references to the Data model as a document size in mongodb cannot be more than 16MB
 const AllDataTypeSchema: Schema = new Schema({
     ["ABP,Dias"]: { 
         type: [mongoose.Schema.Types.ObjectId],
@@ -128,6 +131,7 @@ const AllDataTypeSchema: Schema = new Schema({
     // Add more data types if needed 
 });
 
+// Define the DataTypes which comprises of the different signals. this is merely a typescript interface for the AllDataType
 export interface DataTypes {
   ["ABP,Dias"]: PatientData;
   ["ABP,Mean"]: PatientData;

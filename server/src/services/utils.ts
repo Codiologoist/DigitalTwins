@@ -37,11 +37,19 @@ async function readFile(fileName: string): Promise<PatientData> {
 export const getDecryptedData = async (): Promise<{
   [key: string]: PatientData;
 }> => {
+  // Get the path to the decrypted_data directory
   const directory: string = path.join(__dirname, "../../decrypted_data");
+  // Read all files in the directory
   const files: string[] = fs.readdirSync(directory);
 
+  // Initialize an empty object to store the processed data
   const data: { [key: string]: PatientData } = {};
+
+  // Iterate over each file and read its contents and populate the data object
+  // Each file is a key-value pair where the key is a combination of the first two parts of the file name like ABP,Dias
+  // where ABP and Dias are the first two parts of the file name. We Do not want the json extension, so we split by . and use the first element
   for (const file of files) {
+    // Skip the .DS_Store file
     if (file !== ".DS_Store") {
       let splitedFile = file.split(".");
       data[`${splitedFile[0]}`] = await readFile(file);
