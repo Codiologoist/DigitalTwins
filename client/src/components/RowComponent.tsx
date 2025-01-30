@@ -129,8 +129,8 @@ const RowComponent: React.FC<RowComponentProps> = ({
     const chart = chartInstanceRef.current; // Get the chart instance
     const dataset = chart.data.datasets[0]; // Get the first dataset (assuming only one dataset)
 
-    console.log("RowComponentProps.data", data);
-    console.log("Plotting new data batch...");
+    // console.log("RowComponentProps.data", data);
+    // console.log("Plotting new data batch...");
 
     // Calculate variables needed for plotting in batches
     const batchIntervalMs = 100; // How often to plot a new batch in milliseconds (don't recommend reducing this due to DOM limitations)
@@ -151,7 +151,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
     const plotBatch = () => {
       if (currentIndex >= data.time_vector.length) {
         // Exit if all points have been plotted
-        console.log("All points plotted. Stopping updates.");
+        // console.log("All points plotted. Stopping updates.");
         return;
       }
 
@@ -186,7 +186,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
       if (currentIndex < data.time_vector.length) {
         setTimeout(plotBatch, batchIntervalMs);
       } else {
-        console.log("All points for the current data run have been plotted.");
+        // console.log("All points for the current data run have been plotted.");
       }
     };
 
@@ -201,7 +201,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
 
     const absoluteTimes = valueDisplayData.time_vector;
 
-    console.log("New data batch detected.");
+    // console.log("New data batch detected.");
 
     // Store the timestamp of the last value in the batch for reference
     lastBatchEndTimeRef.current = absoluteTimes[absoluteTimes.length - 1];
@@ -227,7 +227,7 @@ const RowComponent: React.FC<RowComponentProps> = ({
         animationFrameIdRef.current = requestAnimationFrame(updateValue); // Continue the animation loop by requesting the next frame
       } else {
         // Stop once the last value is displayed
-        console.log("Value Update Complete. Displayed all new values.");
+        // console.log("Value Update Complete. Displayed all new values.");
         cancelAnimationFrame(animationFrameIdRef.current!);
       }
     };

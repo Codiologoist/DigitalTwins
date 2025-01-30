@@ -39,7 +39,8 @@ const usePatientData = (
   ssn: string, // Identifier for the patient
   isForTesting: boolean, // Flag to indicate whether the hook is used in testing mode
   decryptionTimeout: number, // Timeout duration for decryption processes
-  path: string // File path for each specific patient
+  path: string, // File path for each specific patient
+  isFirstTime: boolean // Flag to indicate whether it is the first time we get data
 ) => {
   // State to store the processed patient data for various signals
   const [visibleData, setVisibleData] = useState<AllDataType>({
@@ -88,7 +89,6 @@ const usePatientData = (
   });
 
   const fetchIntervalTime = 5000; // Fetch data every 5 seconds
-  const [isFisrtTime, setIsFisrtTime] = useState(true); // State to track if it's the first data fetch
 
   // useEffect hook to manage fetching and updating patient data
   useEffect(() => {
@@ -99,16 +99,13 @@ const usePatientData = (
     }
     // Function to fetch and process patient data
     const fetchData = async () => {
-      if (isForTesting) {
-        setIsFisrtTime(false); // Skip first-time logic for testing
-      }
-      if (isFisrtTime) {
+      if (isFirstTime) {
         // Handle first-time data fetch
         try {
           const fetchedDataSet = await fetchPatientData(
             ssn, // Patient identifier
             "data", // Type of data to fetch
-            isFisrtTime, // Indicates it's the first fetch
+            isFirstTime, // Indicates it's the first fetch
             decryptionTimeout, // Timeout for decryption
             isForTesting, // Testing flag
             path // Patient file path
@@ -123,23 +120,24 @@ const usePatientData = (
             "RR,na": processData(fetchedDataSet["RR,na"]?.data ?? []),
             "PLETH,na": processData(fetchedDataSet["PLETH,na"]?.data ?? []),
           };
-          setIsFisrtTime(false); // Mark as not the first time after successful fetch
+          console.log("isFisrtTime in usePatientData as it should", isFirstTime);
           setVisibleData(() => processedData); // Update the state with processed data
         } catch (err) {
           console.error("Error fetching patient data:", err); // Log errors if fetch fails
         }
       } else {
+        console.log("isFisrtTime in usePatientData as it should not", isFirstTime);
         // Handle subsequent data fetches
         try {
           const fetchedDataSet = await fetchPatientData(
             ssn, // Patient identifier
             "data", // Type of data to fetch
-            isFisrtTime, // Indicates it's the first fetch
+            isFirstTime, // Indicates it's the first fetch
             decryptionTimeout, // Timeout for decryption
             isForTesting, // Testing flag
             path // Patient file path
           );
-          console.log("From backend fetched data:", fetchedDataSet);
+          // console.log("From backend fetched data:", fetchedDataSet);
           // Process and organize the fetched data for various signals
           const processedData: AllDataType = {
             "ECG,II": processData(fetchedDataSet["ECG,II"]?.data ?? []),
@@ -150,7 +148,6 @@ const usePatientData = (
             "RR,na": processData(fetchedDataSet["RR,na"]?.data ?? []),
             "PLETH,na": processData(fetchedDataSet["PLETH,na"]?.data ?? []),
           };
-          setIsFisrtTime(false); // Mark as not the first time after successful fetch
           setVisibleData(() => processedData); // Update the state with processed data
         } catch (err) {
           console.error("Error fetching patient data:", err); // Log errors if fetch fails
@@ -162,7 +159,7 @@ const usePatientData = (
     const intervalId = setInterval(fetchData, fetchIntervalTime); // Set up periodic fetching
 
     return () => clearInterval(intervalId); // Cleanup interval on unmount
-  }, [ssn, isForTesting, decryptionTimeout, isFisrtTime, path]); // Dependencies for the useEffect
+  }, [ssn, isForTesting, decryptionTimeout, isFirstTime, path]); // Dependencies for the useEffect
   return { visibleData }; // Return processed data to the component using the hook
 };
 

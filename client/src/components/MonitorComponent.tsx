@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 import usePatientData from "../hooks/usePatientData.ts";
 import PatientHeader from "./PatientHeaderComponent.tsx";
@@ -111,32 +111,59 @@ const Monitor: React.FC = () => {
     isNotFound: false,
   });
 
+  const isNewPatient = useRef(false);
+
   useEffect(() => {
     const fetchPatient = async () => {
       try {
         const response = await fetchSelectedPatient(String(patientId));
-        setPatientState({
-          selectedPatient: response.selectedPatient,
-          isLoading: response.isLoading,
-          isNotFound: response.isNotFound,
+  
+        setPatientState(prevState => {
+          // Check if the patient is actually different
+          if (prevState.selectedPatient?.SSN !== response.selectedPatient?.SSN) {
+            console.log("New patient detected, setting isNewPatient to true.");
+            isNewPatient.current = true;
+            return {
+              selectedPatient: response.selectedPatient,
+              isLoading: response.isLoading,
+              isNotFound: response.isNotFound,
+            };
+          }
+  
+          // If the patient is the same, just update loading state (no need to set isNewPatient = true)
+          return {
+            selectedPatient: response.selectedPatient,
+            isLoading: response.isLoading,
+            isNotFound: response.isNotFound,
+          };
         });
       } catch (error) {
         console.error("Error fetching patient data:", error);
-        setPatientState({
-          selectedPatient: null,
-          isLoading: false,
-          isNotFound: true,
-        });
+        setPatientState({ selectedPatient: null, isLoading: false, isNotFound: true });
       }
     };
-
+  
     fetchPatient();
-  }, [patientId]);
-
+  }, [patientId]); // Runs only when `patientId` changes
+  
+  
   const ssn = patientState.selectedPatient?.SSN || "";
   const path = patientState.selectedPatient?.path || "";
 
-  visibleData = usePatientData(ssn, true, 5, path).visibleData;
+  // console.log("SSN:", ssn);
+  // console.log("Path:", path);
+  // console.log("isnewPatient:", isNewPatient.current);
+
+  // This next line is for testing
+  // visibleData = usePatientData(ssn, true, 5, path, false).visibleData;
+  visibleData = usePatientData(ssn, false, 5, path, isNewPatient.current).visibleData;
+
+  useEffect(() => {
+    if (isNewPatient.current && ssn) {
+      console.log("First-time fetch complete, setting isNewPatient to false.");
+      isNewPatient.current = false; // Reset to false after first fetch
+    }
+  }, [ssn]);
 
   // Destructure state
   const {

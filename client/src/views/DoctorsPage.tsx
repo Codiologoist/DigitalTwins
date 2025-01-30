@@ -84,7 +84,7 @@ const PatientListPage: React.FC = () => {
           alert(error.response?.data.message || 'An error occurred while updating the patient');
         });
     } else {
-      console.log(newPatient);
+      // console.log(newPatient);
       Api.post(`patients`, newPatient, {
         headers: {
           Authorization: `${token}`

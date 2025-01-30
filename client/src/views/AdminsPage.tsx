@@ -29,7 +29,7 @@ const AdminPage: React.FC = () => {
       }
     })
       .then(response => {
-        console.log('Doctors fetched:', response.data);
+        // console.log('Doctors fetched:', response.data);
         setDoctorData(response.data.data);
         setLoading(false);
       })
@@ -70,7 +70,7 @@ const AdminPage: React.FC = () => {
   const handleSaveChanges = (newDoctor: Doctor) => {
     const token = localStorage.getItem('token');
     if (newDoctor._id) {
-      console.log(newDoctor);
+      // console.log(newDoctor);
       Api.patch(`admin/doctors/${newDoctor._id}`, newDoctor, {
         headers: {
           Authorization: `${token}`

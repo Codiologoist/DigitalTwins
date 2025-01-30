@@ -18,7 +18,7 @@ const fetchPatientData = async (
   }
   try {
 
-    console.log(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`);
+    // console.log(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`);
     const response = await api.get(`/patients/${patientId}/${dataCategory}?first=${isFisrtTime}&duration=${decryptionTimeout}&test=${isForTesting}&path=${path}`, {
       headers: {
         Authorization: `${token}`,
